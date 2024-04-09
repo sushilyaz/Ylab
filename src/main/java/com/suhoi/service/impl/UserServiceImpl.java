@@ -18,11 +18,11 @@ public class UserServiceImpl implements UserService {
 
     private static volatile UserServiceImpl INSTANCE;
 
-    private static volatile UserRepositoryImpl userRepository;
+    private final UserRepositoryImpl userRepository;
 
     // Ленивая инициализация UserRepository
     private UserServiceImpl() {
-        userRepository = UserRepositoryImpl.getInstance();
+        this.userRepository = UserRepositoryImpl.getInstance();
     }
 
     public static UserServiceImpl getInstance() {

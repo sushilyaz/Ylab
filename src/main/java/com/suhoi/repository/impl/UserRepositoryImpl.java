@@ -2,6 +2,7 @@ package com.suhoi.repository.impl;
 
 import com.suhoi.dto.UserDto;
 import com.suhoi.model.User;
+import com.suhoi.repository.RuntimeDB;
 import com.suhoi.repository.UserRepository;
 import com.suhoi.service.impl.UserServiceImpl;
 
@@ -13,11 +14,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     private static volatile UserRepositoryImpl INSTANCE;
 
-    private List<User> users;
-    private Long sequence = 1L;
-
     private UserRepositoryImpl() {
-        users = new ArrayList<>();
     }
 
     public static UserRepositoryImpl getInstance() {
@@ -32,15 +29,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void save(User user) {
-        user.setId(sequence);
-        users.add(user);
-        sequence++;
+    public void save(User user) {;
+        RuntimeDB.addUser(user);
     }
 
     @Override
     public Optional<User> getUserByUsername(String username) {
-        return users.stream()
+        return RuntimeDB.getUsers().stream()
                 .filter(user -> user.getUsername().equals(username))
                 .findFirst();
     }
