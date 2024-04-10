@@ -90,6 +90,7 @@ public class TrainingDailyRunner {
                 case 1:
                     trainingController.addTrain();
                     auditController.save("Insert new training");
+                    TrainingDailyRunner.menu();
                     break;
                 case 2:
                     trainingController.getAllSortedTrainings();

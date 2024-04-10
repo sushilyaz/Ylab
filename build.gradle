@@ -13,7 +13,11 @@ repositories {
 application {
     mainClass = "com.suhoi.Main"
 }
-
+tasks.withType(Jar) {
+    manifest {
+        attributes 'Main-Class': 'com.suhoi.Main'
+    }
+}
 java {
     sourceCompatibility = JavaVersion.VERSION_17;
     targetCompatibility = JavaVersion.VERSION_17;
