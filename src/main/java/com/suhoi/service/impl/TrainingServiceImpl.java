@@ -3,8 +3,8 @@ package com.suhoi.service.impl;
 import com.suhoi.dto.CreateTrainingDto;
 import com.suhoi.dto.TrainingDto;
 import com.suhoi.dto.UpdateTrainingDto;
+import com.suhoi.exception.DataNotFoundException;
 import com.suhoi.exception.EmptyListException;
-import com.suhoi.exception.TodayTrainingException;
 import com.suhoi.model.Role;
 import com.suhoi.model.Training;
 import com.suhoi.repository.TrainingRepository;
@@ -53,7 +53,7 @@ public class TrainingServiceImpl implements TrainingService {
                 .build();
 
         if (isAddedTrainToday(dto)) {
-            throw new TodayTrainingException("Training with type " + dto.getTypeOfTrain() + " today already added");
+            throw new DataNotFoundException("Training with type " + dto.getTypeOfTrain() + " today already added");
         } else {
             trainingRepository.save(training);
         }

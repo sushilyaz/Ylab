@@ -13,7 +13,7 @@ public interface TrainingService {
 
     List<TrainingDto> getTrains();
     Integer getTrainsBetweenDate(LocalDate startDate, LocalDate endDate);
-
+    // Есть уже getTrains, но метод ниже нужен для того, чтобы пользователь смог выбрать id, по которому он будет удалять запись в БД
     List<Training> getAllTrainsByUserId();
 
     void deleteById(Long id);

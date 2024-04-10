@@ -57,7 +57,6 @@ public class TrainingControllerImpl implements TrainingController {
 
         trainingService.addTrain(dto);
         System.out.println("Data added success!");
-        TrainingDailyRunner.menu();
     }
 
 
@@ -69,7 +68,7 @@ public class TrainingControllerImpl implements TrainingController {
         for (TrainingDto train : trains) {
             System.out.println(train);
         }
-        TrainingDailyRunner.menu();
+
     }
 
     @Override
@@ -96,7 +95,6 @@ public class TrainingControllerImpl implements TrainingController {
 
         System.out.println(trainingService.getTrainsBetweenDate(startDate, endDate));
 
-        TrainingDailyRunner.menu();
     }
 
     @Override
@@ -137,7 +135,6 @@ public class TrainingControllerImpl implements TrainingController {
                 .advanced(advanced)
                 .build();
         trainingService.update(build);
-        TrainingDailyRunner.menu();
     }
 
     @Override
@@ -161,7 +158,6 @@ public class TrainingControllerImpl implements TrainingController {
             edit();
         }
         trainingService.deleteById(id);
-        TrainingDailyRunner.menu();
     }
     private Map<String, String> getStringStringMap(Scanner scanner) {
         System.out.println("Enter optional info. Format: key: 'smth' value: 'smth'");

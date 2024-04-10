@@ -10,7 +10,9 @@ import java.util.List;
 public interface TrainingRepository {
     void save(Training training);
 
+    // метод для обычного пользователя
     List<TrainingDto> getTrainOrderByDate(Long id);
+    // перегруженный метод для админа
     List<TrainingDto> getTrainOrderByDate();
 
     void update(UpdateTrainingDto dto);

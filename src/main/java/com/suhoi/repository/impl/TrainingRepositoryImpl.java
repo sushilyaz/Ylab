@@ -94,10 +94,8 @@ public class TrainingRepositoryImpl implements TrainingRepository {
                 .filter(train -> train.getId().equals(id) && train.getUserId() == UserUtils.getCurrentUser().getId())
                 .findFirst();
 
-        // Если Train с таким идентификатором найден
         if (trainOptional.isPresent()) {
             Training trainingToDelete = trainOptional.get();
-            // Удалить найденный Train из списка
             trainings.remove(trainingToDelete);
             System.out.println("Data removed success");
         } else {
@@ -122,7 +120,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
     public List<Training> findAll(Long id) {
 
         return RuntimeDB.getTrainings().stream()
-                .filter(o-> Objects.equals(o.getUserId(), id))
+                .filter(o -> Objects.equals(o.getUserId(), id))
                 .toList();
     }
 

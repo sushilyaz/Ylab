@@ -1,13 +1,17 @@
 package com.suhoi.in;
 
+import com.suhoi.in.controller.AuditController;
 import com.suhoi.in.controller.TrainingController;
 import com.suhoi.in.controller.TypeOfTrainingController;
 import com.suhoi.in.controller.UserController;
+import com.suhoi.in.controller.impl.AuditControllerImpl;
 import com.suhoi.in.controller.impl.TrainingControllerImpl;
 import com.suhoi.in.controller.impl.TypeOfTrainingControllerImpl;
 import com.suhoi.in.controller.impl.UserControllerImpl;
+import com.suhoi.model.Audit;
 import com.suhoi.util.UserUtils;
 
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 
@@ -16,6 +20,7 @@ public class TrainingDailyRunner {
     private static final UserController userController = new UserControllerImpl();
     private static final TrainingController trainingController = new TrainingControllerImpl();
     private static final TypeOfTrainingController typeOfTrainingController = new TypeOfTrainingControllerImpl();
+    private static final AuditController auditController = new AuditControllerImpl();
 
     public static void start() {
         System.out.println();
@@ -59,10 +64,11 @@ public class TrainingDailyRunner {
         System.out.println("3 - Get burned calories between Date");
         System.out.println("4 - Update training");
         System.out.println("5 - Delete training");
-        System.out.println("6 - Add new type of trainings (for ADMIN!)");
-        System.out.println("7 - ");
+        System.out.println("6 - Add new type of trainings (for admin)");
+        System.out.println("7 - Open audit (for admin)");
         System.out.println("8 - Log out");
         Scanner scanner = new Scanner(System.in);
+        Audit audit = new Audit();
         while (true) {
             System.out.print("Enter: ");
             int choice = 0;
@@ -75,21 +81,35 @@ public class TrainingDailyRunner {
             switch (choice) {
                 case 1:
                     trainingController.addTrain();
+                    auditController.save("Insert new training");
                     break;
                 case 2:
                     trainingController.getAllSortedTrainings();
+                    auditController.save("Get all trainings sorted by date");
+                    TrainingDailyRunner.menu();
                     break;
                 case 3:
                     trainingController.getCaloriesBetweenDates();
+                    auditController.save("Get all trainings between dates");
+                    TrainingDailyRunner.menu();
                     break;
                 case 4:
                     trainingController.edit();
+                    auditController.save("Update training");
+                    TrainingDailyRunner.menu();
                     break;
                 case 5:
                     trainingController.delete();
+                    auditController.save("Delete training");
+                    TrainingDailyRunner.menu();
                     break;
                 case 6:
                     typeOfTrainingController.addNewTypeOfTrainings();
+                    auditController.save("Add new type training");
+                    TrainingDailyRunner.menu();
+                    break;
+                case 7:
+                    auditController.getAll();
                     break;
                 case 8:
                     UserUtils.setCurrentUser(null);

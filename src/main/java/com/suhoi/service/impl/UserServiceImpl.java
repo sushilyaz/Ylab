@@ -1,8 +1,7 @@
 package com.suhoi.service.impl;
 
 import com.suhoi.dto.UserDto;
-import com.suhoi.exception.UserIsExistException;
-import com.suhoi.exception.UserIsNotExistException;
+import com.suhoi.exception.UserActionException;
 import com.suhoi.model.Role;
 import com.suhoi.model.User;
 import com.suhoi.repository.impl.UserRepositoryImpl;
@@ -40,7 +39,7 @@ public class UserServiceImpl implements UserService {
     public void signUp(UserDto dto) {
         Optional<User> isUserExist = userRepository.getUserByUsername(dto.getUsername());
         if (isUserExist.isPresent()) {
-            throw new UserIsExistException("User with username '" + dto.getUsername() + "' already exist");
+            throw new UserActionException("User with username '" + dto.getUsername() + "' already exist");
         } else {
             User user = User.builder()
                     .username(dto.getUsername())
@@ -57,11 +56,16 @@ public class UserServiceImpl implements UserService {
     public void signIn(UserDto dto) {
         Optional<User> user = userRepository.getUserByUsername(dto.getUsername());
         if (user.isPresent()) {
-            UserUtils.setCurrentUser(user.get());
-            System.out.println("User with username '" + dto.getUsername() + "' log in success");
+            if (user.get().getPassword().equals(dto.getPassword())){
+                UserUtils.setCurrentUser(user.get());
+                System.out.println("User with username '" + dto.getUsername() + "' log in success");
+            } else {
+                throw new UserActionException("Incorrect password");
+            }
+
         } else {
             UserUtils.setCurrentUser(null);
-            throw new UserIsNotExistException("User with username '" + dto.getUsername() + "' doesnt exist");
+            throw new UserActionException("User with username '" + dto.getUsername() + "' doesnt exist");
         }
     }
 }

@@ -34,6 +34,5 @@ public class TypeOfTrainingControllerImpl implements TypeOfTrainingController {
                 .build();
 
         typeOfTrainingService.save(build);
-        TrainingDailyRunner.menu();
     }
 }
