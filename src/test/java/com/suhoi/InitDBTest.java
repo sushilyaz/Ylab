@@ -1,4 +1,4 @@
-package com.suhoi.util;
+package com.suhoi;
 
 import com.suhoi.model.Role;
 import com.suhoi.model.Training;
@@ -10,12 +10,18 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Map;
 
-public class InitDB {
+public class InitDBTest {
     public static void importData() {
 
         User user1 = User.builder()
                 .username("user1")
                 .password("user1")
+                .role(Role.SIMPLE)
+                .build();
+
+        User user2 = User.builder()
+                .username("user2")
+                .password("user2")
                 .role(Role.SIMPLE)
                 .build();
 
@@ -26,6 +32,7 @@ public class InitDB {
                 .build();
 
         RuntimeDB.addUser(user1);
+        RuntimeDB.addUser(user2);
         RuntimeDB.addUser(admin);
 
         Map<String, String> advanced = Map.of(
@@ -51,23 +58,29 @@ public class InitDB {
                 .date(LocalDate.parse("2024-04-05"))
                 .build();
 
+        Training training3 = Training.builder()
+                .userId(2L)
+                .typeOfTrainingId(1L)
+                .duration(Duration.ofHours(1))
+                .calories(1000)
+                .advanced(advanced)
+                .date(LocalDate.now())
+                .build();
+
         RuntimeDB.addTrain(training1);
         RuntimeDB.addTrain(training2);
+        RuntimeDB.addTrain(training3);
 
         TypeOfTraining type1 = TypeOfTraining.builder()
-                .name("strength")
+                .name("GYM")
                 .build();
 
         TypeOfTraining type2 = TypeOfTraining.builder()
-                .name("yoga")
-                .build();
-        TypeOfTraining type3 = TypeOfTraining.builder()
-                .name("cardio")
+                .name("YOGA")
                 .build();
 
         RuntimeDB.addTypeOfTrain(type1);
         RuntimeDB.addTypeOfTrain(type2);
-        RuntimeDB.addTypeOfTrain(type3);
 
         System.out.println("Init database success");
     }

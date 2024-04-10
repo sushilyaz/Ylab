@@ -1,5 +1,6 @@
 package com.suhoi.service.impl;
 
+import com.suhoi.InitDBTest;
 import com.suhoi.dto.CreateTrainingDto;
 import com.suhoi.dto.TrainingDto;
 import com.suhoi.model.Role;
@@ -8,7 +9,6 @@ import com.suhoi.model.User;
 import com.suhoi.repository.TrainingRepository;
 import com.suhoi.service.TrainingService;
 import com.suhoi.service.TypeOfTrainingService;
-import com.suhoi.util.InitDB;
 import com.suhoi.util.UserUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,7 +40,7 @@ class TrainingServiceImplTest {
     @BeforeEach
     void init() {
         trainingService = new TrainingServiceImpl(trainingRepository);
-        InitDB.importData();
+        InitDBTest.importData();
         UserUtils.setCurrentUser(new User(1L, "user1", "user1", Role.SIMPLE));
     }
 

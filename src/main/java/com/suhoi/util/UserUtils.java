@@ -6,7 +6,7 @@ import lombok.Setter;
 
 public class UserUtils {
 
-    // Метод для получения текущего пользователя
+    // Геттер и сеттер для текущего пользователя
     @Getter
     @Setter
     private static User currentUser;
