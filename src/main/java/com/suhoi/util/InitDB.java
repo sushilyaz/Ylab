@@ -1,8 +1,8 @@
 package com.suhoi.util;
 
 import com.suhoi.model.Role;
-import com.suhoi.model.Train;
-import com.suhoi.model.TypeOfTrain;
+import com.suhoi.model.Training;
+import com.suhoi.model.TypeOfTraining;
 import com.suhoi.model.User;
 import com.suhoi.repository.RuntimeDB;
 
@@ -40,42 +40,42 @@ public class InitDB {
                 "weight", "20"
         );
 
-        Train train1 = Train.builder()
+        Training training1 = Training.builder()
                 .userId(1L)
-                .typeOfTrainId(1L)
+                .typeOfTrainingId(1L)
                 .duration(Duration.ofHours(2))
                 .calories(2000)
                 .advanced(advanced)
                 .date(LocalDate.now())
                 .build();
 
-        Train train2 = Train.builder()
+        Training training2 = Training.builder()
                 .userId(1L)
-                .typeOfTrainId(2L)
+                .typeOfTrainingId(2L)
                 .duration(Duration.ofHours(3))
                 .calories(4000)
                 .advanced(advanced)
                 .date(LocalDate.parse("2024-04-05"))
                 .build();
 
-        Train train3 = Train.builder()
+        Training training3 = Training.builder()
                 .userId(2L)
-                .typeOfTrainId(1L)
+                .typeOfTrainingId(1L)
                 .duration(Duration.ofHours(1))
                 .calories(1000)
                 .advanced(advanced)
                 .date(LocalDate.now())
                 .build();
 
-        RuntimeDB.addTrain(train1);
-        RuntimeDB.addTrain(train2);
-        RuntimeDB.addTrain(train3);
+        RuntimeDB.addTrain(training1);
+        RuntimeDB.addTrain(training2);
+        RuntimeDB.addTrain(training3);
 
-        TypeOfTrain type1 = TypeOfTrain.builder()
+        TypeOfTraining type1 = TypeOfTraining.builder()
                 .name("GYM")
                 .build();
 
-        TypeOfTrain type2 = TypeOfTrain.builder()
+        TypeOfTraining type2 = TypeOfTraining.builder()
                 .name("YOGA")
                 .build();
 

@@ -13,10 +13,10 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Train {
+public class Training {
     private Long id;
     private Long userId; // FK user.id
-    private Long typeOfTrainId; // FK type_of_train.id
+    private Long typeOfTrainingId; // FK type_of_train.id
     private Duration duration; // продолжительность
     private Integer calories; // сженные калории
     /*

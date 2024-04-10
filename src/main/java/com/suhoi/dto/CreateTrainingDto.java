@@ -6,17 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.Map;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TrainDto {
+public class CreateTrainingDto {
     String typeOfTrain;
     Duration duration;
     Integer calories;
     Map<String, String> advanced;
-    LocalDate date;
 }

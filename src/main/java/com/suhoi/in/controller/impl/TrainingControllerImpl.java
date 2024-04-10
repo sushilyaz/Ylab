@@ -1,13 +1,13 @@
 package com.suhoi.in.controller.impl;
 
-import com.suhoi.dto.CreateTrainDto;
-import com.suhoi.dto.TrainDto;
-import com.suhoi.dto.UpdateTrainDto;
+import com.suhoi.dto.CreateTrainingDto;
+import com.suhoi.dto.TrainingDto;
+import com.suhoi.dto.UpdateTrainingDto;
 import com.suhoi.in.TrainingDailyRunner;
-import com.suhoi.in.controller.TrainController;
-import com.suhoi.model.Train;
-import com.suhoi.service.TrainService;
-import com.suhoi.service.impl.TrainServiceImpl;
+import com.suhoi.in.controller.TrainingController;
+import com.suhoi.model.Training;
+import com.suhoi.service.TrainingService;
+import com.suhoi.service.impl.TrainingServiceImpl;
 import com.suhoi.util.Parser;
 
 import java.time.Duration;
@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class TrainControllerImpl implements TrainController {
+public class TrainingControllerImpl implements TrainingController {
 
-    private final TrainService trainService;
+    private final TrainingService trainingService;
 
-    public TrainControllerImpl() {
-        this.trainService = TrainServiceImpl.getInstance();
+    public TrainingControllerImpl() {
+        this.trainingService = TrainingServiceImpl.getInstance();
     }
 
     @Override
@@ -48,14 +48,14 @@ public class TrainControllerImpl implements TrainController {
         Map<String, String> advanced = getStringStringMap(scanner);
 
 
-        CreateTrainDto dto = CreateTrainDto.builder()
+        CreateTrainingDto dto = CreateTrainingDto.builder()
                 .typeOfTrain(typeOfTrain)
                 .calories(calories)
                 .duration(duration)
                 .advanced(advanced)
                 .build();
 
-        trainService.addTrain(dto);
+        trainingService.addTrain(dto);
         System.out.println("Data added success!");
         TrainingDailyRunner.menu();
     }
@@ -65,8 +65,8 @@ public class TrainControllerImpl implements TrainController {
     @Override
     public void getAllSortedTrainings() {
         System.out.println("All trainings sorted by date: ");
-        List<TrainDto> trains = trainService.getTrains();
-        for (TrainDto train : trains) {
+        List<TrainingDto> trains = trainingService.getTrains();
+        for (TrainingDto train : trains) {
             System.out.println(train);
         }
         TrainingDailyRunner.menu();
@@ -76,7 +76,7 @@ public class TrainControllerImpl implements TrainController {
     public void getCaloriesBetweenDates() {
         System.out.println("""
                 You must enter the date in the format yyyy-mm-dd
-                For example: 2024-04-07 (НЕ ВКЛЮЧИТЕЛЬНО !!! НЕРАВЕНСТВО НЕ СТРОГОЕ !!!)
+                For example: 2024-04-07 (NOT INCLUSIVE !!! INEQUALITY IS NOT STRICT !!!)
                 """);
         System.out.println();
         Scanner scanner = new Scanner(System.in);
@@ -94,7 +94,7 @@ public class TrainControllerImpl implements TrainController {
             getAllSortedTrainings();
         }
 
-        System.out.println(trainService.getTrainsBetweenDate(startDate, endDate));
+        System.out.println(trainingService.getTrainsBetweenDate(startDate, endDate));
 
         TrainingDailyRunner.menu();
     }
@@ -105,9 +105,9 @@ public class TrainControllerImpl implements TrainController {
                 Enter the ID of the record you want to update:
                 You can update only CALORIES and ADVANCED
                 """);
-        List<Train> allTrains = trainService.getAllTrainsByUserId();
-        for (Train train : allTrains) {
-            System.out.println(train);
+        List<Training> allTrainings = trainingService.getAllTrainsByUserId();
+        for (Training training : allTrainings) {
+            System.out.println(training);
         }
         System.out.println();
         Scanner scanner = new Scanner(System.in);
@@ -131,12 +131,12 @@ public class TrainControllerImpl implements TrainController {
         System.out.println("Enter new optional info: ");
         Map<String, String> advanced = getStringStringMap(scanner);
 
-        UpdateTrainDto build = UpdateTrainDto.builder()
+        UpdateTrainingDto build = UpdateTrainingDto.builder()
                 .id(id)
                 .calories(calories)
                 .advanced(advanced)
                 .build();
-        trainService.update(build);
+        trainingService.update(build);
         TrainingDailyRunner.menu();
     }
 
@@ -145,10 +145,10 @@ public class TrainControllerImpl implements TrainController {
         System.out.println("""
                 Enter the ID of the record you want to delete:
                 """);
-        List<Train> allTrains = trainService.getAllTrainsByUserId();
+        List<Training> allTrainings = trainingService.getAllTrainsByUserId();
 
-        for (Train train : allTrains) {
-            System.out.println(train);
+        for (Training training : allTrainings) {
+            System.out.println(training);
         }
         System.out.println();
         Scanner scanner = new Scanner(System.in);
@@ -160,7 +160,7 @@ public class TrainControllerImpl implements TrainController {
             System.out.println("Invalid number");
             edit();
         }
-        trainService.deleteById(id);
+        trainingService.deleteById(id);
         TrainingDailyRunner.menu();
     }
     private Map<String, String> getStringStringMap(Scanner scanner) {

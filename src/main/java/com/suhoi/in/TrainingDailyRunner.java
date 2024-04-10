@@ -1,12 +1,11 @@
 package com.suhoi.in;
 
-import com.suhoi.in.controller.TrainController;
-import com.suhoi.in.controller.TypeOfTrainController;
+import com.suhoi.in.controller.TrainingController;
+import com.suhoi.in.controller.TypeOfTrainingController;
 import com.suhoi.in.controller.UserController;
-import com.suhoi.in.controller.impl.TrainControllerImpl;
-import com.suhoi.in.controller.impl.TypeOfTrainControllerImpl;
+import com.suhoi.in.controller.impl.TrainingControllerImpl;
+import com.suhoi.in.controller.impl.TypeOfTrainingControllerImpl;
 import com.suhoi.in.controller.impl.UserControllerImpl;
-import com.suhoi.model.User;
 import com.suhoi.util.UserUtils;
 
 import java.util.Scanner;
@@ -15,8 +14,8 @@ import java.util.Scanner;
 public class TrainingDailyRunner {
 
     private static final UserController userController = new UserControllerImpl();
-    private static final TrainController trainController = new TrainControllerImpl();
-    private static final TypeOfTrainController typeOfTrainController = new TypeOfTrainControllerImpl();
+    private static final TrainingController trainingController = new TrainingControllerImpl();
+    private static final TypeOfTrainingController typeOfTrainingController = new TypeOfTrainingControllerImpl();
 
     public static void start() {
         System.out.println();
@@ -75,22 +74,22 @@ public class TrainingDailyRunner {
             }
             switch (choice) {
                 case 1:
-                    trainController.addTrain();
+                    trainingController.addTrain();
                     break;
                 case 2:
-                    trainController.getAllSortedTrainings();
+                    trainingController.getAllSortedTrainings();
                     break;
                 case 3:
-                    trainController.getCaloriesBetweenDates();
+                    trainingController.getCaloriesBetweenDates();
                     break;
                 case 4:
-                    trainController.edit();
+                    trainingController.edit();
                     break;
                 case 5:
-                    trainController.delete();
+                    trainingController.delete();
                     break;
                 case 6:
-                    typeOfTrainController.addNewTypeOfTrainings();
+                    typeOfTrainingController.addNewTypeOfTrainings();
                     break;
                 case 8:
                     UserUtils.setCurrentUser(null);

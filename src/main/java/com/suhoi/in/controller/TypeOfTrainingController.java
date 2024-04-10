@@ -1,5 +1,5 @@
 package com.suhoi.in.controller;
 
-public interface TypeOfTrainController {
+public interface TypeOfTrainingController {
     void addNewTypeOfTrainings();
 }

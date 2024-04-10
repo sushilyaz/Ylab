@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TypeOfTrain {
+public class TypeOfTraining {
     Long id;
     String name; // название тренировки
 }

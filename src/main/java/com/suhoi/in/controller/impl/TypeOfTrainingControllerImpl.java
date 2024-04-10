@@ -2,23 +2,21 @@ package com.suhoi.in.controller.impl;
 
 import com.suhoi.exception.PermissionDeniedException;
 import com.suhoi.in.TrainingDailyRunner;
-import com.suhoi.in.controller.TypeOfTrainController;
+import com.suhoi.in.controller.TypeOfTrainingController;
 import com.suhoi.model.Role;
-import com.suhoi.model.TypeOfTrain;
-import com.suhoi.service.TrainService;
-import com.suhoi.service.TypeOfTrainService;
-import com.suhoi.service.impl.TrainServiceImpl;
-import com.suhoi.service.impl.TypeOfTrainServiceImpl;
+import com.suhoi.model.TypeOfTraining;
+import com.suhoi.service.TypeOfTrainingService;
+import com.suhoi.service.impl.TypeOfTrainingServiceImpl;
 import com.suhoi.util.UserUtils;
 
 import java.util.Scanner;
 
-public class TypeOfTrainControllerImpl implements TypeOfTrainController {
+public class TypeOfTrainingControllerImpl implements TypeOfTrainingController {
 
-    private final TypeOfTrainService typeOfTrainService;
+    private final TypeOfTrainingService typeOfTrainingService;
 
-    public TypeOfTrainControllerImpl() {
-        this.typeOfTrainService = TypeOfTrainServiceImpl.getInstance();
+    public TypeOfTrainingControllerImpl() {
+        this.typeOfTrainingService = TypeOfTrainingServiceImpl.getInstance();
     }
 
     @Override
@@ -31,11 +29,11 @@ public class TypeOfTrainControllerImpl implements TypeOfTrainController {
         System.out.print("Enter new type of train: ");
         String typeOfTrain = scanner.nextLine();
 
-        TypeOfTrain build = TypeOfTrain.builder()
+        TypeOfTraining build = TypeOfTraining.builder()
                 .name(typeOfTrain)
                 .build();
 
-        typeOfTrainService.save(build);
+        typeOfTrainingService.save(build);
         TrainingDailyRunner.menu();
     }
 }

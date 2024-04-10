@@ -1,6 +1,6 @@
 package com.suhoi.in.controller;
 
-public interface TrainController {
+public interface TrainingController {
     void addTrain();
 
     void getAllSortedTrainings();
