@@ -6,6 +6,9 @@ import com.suhoi.repository.UserRepository;
 
 import java.util.Optional;
 
+/**
+ * Javadoc в интерфейсе
+ */
 public class UserRepositoryImpl implements UserRepository {
 
     private static volatile UserRepositoryImpl INSTANCE;

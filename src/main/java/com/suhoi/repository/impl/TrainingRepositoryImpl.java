@@ -12,6 +12,9 @@ import com.suhoi.util.UserUtils;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * Javadoc в интерфейсе
+ */
 public class TrainingRepositoryImpl implements TrainingRepository {
 
     private static volatile TrainingRepositoryImpl INSTANCE;
@@ -38,34 +41,38 @@ public class TrainingRepositoryImpl implements TrainingRepository {
 
     @Override
     public List<TrainingDto> getTrainOrderByDate(Long id) {
+        // достаем одну сущность
         List<Training> trainings = RuntimeDB.getTrainings().stream()
                 .filter(o -> o.getUserId() == id)
                 .sorted(Comparator.comparing(Training::getDate).reversed())
                 .toList();
+        // достаем другую
         List<TypeOfTraining> typeOfTrainings = RuntimeDB.getType_of_training();
-
+        // join
         return join(trainings, typeOfTrainings);
     }
 
     @Override
     public List<TrainingDto> getTrainOrderByDate() {
+        // достаем одну сущность
         List<Training> trainings = RuntimeDB.getTrainings().stream()
                 .sorted(Comparator.comparing(Training::getDate).reversed())
                 .toList();
+        // достаем другую
         List<TypeOfTraining> typeOfTrainings = RuntimeDB.getType_of_training();
-
+        // join
         return join(trainings, typeOfTrainings);
     }
 
     @Override
     public void update(UpdateTrainingDto dto) {
         List<Training> trainings = RuntimeDB.getTrainings();
-
+        // достаем сущность по id, которую хотим обновить (если она существует)
         Optional<Training> trainOptional = trainings.stream()
                 .filter(train -> train.getId().equals(dto.getId()) && train.getUserId() == UserUtils.getCurrentUser().getId())
                 .findFirst();
 
-
+        // Если существует, обновляем
         if (trainOptional.isPresent()) {
             Training trainingToUpdate = trainOptional.get();
 
@@ -80,7 +87,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
             }
             System.out.println("Data updated success");
         } else {
-            // Обработка случая, если Train с указанным id не найден
+            // Обработка случая, если Training с указанным id не найден
             throw new DataNotFoundException("Train with id " + dto.getId() + " not found");
         }
     }
@@ -106,13 +113,15 @@ public class TrainingRepositoryImpl implements TrainingRepository {
 
     @Override
     public List<TrainingDto> getTrainBetweenDate(LocalDate startDate, LocalDate endDate, Long id) {
+        // Достаем одну сущность
         List<Training> trainings = RuntimeDB.getTrainings();
+        // Фильтруем
         List<Training> filteredTrainings = trainings.stream()
                 .filter(train -> train.getDate().isAfter(startDate) && train.getDate().isBefore(endDate) && train.getUserId() == id)
                 .toList();
-
+        // Достаем другую сущность
         List<TypeOfTraining> typeOfTrainings = RuntimeDB.getType_of_training();
-
+        // join и возвращаем
         return join(filteredTrainings, typeOfTrainings);
     }
 
@@ -124,8 +133,9 @@ public class TrainingRepositoryImpl implements TrainingRepository {
                 .toList();
     }
 
-    /*
-    Выглядит пока что мудрено, но когда появится postgres, все хорошо решится через JOIN ON
+    /**
+     * Метод для Join двух сущностей: Training и TypeOfTraining
+     * Выглядит пока что мудрено, но когда появится postgres, все хорошо решится через JOIN ON
      */
     private List<TrainingDto> join(List<Training> trainings, List<TypeOfTraining> typeOfTrainings) {
         List<TrainingDto> trainingDtos = new ArrayList<>();

@@ -10,7 +10,11 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Map;
 
+
 public class InitDB {
+    /**
+     * Инициализация БД
+     */
     public static void importData() {
 
         User user1 = User.builder()

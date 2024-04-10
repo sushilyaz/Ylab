@@ -9,6 +9,9 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Map;
 
+/**
+ * Dto вывода тренировки (для читаемости)
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

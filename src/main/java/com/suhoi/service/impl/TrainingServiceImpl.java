@@ -18,6 +18,9 @@ import com.suhoi.util.UserUtils;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Javadoc методов в интерфейсе
+ */
 public class TrainingServiceImpl implements TrainingService {
 
     private static volatile TrainingServiceImpl INSTANCE;
@@ -33,6 +36,7 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     public void addTrain(CreateTrainingDto dto) {
+        // Достаем тип тренировки, для проверки на занесение данных за сегодня
         Long typeOfTrainId = typeOfTrainingService.getType(dto.getTypeOfTrain()).getId();
 
         Training training = Training.builder()
@@ -53,20 +57,24 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     public List<TrainingDto> getTrains() {
+        // Проверяем, какая роль. Если роль у текущего пользователя simple - запрос на получение только его тренировок
         if (UserUtils.getCurrentUser().getRole().equals(Role.SIMPLE)) {
             return trainingRepository.getTrainOrderByDate(UserUtils.getCurrentUser().getId());
         } else {
-            // для ADMIN
+            // Если admin - тренировки всех пользователей
             return trainingRepository.getTrainOrderByDate();
         }
     }
 
     @Override
     public Integer getTrainsBetweenDate(LocalDate startDate, LocalDate endDate) {
+        // запрос на все тренировки
         List<TrainingDto> trainBetweenDate = trainingRepository.getTrainBetweenDate(startDate, endDate, UserUtils.getCurrentUser().getId());
+        // Если список пуст, значит в заданном диапазоне не было - бросаем исключение
         if (trainBetweenDate.isEmpty()) {
             throw new EmptyListException("Data not exist for this dates");
         }
+        // Подсчет калорий
         Integer burnedCalories = 0;
         for (TrainingDto dto : trainBetweenDate) {
             burnedCalories = burnedCalories + dto.getCalories();
@@ -94,6 +102,11 @@ public class TrainingServiceImpl implements TrainingService {
         trainingRepository.update(dto);
     }
 
+    /**
+     * Метод, проверяющий добавляли ли сегодня тренировку с этим же типом
+     * @param dto
+     * @return
+     */
     private boolean isAddedTrainToday(CreateTrainingDto dto) {
         return trainingRepository.getTrainOrderByDate(UserUtils.getCurrentUser().getId()).stream()
                 .anyMatch(t -> t.getDate().equals(LocalDate.now()) && t.getTypeOfTrain().equals(dto.getTypeOfTrain()));

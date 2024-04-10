@@ -9,6 +9,9 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Map;
 
+/**
+ * POJO trainings
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

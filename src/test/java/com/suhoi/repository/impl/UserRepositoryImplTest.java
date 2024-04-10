@@ -5,9 +5,7 @@ import com.suhoi.model.Role;
 import com.suhoi.model.User;
 import com.suhoi.repository.RuntimeDB;
 import com.suhoi.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.Optional;
 
@@ -17,11 +15,15 @@ public class UserRepositoryImplTest {
 
     private UserRepository userRepository = UserRepositoryImpl.getInstance();
 
+
     @BeforeEach
     void initDB() {
         InitDBTest.importData();
     }
-
+    @AfterEach
+    void clear() {
+        RuntimeDB.getUsers().clear();
+    }
     @Test
     @DisplayName("success save user")
     void test1() {

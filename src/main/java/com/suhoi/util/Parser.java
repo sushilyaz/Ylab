@@ -6,6 +6,11 @@ import java.time.Duration;
 import java.time.LocalDate;
 
 public class Parser {
+    /**
+     * Парсер для Duration
+     * @param toParse
+     * @return
+     */
     public static Duration durationParse(String toParse) {
         try {
             Duration duration;

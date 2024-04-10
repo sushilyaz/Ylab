@@ -31,9 +31,7 @@ public class UserControllerImpl implements UserController {
         System.out.print("Enter password (min 4 symbol): ");
         String password = scanner.nextLine();
 
-        /*
-        Когда приложение закончит выполнение, выдаст все ошибки, которые были совершены в ходе работы приложения (кастомные exceptions)
-         */
+        // валидация
         if (username.length() < 4 || password.length() < 4) {
             throw new NoValidDataException("Data no valid. Username and password must be consist minimum 4 symbols");
         }
@@ -44,10 +42,8 @@ public class UserControllerImpl implements UserController {
                 .build();
 
         userService.signUp(userDto);
-
-        TrainingDailyRunner.start();
     }
-
+    // POST
     @Override
     public void signIn() {
         System.out.println();

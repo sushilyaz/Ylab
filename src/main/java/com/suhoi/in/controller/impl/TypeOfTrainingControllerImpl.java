@@ -22,6 +22,7 @@ public class TypeOfTrainingControllerImpl implements TypeOfTrainingController {
 
     @Override
     public void addNewTypeOfTrainings() {
+        // если обычный пользователь пытается - исключение
         if (UserUtils.getCurrentUser().getRole().equals(Role.SIMPLE)) {
             throw new PermissionDeniedException("Permission denied");
         }

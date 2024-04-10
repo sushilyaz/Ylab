@@ -22,6 +22,9 @@ public class TrainingDailyRunner {
     private static final TypeOfTrainingController typeOfTrainingController = new TypeOfTrainingControllerImpl();
     private static final AuditController auditController = new AuditControllerImpl();
 
+    /**
+     * Окно авторизации и регистрации
+     */
     public static void start() {
         System.out.println();
         System.out.println("At first you need to register or log in. Choose an action");
@@ -41,6 +44,7 @@ public class TrainingDailyRunner {
         switch (choice) {
             case 1:
                 userController.signUp();
+                start();
                 break;
             case 2:
                 userController.signIn();
@@ -56,6 +60,9 @@ public class TrainingDailyRunner {
         }
     }
 
+    /**
+     * Главное меню
+     */
     public static void menu() {
         System.out.println();
         System.out.println("Choose action: ");
@@ -71,6 +78,7 @@ public class TrainingDailyRunner {
         Audit audit = new Audit();
         while (true) {
             System.out.print("Enter: ");
+            // обрабатываем, чтобы не положить приложение
             int choice = 0;
             try {
                 choice = scanner.nextInt();

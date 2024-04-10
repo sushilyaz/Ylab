@@ -9,6 +9,7 @@ import com.suhoi.model.User;
 import com.suhoi.repository.RuntimeDB;
 import com.suhoi.repository.TrainingRepository;
 import com.suhoi.util.UserUtils;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TrainingRepositoryImplTest {
 
     private TrainingRepository trainingRepository = TrainingRepositoryImpl.getInstance();
-    @BeforeEach
-    void initDB() {
+    @BeforeAll
+    static void initDB() {
         InitDBTest.importData();
         UserUtils.setCurrentUser(new User(1L, "user1", "user1", Role.SIMPLE));
     }

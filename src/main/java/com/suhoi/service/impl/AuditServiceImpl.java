@@ -10,6 +10,9 @@ import com.suhoi.service.TypeOfTrainingService;
 
 import java.util.List;
 
+/**
+ * Javadoc в интерфейсе
+ */
 public class AuditServiceImpl implements AuditService {
 
     private static volatile AuditServiceImpl INSTANCE;

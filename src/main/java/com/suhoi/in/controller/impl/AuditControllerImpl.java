@@ -33,6 +33,7 @@ public class AuditControllerImpl implements AuditController {
 
     @Override
     public void getAll() {
+        // Проверка на роль. Операция доступна только админу
         if (UserUtils.getCurrentUser().getRole().equals(Role.ADMIN)) {
             List<Audit> audits = auditService.getAll();
             for (Audit audit : audits) {

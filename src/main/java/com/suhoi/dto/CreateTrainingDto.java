@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import java.time.Duration;
 import java.util.Map;
 
+/**
+ * Dto создания тренировки
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

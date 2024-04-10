@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
+/**
+ * Dto обновления тренировки
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

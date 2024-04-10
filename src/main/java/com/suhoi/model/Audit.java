@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * POJO аудита
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

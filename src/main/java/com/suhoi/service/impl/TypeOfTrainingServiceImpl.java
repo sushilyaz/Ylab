@@ -11,7 +11,6 @@ import java.util.List;
 
 public class TypeOfTrainingServiceImpl implements TypeOfTrainingService {
 
-//    private static volatile TypeOfTrainingServiceImpl INSTANCE;
 
     private final TypeOfTrainingRepository typeOfTrainingRepository;
 
@@ -21,6 +20,7 @@ public class TypeOfTrainingServiceImpl implements TypeOfTrainingService {
 
     @Override
     public TypeOfTraining getType(String type) {
+        // Если такого типа нет - бросаем эксепшен
         return typeOfTrainingRepository.getTypeByName(type)
                 .orElseThrow(() -> new DataNotFoundException("Type of train with name '" + type + "' doesn't exist"));
     }

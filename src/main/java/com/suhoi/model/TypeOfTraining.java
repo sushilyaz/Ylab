@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * POJO типов тренировок
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

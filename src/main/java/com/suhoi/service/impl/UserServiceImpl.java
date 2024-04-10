@@ -11,6 +11,9 @@ import com.suhoi.util.UserUtils;
 
 import java.util.Optional;
 
+/**
+ * Javadoc в интерфейсе
+ */
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -22,6 +25,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void signUp(UserDto dto) {
         Optional<User> isUserExist = userRepository.getUserByUsername(dto.getUsername());
+        // Если пользователь существует - исключение
         if (isUserExist.isPresent()) {
             throw new UserActionException("User with username '" + dto.getUsername() + "' already exist");
         } else {
@@ -30,17 +34,17 @@ public class UserServiceImpl implements UserService {
                     .password(dto.getPassword())
                     .role(Role.SIMPLE)
                     .build();
-            // return сделал для теста сервисного слоя
             userRepository.save(user);
-            // когда будет web, sout ниже будет в виде response body на уровне контроллеров, пока пусть будет в сервисах, чтобы все было централизовано
             System.out.println("User with username '" + dto.getUsername() + "' registered success");
         }
     }
 
     @Override
     public void signIn(UserDto dto) {
+        // Достаем пользователя, если он существует
         Optional<User> user = userRepository.getUserByUsername(dto.getUsername());
         if (user.isPresent()) {
+            // Проверка правильности пароля
             if (user.get().getPassword().equals(dto.getPassword())){
                 UserUtils.setCurrentUser(user.get());
                 System.out.println("User with username '" + dto.getUsername() + "' log in success");

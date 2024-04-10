@@ -10,6 +10,7 @@ import com.suhoi.repository.TrainingRepository;
 import com.suhoi.service.TrainingService;
 import com.suhoi.service.TypeOfTrainingService;
 import com.suhoi.util.UserUtils;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,10 +38,13 @@ class TrainingServiceImplTest {
 
     private TrainingService trainingService;
 
+    @BeforeAll
+    static void initTestDB() {
+        InitDBTest.importData();
+    }
     @BeforeEach
     void init() {
         trainingService = new TrainingServiceImpl(trainingRepository);
-        InitDBTest.importData();
         UserUtils.setCurrentUser(new User(1L, "user1", "user1", Role.SIMPLE));
     }
 

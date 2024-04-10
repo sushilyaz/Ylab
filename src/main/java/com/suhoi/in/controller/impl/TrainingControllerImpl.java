@@ -39,6 +39,7 @@ public class TrainingControllerImpl implements TrainingController {
         Duration duration = Parser.durationParse(stringDuration);
 
         System.out.print("Enter burned calories: ");
+        // обрабатываем, чтобы не положить приложение
         Integer calories = null;
         try {
             calories = scanner.nextInt();
@@ -87,6 +88,7 @@ public class TrainingControllerImpl implements TrainingController {
         String endDateString = scanner.nextLine();
         LocalDate startDate = null;
         LocalDate endDate = null;
+        // обрабатываем, чтобы не положить приложение
         try {
             startDate = LocalDate.parse(startDateString);
             endDate = LocalDate.parse(endDateString);
@@ -109,9 +111,11 @@ public class TrainingControllerImpl implements TrainingController {
         for (Training training : allTrainings) {
             System.out.println(training);
         }
+        // Заполняем данные для обновления
         System.out.println();
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter ID: ");
+        // обрабатываем, чтобы не положить приложение
         Long id = 0L;
         try {
             id = scanner.nextLong();
@@ -119,7 +123,7 @@ public class TrainingControllerImpl implements TrainingController {
             System.out.println("Invalid number");
             edit();
         }
-
+        // обрабатываем, чтобы не положить приложение
         System.out.print("Enter new calories: ");
         Integer calories = 0;
         try {
@@ -153,6 +157,7 @@ public class TrainingControllerImpl implements TrainingController {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter ID: ");
         Long id = 0L;
+        // обрабатываем, чтобы не положить приложение
         try {
             id = scanner.nextLong();
         } catch (Exception e) {
@@ -161,6 +166,13 @@ public class TrainingControllerImpl implements TrainingController {
         }
         trainingService.deleteById(id);
     }
+
+    /**
+     * Метод для заполнение мапы с дополнительными данными
+     *
+     * @param scanner
+     * @return
+     */
     private Map<String, String> getStringStringMap(Scanner scanner) {
         System.out.println("Enter optional info. Format: key: 'smth' value: 'smth'");
         Map<String, String> advanced = new HashMap<>();

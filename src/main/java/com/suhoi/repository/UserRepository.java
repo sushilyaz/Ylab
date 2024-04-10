@@ -6,7 +6,18 @@ import java.util.Optional;
 
 public interface UserRepository {
 
-    // return нужен для теста сервисного слоя
+    /**
+     * INSERT
+     *
+     * @param user
+     */
     void save(User user);
+
+    /**
+     * SELECT * FROM users WHERE username = ?
+     *
+     * @param username
+     * @return
+     */
     Optional<User> getUserByUsername(String username);
 }
