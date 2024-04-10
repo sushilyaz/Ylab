@@ -11,10 +11,13 @@ public interface TrainRepository {
     void save(Train train);
 
     List<TrainDto> getTrainOrderByDate(Long id);
+    List<TrainDto> getTrainOrderByDate();
 
     void update(UpdateTrainDto dto);
 
     void delete(Long id);
 
     List<TrainDto> getTrainBetweenDate(LocalDate startDate, LocalDate endDate, Long id);
+
+    List<Train> findAll(Long id);
 }

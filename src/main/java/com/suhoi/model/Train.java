@@ -14,15 +14,15 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 public class Train {
-    Long id;
-    Long userId; // FK user.id
-    Long typeOfTrainId; // FK type_of_train.id
-    Duration duration; // продолжительность
-    Integer calories; // сженные калории
+    private Long id;
+    private Long userId; // FK user.id
+    private Long typeOfTrainId; // FK type_of_train.id
+    private Duration duration; // продолжительность
+    private Integer calories; // сженные калории
     /*
      Доп. инфа, например: количество упражнений, количество ввыпитого протеина, количество уколов тренболона итд
      P.S. В БД планирую хранить в JSONB, если подход плохой - дайте знать пж
      */
-    Map<String, String> advanced;
-    LocalDate date;
+    private Map<String, String> advanced;
+    private LocalDate date;
 }

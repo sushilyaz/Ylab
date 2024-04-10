@@ -2,8 +2,10 @@ package com.suhoi.service.impl;
 
 import com.suhoi.dto.CreateTrainDto;
 import com.suhoi.dto.TrainDto;
+import com.suhoi.dto.UpdateTrainDto;
 import com.suhoi.exception.EmptyListException;
 import com.suhoi.exception.TodayTrainException;
+import com.suhoi.model.Role;
 import com.suhoi.model.Train;
 import com.suhoi.repository.TrainRepository;
 import com.suhoi.repository.impl.TrainRepositoryImpl;
@@ -59,7 +61,13 @@ public class TrainServiceImpl implements TrainService {
 
     @Override
     public List<TrainDto> getTrains() {
-        return trainRepository.getTrainOrderByDate(UserUtils.getCurrentUser().getId());
+        if (UserUtils.getCurrentUser().getRole().equals(Role.SIMPLE)) {
+            return trainRepository.getTrainOrderByDate(UserUtils.getCurrentUser().getId());
+        } else {
+            // для ADMIN
+            return trainRepository.getTrainOrderByDate();
+        }
+
     }
 
     @Override
@@ -73,6 +81,26 @@ public class TrainServiceImpl implements TrainService {
             burnedCalories = burnedCalories + dto.getCalories();
         }
         return burnedCalories;
+    }
+
+    @Override
+    public List<Train> getAllTrainsByUserId() {
+        List<Train> all = trainRepository.findAll(UserUtils.getCurrentUser().getId());
+        if (all.isEmpty()) {
+            throw new EmptyListException("You have no trainings");
+        } else {
+            return all;
+        }
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        trainRepository.delete(id);
+    }
+
+    @Override
+    public void update(UpdateTrainDto dto) {
+        trainRepository.update(dto);
     }
 
     private boolean isAddedTrainToday(CreateTrainDto dto) {

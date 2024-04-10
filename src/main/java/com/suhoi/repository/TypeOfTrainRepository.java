@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface TypeOfTrainRepository {
 
-    void save(String name);
+    void save(TypeOfTrain build);
 
     Optional<TypeOfTrain> getTypeByName(String name);
 

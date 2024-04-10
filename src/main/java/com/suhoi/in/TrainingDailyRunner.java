@@ -4,6 +4,7 @@ import com.suhoi.in.controller.TrainController;
 import com.suhoi.in.controller.TypeOfTrainController;
 import com.suhoi.in.controller.UserController;
 import com.suhoi.in.controller.impl.TrainControllerImpl;
+import com.suhoi.in.controller.impl.TypeOfTrainControllerImpl;
 import com.suhoi.in.controller.impl.UserControllerImpl;
 import com.suhoi.model.User;
 import com.suhoi.util.UserUtils;
@@ -15,7 +16,7 @@ public class TrainingDailyRunner {
 
     private static final UserController userController = new UserControllerImpl();
     private static final TrainController trainController = new TrainControllerImpl();
-    private static TypeOfTrainController typeOfTrainController;
+    private static final TypeOfTrainController typeOfTrainController = new TypeOfTrainControllerImpl();
 
     public static void start() {
         System.out.println();
@@ -41,7 +42,6 @@ public class TrainingDailyRunner {
                 userController.signIn();
                 menu();
                 break;
-
             case 3:
                 System.out.println("Exit");
                 System.exit(0);
@@ -56,9 +56,13 @@ public class TrainingDailyRunner {
         System.out.println();
         System.out.println("Choose action: ");
         System.out.println("1 - Add trainings");
-        System.out.println("2 - Get all trainings sorted by Date");
+        System.out.println("2 - Get all trainings sorted by Date for current user. (if you login as Admin - for all users)");
         System.out.println("3 - Get burned calories between Date");
-        System.out.println("5 - Log out");
+        System.out.println("4 - Update training");
+        System.out.println("5 - Delete training");
+        System.out.println("6 - Add new type of trainings (for ADMIN!)");
+        System.out.println("7 - ");
+        System.out.println("8 - Log out");
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.print("Enter: ");
@@ -80,9 +84,15 @@ public class TrainingDailyRunner {
                     trainController.getCaloriesBetweenDates();
                     break;
                 case 4:
-
+                    trainController.edit();
                     break;
                 case 5:
+                    trainController.delete();
+                    break;
+                case 6:
+                    typeOfTrainController.addNewTypeOfTrainings();
+                    break;
+                case 8:
                     UserUtils.setCurrentUser(null);
                     start();
                     break;

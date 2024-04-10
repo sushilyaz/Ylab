@@ -2,8 +2,10 @@ package com.suhoi.in.controller.impl;
 
 import com.suhoi.dto.CreateTrainDto;
 import com.suhoi.dto.TrainDto;
+import com.suhoi.dto.UpdateTrainDto;
 import com.suhoi.in.TrainingDailyRunner;
 import com.suhoi.in.controller.TrainController;
+import com.suhoi.model.Train;
 import com.suhoi.service.TrainService;
 import com.suhoi.service.impl.TrainServiceImpl;
 import com.suhoi.util.Parser;
@@ -43,28 +45,7 @@ public class TrainControllerImpl implements TrainController {
             addTrain();
         }
 
-        System.out.println("Enter optional info. Format: key: 'smth' value: 'smth'");
-        Map<String, String> advanced = new HashMap<>();
-        while (true) {
-            System.out.print("Do you want add optional? (yes/no): ");
-            scanner.nextLine();
-            String addField = scanner.nextLine().trim();
-            if (addField.equalsIgnoreCase("no")) {
-                break;
-            } else if (!addField.equalsIgnoreCase("yes")) {
-                System.out.println("Invalid data. Please write 'yes' or 'no'.");
-                continue;
-            }
-
-            System.out.print("Enter key: ");
-            String key = scanner.nextLine().trim();
-
-            System.out.print("Enter values: ");
-            String value = scanner.nextLine().trim();
-
-            advanced.put(key, value);
-        }
-
+        Map<String, String> advanced = getStringStringMap(scanner);
 
 
         CreateTrainDto dto = CreateTrainDto.builder()
@@ -78,6 +59,8 @@ public class TrainControllerImpl implements TrainController {
         System.out.println("Data added success!");
         TrainingDailyRunner.menu();
     }
+
+
 
     @Override
     public void getAllSortedTrainings() {
@@ -114,5 +97,94 @@ public class TrainControllerImpl implements TrainController {
         System.out.println(trainService.getTrainsBetweenDate(startDate, endDate));
 
         TrainingDailyRunner.menu();
+    }
+
+    @Override
+    public void edit() {
+        System.out.println("""
+                Enter the ID of the record you want to update:
+                You can update only CALORIES and ADVANCED
+                """);
+        List<Train> allTrains = trainService.getAllTrainsByUserId();
+        for (Train train : allTrains) {
+            System.out.println(train);
+        }
+        System.out.println();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter ID: ");
+        Long id = 0L;
+        try {
+            id = scanner.nextLong();
+        } catch (Exception e) {
+            System.out.println("Invalid number");
+            edit();
+        }
+
+        System.out.print("Enter new calories: ");
+        Integer calories = 0;
+        try {
+            calories = scanner.nextInt();
+        } catch (Exception e) {
+            System.out.println("Invalid number");
+            edit();
+        }
+        System.out.println("Enter new optional info: ");
+        Map<String, String> advanced = getStringStringMap(scanner);
+
+        UpdateTrainDto build = UpdateTrainDto.builder()
+                .id(id)
+                .calories(calories)
+                .advanced(advanced)
+                .build();
+        trainService.update(build);
+        TrainingDailyRunner.menu();
+    }
+
+    @Override
+    public void delete() {
+        System.out.println("""
+                Enter the ID of the record you want to delete:
+                """);
+        List<Train> allTrains = trainService.getAllTrainsByUserId();
+
+        for (Train train : allTrains) {
+            System.out.println(train);
+        }
+        System.out.println();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter ID: ");
+        Long id = 0L;
+        try {
+            id = scanner.nextLong();
+        } catch (Exception e) {
+            System.out.println("Invalid number");
+            edit();
+        }
+        trainService.deleteById(id);
+        TrainingDailyRunner.menu();
+    }
+    private Map<String, String> getStringStringMap(Scanner scanner) {
+        System.out.println("Enter optional info. Format: key: 'smth' value: 'smth'");
+        Map<String, String> advanced = new HashMap<>();
+        while (true) {
+            System.out.print("Do you want add optional? (yes/no): ");
+            scanner.nextLine();
+            String addField = scanner.nextLine().trim();
+            if (addField.equalsIgnoreCase("no")) {
+                break;
+            } else if (!addField.equalsIgnoreCase("yes")) {
+                System.out.println("Invalid data. Please write 'yes' or 'no'.");
+                continue;
+            }
+
+            System.out.print("Enter key: ");
+            String key = scanner.nextLine().trim();
+
+            System.out.print("Enter values: ");
+            String value = scanner.nextLine().trim();
+
+            advanced.put(key, value);
+        }
+        return advanced;
     }
 }

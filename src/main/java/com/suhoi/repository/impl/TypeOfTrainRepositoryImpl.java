@@ -26,8 +26,9 @@ public class TypeOfTrainRepositoryImpl implements TypeOfTrainRepository {
     }
 
     @Override
-    public void save(String name) {
-
+    public void save(TypeOfTrain build) {
+        RuntimeDB.addTypeOfTrain(build);
+        System.out.println("New type added success");
     }
 
     @Override

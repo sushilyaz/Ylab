@@ -8,4 +8,6 @@ public interface TypeOfTrainService {
     TypeOfTrain getType(String type);
 
     List<TypeOfTrain> getAllType();
+
+    void save(TypeOfTrain build);
 }
