@@ -5,6 +5,7 @@ import com.suhoi.exception.NoValidDataException;
 import com.suhoi.in.TrainingDailyRunner;
 import com.suhoi.in.controller.UserController;
 import com.suhoi.model.User;
+import com.suhoi.repository.impl.UserRepositoryImpl;
 import com.suhoi.service.UserService;
 import com.suhoi.service.impl.UserServiceImpl;
 import com.suhoi.util.UserUtils;
@@ -17,7 +18,7 @@ public class UserControllerImpl implements UserController {
     private final UserService userService;
 
     public UserControllerImpl() {
-        this.userService = UserServiceImpl.getInstance();
+        this.userService = new UserServiceImpl(UserRepositoryImpl.getInstance());
     }
 
     // POST

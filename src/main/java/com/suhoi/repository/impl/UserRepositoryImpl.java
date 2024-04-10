@@ -1,13 +1,9 @@
 package com.suhoi.repository.impl;
 
-import com.suhoi.dto.UserDto;
 import com.suhoi.model.User;
 import com.suhoi.repository.RuntimeDB;
 import com.suhoi.repository.UserRepository;
-import com.suhoi.service.impl.UserServiceImpl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class UserRepositoryImpl implements UserRepository {
@@ -29,7 +25,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void save(User user) {;
+    public void save(User user) {
         RuntimeDB.addUser(user);
     }
 

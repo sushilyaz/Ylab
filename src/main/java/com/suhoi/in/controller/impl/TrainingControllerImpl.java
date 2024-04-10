@@ -6,6 +6,8 @@ import com.suhoi.dto.UpdateTrainingDto;
 import com.suhoi.in.TrainingDailyRunner;
 import com.suhoi.in.controller.TrainingController;
 import com.suhoi.model.Training;
+import com.suhoi.repository.impl.TrainingRepositoryImpl;
+import com.suhoi.repository.impl.UserRepositoryImpl;
 import com.suhoi.service.TrainingService;
 import com.suhoi.service.impl.TrainingServiceImpl;
 import com.suhoi.util.Parser;
@@ -22,7 +24,7 @@ public class TrainingControllerImpl implements TrainingController {
     private final TrainingService trainingService;
 
     public TrainingControllerImpl() {
-        this.trainingService = TrainingServiceImpl.getInstance();
+        this.trainingService = new TrainingServiceImpl(TrainingRepositoryImpl.getInstance());
     }
 
     @Override

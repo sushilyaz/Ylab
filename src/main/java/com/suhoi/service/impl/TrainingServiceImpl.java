@@ -9,6 +9,8 @@ import com.suhoi.model.Role;
 import com.suhoi.model.Training;
 import com.suhoi.repository.TrainingRepository;
 import com.suhoi.repository.impl.TrainingRepositoryImpl;
+import com.suhoi.repository.impl.TypeOfTrainingRepositoryImpl;
+import com.suhoi.repository.impl.UserRepositoryImpl;
 import com.suhoi.service.TrainingService;
 import com.suhoi.service.TypeOfTrainingService;
 import com.suhoi.util.UserUtils;
@@ -23,21 +25,11 @@ public class TrainingServiceImpl implements TrainingService {
     private final TrainingRepository trainingRepository;
     private final TypeOfTrainingService typeOfTrainingService;
 
-    private TrainingServiceImpl() {
-        this.trainingRepository = TrainingRepositoryImpl.getInstance();
-        this.typeOfTrainingService = TypeOfTrainingServiceImpl.getInstance();
+    public TrainingServiceImpl(TrainingRepository trainingRepository) {
+        this.trainingRepository = trainingRepository;
+        this.typeOfTrainingService = new TypeOfTrainingServiceImpl(TypeOfTrainingRepositoryImpl.getInstance());
     }
 
-    public static TrainingServiceImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (TrainingServiceImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new TrainingServiceImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
 
     @Override
     public void addTrain(CreateTrainingDto dto) {
@@ -67,7 +59,6 @@ public class TrainingServiceImpl implements TrainingService {
             // для ADMIN
             return trainingRepository.getTrainOrderByDate();
         }
-
     }
 
     @Override
