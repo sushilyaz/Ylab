@@ -6,11 +6,13 @@ import com.suhoi.model.Training;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface TrainingRepository {
+
+    Optional<Training> getTrainingForDateById(Long userId, Long typeOfTrainingId, LocalDate date);
     /**
      * Сохранить новую тренировку
-     * INSERT
      *
      * @param training
      */
@@ -18,27 +20,11 @@ public interface TrainingRepository {
 
     /**
      * Получить тренировки для конкретного пользователя
-     * SELECT tot.name, t.duration, t.calories, t.advanced, t.date
-     * FROM trainings t
-     * JOIN type_of_trainings tot
-     * ON t.type_of_trainings_id = tot.id
-     * WHERE t.user_id = ?
      *
      * @param id
      * @return
      */
-    List<TrainingDto> getTrainOrderByDate(Long id);
-
-    /**
-     * Получить тренировки всех пользователей (для админа)
-     * SELECT tot.name, t.duration, t.calories, t.advanced, t.date
-     * FROM trainings t
-     * JOIN type_of_trainings tot
-     * ON t.type_of_trainings_id = tot.id
-     *
-     * @return
-     */
-    List<TrainingDto> getTrainOrderByDate();
+    List<Training> getAllByUserIdOrderByDate(Long id);
 
     /**
      * Обновить существующую тренировку.
@@ -54,8 +40,9 @@ public interface TrainingRepository {
      * DELETE
      *
      * @param id
+     * @param userId
      */
-    void delete(Long id);
+    void delete(Long id, Long userId);
 
     /**
      * Получить тренировки для конкретного пользователя в диапазоне времени
@@ -70,7 +57,7 @@ public interface TrainingRepository {
      * @param id
      * @return
      */
-    List<TrainingDto> getTrainBetweenDate(LocalDate startDate, LocalDate endDate, Long id);
+    List<Training> getTrainBetweenDate(LocalDate startDate, LocalDate endDate, Long id);
 
     /**
      * Для пользователя, чтобы он смог выбрать id, чтобы выбрать запись для удаления

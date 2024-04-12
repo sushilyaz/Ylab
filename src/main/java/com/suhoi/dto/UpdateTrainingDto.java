@@ -16,6 +16,7 @@ import java.util.Map;
 @Builder
 public class UpdateTrainingDto {
     private Long id;
+    private Long userId;
     private Integer calories;
     private Map<String, String> advanced;
 }

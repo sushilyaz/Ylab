@@ -1,15 +1,17 @@
 package com.suhoi.in.controller;
 
+import com.suhoi.model.Audit;
+
+import java.util.List;
+
+/**
+ * Контроллер аудита
+ */
 public interface AuditController {
     /**
-     * Сохранение действий пользователя
-     *
-     * @param action
-     */
-    void save(String action);
-
-    /**
      * Запрос на получение действий пользователя (для админа)
+     *
+     * @return
      */
-    void getAll();
+    List<Audit> getAll();
 }

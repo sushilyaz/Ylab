@@ -6,9 +6,6 @@ import com.suhoi.repository.RuntimeDB;
 
 import java.util.List;
 
-/**
- * Javadoc в интерфейсе
- */
 public class AuditRepositoryImpl implements AuditRepository {
 
     private static volatile AuditRepositoryImpl INSTANCE;

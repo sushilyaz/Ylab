@@ -7,9 +7,10 @@ import java.util.List;
 public interface AuditService {
     /**
      * Сервис для сохранения аудита
-     * @param audit
+     *
+     * @param action
      */
-    void save(Audit audit);
+    void save(String action);
 
     /**
      * Сервис для предоставления администратору всех действий пользователей

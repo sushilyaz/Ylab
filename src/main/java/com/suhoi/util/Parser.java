@@ -1,9 +1,8 @@
 package com.suhoi.util;
 
-import com.suhoi.in.TrainingDailyRunner;
+import com.suhoi.in.console.TrainingDailyRunner;
 
 import java.time.Duration;
-import java.time.LocalDate;
 
 public class Parser {
     /**

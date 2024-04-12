@@ -1,40 +1,46 @@
 package com.suhoi.in.controller.impl;
 
 import com.suhoi.exception.PermissionDeniedException;
-import com.suhoi.in.TrainingDailyRunner;
+import com.suhoi.facade.TrainingFacade;
+import com.suhoi.facade.TypeOfTrainingFacade;
+import com.suhoi.facade.impl.TrainingFacadeImpl;
+import com.suhoi.facade.impl.TypeOfTrainingFacadeImpl;
+import com.suhoi.in.console.TrainingDailyRunner;
 import com.suhoi.in.controller.TypeOfTrainingController;
 import com.suhoi.model.Role;
 import com.suhoi.model.TypeOfTraining;
-import com.suhoi.repository.impl.TypeOfTrainingRepositoryImpl;
-import com.suhoi.service.TypeOfTrainingService;
-import com.suhoi.service.impl.TypeOfTrainingServiceImpl;
 import com.suhoi.util.UserUtils;
-
-import java.util.Scanner;
 
 public class TypeOfTrainingControllerImpl implements TypeOfTrainingController {
 
-    private final TypeOfTrainingService typeOfTrainingService;
+    private static volatile TypeOfTrainingControllerImpl INSTANCE;
+    private TypeOfTrainingFacade typeOfTrainingFacade;
 
-    public TypeOfTrainingControllerImpl() {
-        this.typeOfTrainingService = new TypeOfTrainingServiceImpl(TypeOfTrainingRepositoryImpl.getInstance());
+    private TypeOfTrainingControllerImpl() {
+        this.typeOfTrainingFacade = TypeOfTrainingFacadeImpl.getInstance();
+    }
+
+    public static TypeOfTrainingControllerImpl getInstance() {
+        if (INSTANCE == null) {
+            synchronized (TypeOfTrainingControllerImpl.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new TypeOfTrainingControllerImpl();
+                }
+            }
+        }
+        return INSTANCE;
     }
 
     @Override
-    public void addNewTypeOfTrainings() {
-        // если обычный пользователь пытается - исключение
-        if (UserUtils.getCurrentUser().getRole().equals(Role.SIMPLE)) {
-            throw new PermissionDeniedException("Permission denied");
+    public void addNewTypeOfTrainings(String name) {
+        try {
+            if (!UserUtils.getCurrentUser().getRole().equals(Role.ADMIN)) {
+                throw new PermissionDeniedException("Permission denied");
+            }
+        } catch (PermissionDeniedException e) {
+            System.out.println(e.getMessage());
+            TrainingDailyRunner.menu();
         }
-        System.out.println();
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter new type of train: ");
-        String typeOfTrain = scanner.nextLine();
-
-        TypeOfTraining build = TypeOfTraining.builder()
-                .name(typeOfTrain)
-                .build();
-
-        typeOfTrainingService.save(build);
+        typeOfTrainingFacade.addNewTypeOfTraining(name);
     }
 }

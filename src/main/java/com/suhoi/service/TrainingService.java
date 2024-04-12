@@ -1,21 +1,18 @@
 package com.suhoi.service;
 
-import com.suhoi.dto.CreateTrainingDto;
-import com.suhoi.dto.TrainingDto;
+import com.suhoi.dto.RangeDto;
 import com.suhoi.dto.UpdateTrainingDto;
 import com.suhoi.model.Training;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface TrainingService {
     /**
      * Добавление новой тренировки
      * Если сегодня тренировка с одним типом добавлялась - эксепшен
-     *
-     * @param dto
      */
-    void addTrain(CreateTrainingDto dto);
+
+    void addTrainingIfNotExist(Training training);
 
     /**
      * Вывод всех тренировок отсортированных по дате.
@@ -24,16 +21,14 @@ public interface TrainingService {
      *
      * @return
      */
-    List<TrainingDto> getTrains();
+    List<Training> getAllForUser();
 
     /**
      * Подсчет калорий в разрезе времени у конкретного пользователя
      *
-     * @param startDate
-     * @param endDate
      * @return
      */
-    Integer getTrainsBetweenDate(LocalDate startDate, LocalDate endDate);
+    Integer getTrainsBetweenDate(RangeDto dto);
 
     /**
      * Возвращаем все тренировки конкретного пользователя. Возвращается вся модель, чтобы можно было выбрать ID, по которому удалять
@@ -45,8 +40,6 @@ public interface TrainingService {
 
     /**
      * Удаление записи о тренировке по ее id
-     *
-     * @param id
      */
     void deleteById(Long id);
 

@@ -6,9 +6,6 @@ import com.suhoi.repository.UserRepository;
 
 import java.util.Optional;
 
-/**
- * Javadoc в интерфейсе
- */
 public class UserRepositoryImpl implements UserRepository {
 
     private static volatile UserRepositoryImpl INSTANCE;
@@ -34,8 +31,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> getUserByUsername(String username) {
-        return RuntimeDB.getUsers().stream()
-                .filter(user -> user.getUsername().equals(username))
-                .findFirst();
+        return Optional.ofNullable(RuntimeDB.getUsernameIndex().get(username));
     }
 }

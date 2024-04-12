@@ -1,27 +1,10 @@
-package com.suhoi.in;
+package com.suhoi.in.console;
 
-import com.suhoi.in.controller.AuditController;
-import com.suhoi.in.controller.TrainingController;
-import com.suhoi.in.controller.TypeOfTrainingController;
-import com.suhoi.in.controller.UserController;
-import com.suhoi.in.controller.impl.AuditControllerImpl;
-import com.suhoi.in.controller.impl.TrainingControllerImpl;
-import com.suhoi.in.controller.impl.TypeOfTrainingControllerImpl;
-import com.suhoi.in.controller.impl.UserControllerImpl;
-import com.suhoi.model.Audit;
 import com.suhoi.util.UserUtils;
-
-import java.time.LocalDateTime;
 import java.util.Scanner;
 
 
 public class TrainingDailyRunner {
-
-    private static final UserController userController = new UserControllerImpl();
-    private static final TrainingController trainingController = new TrainingControllerImpl();
-    private static final TypeOfTrainingController typeOfTrainingController = new TypeOfTrainingControllerImpl();
-    private static final AuditController auditController = new AuditControllerImpl();
-
     /**
      * Окно авторизации и регистрации
      */
@@ -43,12 +26,10 @@ public class TrainingDailyRunner {
 
         switch (choice) {
             case 1:
-                userController.signUp();
-                start();
+                StartHandler.registration();
                 break;
             case 2:
-                userController.signIn();
-                menu();
+                StartHandler.authentication();
                 break;
             case 3:
                 System.out.println("Exit");
@@ -75,10 +56,8 @@ public class TrainingDailyRunner {
         System.out.println("7 - Open audit (for admin)");
         System.out.println("8 - Log out");
         Scanner scanner = new Scanner(System.in);
-        Audit audit = new Audit();
         while (true) {
             System.out.print("Enter: ");
-            // обрабатываем, чтобы не положить приложение
             int choice = 0;
             try {
                 choice = scanner.nextInt();
@@ -88,37 +67,32 @@ public class TrainingDailyRunner {
             }
             switch (choice) {
                 case 1:
-                    trainingController.addTrain();
-                    auditController.save("Insert new training");
+                    MenuHandler.addNewTraining();
                     TrainingDailyRunner.menu();
                     break;
                 case 2:
-                    trainingController.getAllSortedTrainings();
-                    auditController.save("Get all trainings sorted by date");
+                    MenuHandler.getAllTrainingsForUser();
                     TrainingDailyRunner.menu();
                     break;
                 case 3:
-                    trainingController.getCaloriesBetweenDates();
-                    auditController.save("Get all trainings between dates");
+                    MenuHandler.getCaloriesBetweenDates();
                     TrainingDailyRunner.menu();
                     break;
                 case 4:
-                    trainingController.edit();
-                    auditController.save("Update training");
+                    MenuHandler.edit();
                     TrainingDailyRunner.menu();
                     break;
                 case 5:
-                    trainingController.delete();
-                    auditController.save("Delete training");
+                    MenuHandler.delete();
                     TrainingDailyRunner.menu();
                     break;
                 case 6:
-                    typeOfTrainingController.addNewTypeOfTrainings();
-                    auditController.save("Add new type training");
+                    MenuHandler.addNewTypeOfTraining();
                     TrainingDailyRunner.menu();
                     break;
                 case 7:
-                    auditController.getAll();
+                    MenuHandler.getAudit();
+                    TrainingDailyRunner.menu();
                     break;
                 case 8:
                     UserUtils.setCurrentUser(null);

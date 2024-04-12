@@ -1,11 +1,11 @@
 package com.suhoi.service.impl;
 
-import com.suhoi.dto.UserDto;
 import com.suhoi.exception.UserActionException;
-import com.suhoi.model.Role;
+import com.suhoi.in.console.TrainingDailyRunner;
 import com.suhoi.model.User;
 import com.suhoi.repository.UserRepository;
 import com.suhoi.repository.impl.UserRepositoryImpl;
+import com.suhoi.service.AuditService;
 import com.suhoi.service.UserService;
 import com.suhoi.util.UserUtils;
 
@@ -16,45 +16,57 @@ import java.util.Optional;
  */
 public class UserServiceImpl implements UserService {
 
+    private static volatile UserServiceImpl INSTANCE;
+
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    private final AuditService auditService;
+
+    private UserServiceImpl() {
+        this.userRepository = UserRepositoryImpl.getInstance();
+        this.auditService = AuditServiceImpl.getInstance();
     }
 
-    @Override
-    public void signUp(UserDto dto) {
-        Optional<User> isUserExist = userRepository.getUserByUsername(dto.getUsername());
-        // Если пользователь существует - исключение
-        if (isUserExist.isPresent()) {
-            throw new UserActionException("User with username '" + dto.getUsername() + "' already exist");
-        } else {
-            User user = User.builder()
-                    .username(dto.getUsername())
-                    .password(dto.getPassword())
-                    .role(Role.SIMPLE)
-                    .build();
-            userRepository.save(user);
-            System.out.println("User with username '" + dto.getUsername() + "' registered success");
-        }
-    }
-
-    @Override
-    public void signIn(UserDto dto) {
-        // Достаем пользователя, если он существует
-        Optional<User> user = userRepository.getUserByUsername(dto.getUsername());
-        if (user.isPresent()) {
-            // Проверка правильности пароля
-            if (user.get().getPassword().equals(dto.getPassword())){
-                UserUtils.setCurrentUser(user.get());
-                System.out.println("User with username '" + dto.getUsername() + "' log in success");
-            } else {
-                throw new UserActionException("Incorrect password");
+    public static UserServiceImpl getInstance() {
+        if (INSTANCE == null) {
+            synchronized (UserServiceImpl.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new UserServiceImpl();
+                }
             }
-
-        } else {
-            UserUtils.setCurrentUser(null);
-            throw new UserActionException("User with username '" + dto.getUsername() + "' doesnt exist");
         }
+        return INSTANCE;
+    }
+
+    @Override
+    public void createUserIfNotExist(User createUser) {
+        Optional<User> existUser = userRepository.getUserByUsername(createUser.getUsername());
+        try {
+            if (existUser.isPresent()) {
+                throw new UserActionException("User with username '" + createUser.getUsername() + "' already exist");
+            }
+        } catch (UserActionException e) {
+            System.out.println(e.getMessage());
+            TrainingDailyRunner.start();
+        }
+        userRepository.save(createUser);
+        System.out.println("User with username '" + createUser.getUsername() + "' registered success");
+
+    }
+
+    @Override
+    public void auth(User authUser) {
+        Optional<User> user = userRepository.getUserByUsername(authUser.getUsername());
+        try {
+            if (user.isEmpty() || !user.get().getPassword().equals(authUser.getPassword())) {
+                throw new UserActionException("Incorrect login or password");
+            }
+        } catch (UserActionException e) {
+            System.out.println(e.getMessage());
+            TrainingDailyRunner.start();
+        }
+        UserUtils.setCurrentUser(user.get());
+        System.out.println("User with username '" + authUser.getUsername() + "' log in success");
+        auditService.save("called UserService.auth");
     }
 }

@@ -7,11 +7,9 @@ import java.util.List;
 public interface TypeOfTrainingService {
     /**
      * По названию типа возвращаем сущность, чтобы в дальнейшем можно было взять оттуда id для JOIN
-     *
-     * @param type
      * @return
      */
-    TypeOfTraining getType(String type);
+    TypeOfTraining getTypeByName(String name);
 
 
     /**
@@ -24,7 +22,7 @@ public interface TypeOfTrainingService {
     /**
      * Сохранение нового типа тренировки
      *
-     * @param build
+     * @param name
      */
-    void save(TypeOfTraining build);
+    void save(String name);
 }

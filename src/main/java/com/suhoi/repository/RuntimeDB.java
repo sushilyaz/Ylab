@@ -7,7 +7,9 @@ import com.suhoi.model.User;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * База данных в рантайме (имитация)
@@ -27,10 +29,13 @@ public class RuntimeDB {
     private static List<TypeOfTraining> type_of_training = new ArrayList<>();
     @Getter
     private static List<Audit> audits = new ArrayList<>();
+    @Getter
+    private static Map<String, User> usernameIndex = new HashMap<>();
 
     public static void addUser(User user) {
         user.setId(seq_users++);
         users.add(user);
+        usernameIndex.put(user.getUsername(), user);
     }
 
     public static void addTrain(Training training) {

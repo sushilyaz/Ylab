@@ -1,18 +1,16 @@
 package com.suhoi.service.impl;
 
 import com.suhoi.dto.CreateTrainingDto;
-import com.suhoi.dto.TrainingDto;
+import com.suhoi.dto.RangeDto;
 import com.suhoi.dto.UpdateTrainingDto;
 import com.suhoi.exception.DataNotFoundException;
 import com.suhoi.exception.EmptyListException;
-import com.suhoi.model.Role;
+import com.suhoi.in.console.TrainingDailyRunner;
 import com.suhoi.model.Training;
 import com.suhoi.repository.TrainingRepository;
 import com.suhoi.repository.impl.TrainingRepositoryImpl;
-import com.suhoi.repository.impl.TypeOfTrainingRepositoryImpl;
-import com.suhoi.repository.impl.UserRepositoryImpl;
+import com.suhoi.service.AuditService;
 import com.suhoi.service.TrainingService;
-import com.suhoi.service.TypeOfTrainingService;
 import com.suhoi.util.UserUtils;
 
 import java.time.LocalDate;
@@ -26,90 +24,100 @@ public class TrainingServiceImpl implements TrainingService {
     private static volatile TrainingServiceImpl INSTANCE;
 
     private final TrainingRepository trainingRepository;
-    private final TypeOfTrainingService typeOfTrainingService;
+    private final AuditService auditService;
 
-    public TrainingServiceImpl(TrainingRepository trainingRepository) {
-        this.trainingRepository = trainingRepository;
-        this.typeOfTrainingService = new TypeOfTrainingServiceImpl(TypeOfTrainingRepositoryImpl.getInstance());
+    private TrainingServiceImpl() {
+        this.trainingRepository = TrainingRepositoryImpl.getInstance();
+        this.auditService = AuditServiceImpl.getInstance();
     }
 
-
-    @Override
-    public void addTrain(CreateTrainingDto dto) {
-        // Достаем тип тренировки, для проверки на занесение данных за сегодня
-        Long typeOfTrainId = typeOfTrainingService.getType(dto.getTypeOfTrain()).getId();
-
-        Training training = Training.builder()
-                .userId(UserUtils.getCurrentUser().getId())
-                .typeOfTrainingId(typeOfTrainId)
-                .duration(dto.getDuration())
-                .calories(dto.getCalories())
-                .advanced(dto.getAdvanced())
-                .date(LocalDate.now())
-                .build();
-
-        if (isAddedTrainToday(dto)) {
-            throw new DataNotFoundException("Training with type " + dto.getTypeOfTrain() + " today already added");
-        } else {
-            trainingRepository.save(training);
+    public static TrainingServiceImpl getInstance() {
+        if (INSTANCE == null) {
+            synchronized (TrainingServiceImpl.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new TrainingServiceImpl();
+                }
+            }
         }
+        return INSTANCE;
     }
 
     @Override
-    public List<TrainingDto> getTrains() {
-        // Проверяем, какая роль. Если роль у текущего пользователя simple - запрос на получение только его тренировок
-        if (UserUtils.getCurrentUser().getRole().equals(Role.SIMPLE)) {
-            return trainingRepository.getTrainOrderByDate(UserUtils.getCurrentUser().getId());
-        } else {
-            // Если admin - тренировки всех пользователей
-            return trainingRepository.getTrainOrderByDate();
+    public void addTrainingIfNotExist(Training training) {
+        Long userId = training.getId();
+        Long typeOfTrainingId = training.getTypeOfTrainingId();
+        LocalDate date = training.getDate();
+        try {
+            trainingRepository.getTrainingForDateById(userId, typeOfTrainingId, date)
+                    .ifPresent(t -> {
+                        throw new DataNotFoundException("Training with id " + training.getId() + " already exists");
+                    });
+        } catch (DataNotFoundException e) {
+            auditService.save("TrainingService.addTrainingIfNotExist failed");
+            System.out.println(e.getMessage());
+            TrainingDailyRunner.menu();
         }
+        trainingRepository.save(training);
+        auditService.save("TrainingService.addTrainingIfNotExist success");
     }
 
     @Override
-    public Integer getTrainsBetweenDate(LocalDate startDate, LocalDate endDate) {
-        // запрос на все тренировки
-        List<TrainingDto> trainBetweenDate = trainingRepository.getTrainBetweenDate(startDate, endDate, UserUtils.getCurrentUser().getId());
-        // Если список пуст, значит в заданном диапазоне не было - бросаем исключение
-        if (trainBetweenDate.isEmpty()) {
-            throw new EmptyListException("Data not exist for this dates");
+    public List<Training> getAllForUser() {
+        List<Training> rs = trainingRepository.getAllByUserIdOrderByDate(UserUtils.getCurrentUser().getId());
+        try {
+            if (rs.isEmpty()) throw new EmptyListException("There are no trainings");
+        } catch (EmptyListException e) {
+            auditService.save("TrainingService.getAllForUser failed");
+            System.out.println(e.getMessage());
+            TrainingDailyRunner.menu();
         }
-        // Подсчет калорий
+        auditService.save("TrainingService.getAllForUser success");
+        return rs;
+    }
+
+    @Override
+    public Integer getTrainsBetweenDate(RangeDto dto) {
+        List<Training> trainBetweenDate = trainingRepository.getTrainBetweenDate(dto.getStartDate(), dto.getEndDate(), UserUtils.getCurrentUser().getId());
+        try {
+            if (trainBetweenDate.isEmpty()) throw new EmptyListException("Data not exist for this dates");
+        } catch (EmptyListException e) {
+            auditService.save("TrainingService.getTrainsBetweenDate failed");
+            System.out.println(e.getMessage());
+            TrainingDailyRunner.menu();
+        }
         Integer burnedCalories = 0;
-        for (TrainingDto dto : trainBetweenDate) {
-            burnedCalories = burnedCalories + dto.getCalories();
+        for (Training training : trainBetweenDate) {
+            burnedCalories = burnedCalories + training.getCalories();
         }
+        auditService.save("TrainingService.getTrainsBetweenDate success");
         return burnedCalories;
     }
 
     @Override
     public List<Training> getAllTrainsByUserId() {
         List<Training> all = trainingRepository.findAll(UserUtils.getCurrentUser().getId());
-        if (all.isEmpty()) {
-            throw new EmptyListException("You have no trainings");
-        } else {
-            return all;
+        try {
+            if (all.isEmpty()) throw new EmptyListException("You have no trainings");
+        } catch (EmptyListException e) {
+            auditService.save("TrainingService.getAllTrainsByUserId failed");
+            System.out.println(e.getMessage());
+            TrainingDailyRunner.menu();
+            return null;
         }
+        auditService.save("TrainingService.getAllTrainsByUserId success");
+        return all;
     }
 
     @Override
     public void deleteById(Long id) {
-        trainingRepository.delete(id);
+        auditService.save("called TrainingService.deleteById");
+        trainingRepository.delete(id, UserUtils.getCurrentUser().getId());
     }
 
     @Override
     public void update(UpdateTrainingDto dto) {
+        auditService.save("called TrainingService.update");
+        dto.setUserId(UserUtils.getCurrentUser().getId());
         trainingRepository.update(dto);
     }
-
-    /**
-     * Метод, проверяющий добавляли ли сегодня тренировку с этим же типом
-     * @param dto
-     * @return
-     */
-    private boolean isAddedTrainToday(CreateTrainingDto dto) {
-        return trainingRepository.getTrainOrderByDate(UserUtils.getCurrentUser().getId()).stream()
-                .anyMatch(t -> t.getDate().equals(LocalDate.now()) && t.getTypeOfTrain().equals(dto.getTypeOfTrain()));
-    }
-
 }

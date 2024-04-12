@@ -1,6 +1,6 @@
 package com.suhoi;
 
-import com.suhoi.in.TrainingDailyRunner;
+import com.suhoi.in.console.TrainingDailyRunner;
 import com.suhoi.util.InitDB;
 
 public class Main {

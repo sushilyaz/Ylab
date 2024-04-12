@@ -7,9 +7,6 @@ import com.suhoi.repository.TypeOfTrainingRepository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Javadoc в интерфейсе
- */
 public class TypeOfTrainingRepositoryImpl implements TypeOfTrainingRepository {
 
     private static volatile TypeOfTrainingRepositoryImpl INSTANCE;

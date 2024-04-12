@@ -1,14 +1,15 @@
 package com.suhoi.in.controller;
 
+import com.suhoi.dto.AuthDto;
+import com.suhoi.dto.CreateUserDto;
+
 public interface UserController {
     /**
      * Регистрация
-     * POST
      */
-    void signUp();
+    void signUp(CreateUserDto createUserDto);
     /**
      * Авторизация
-     * POST
      */
-    void signIn();
+    void authentication(AuthDto authDto);
 }

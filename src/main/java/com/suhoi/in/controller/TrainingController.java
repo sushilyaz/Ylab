@@ -1,35 +1,41 @@
 package com.suhoi.in.controller;
 
+import com.suhoi.dto.*;
+import com.suhoi.model.Training;
+
+import java.util.List;
+
 public interface TrainingController {
     /**
      * Добавление новой тренировки
-     * POST
      */
-    void addTrain();
+    void addNewTraining(CreateTrainingDto dto);
 
     /**
-     * Запрос на получение всех тренировок пользователя[лей]
-     * GET
+     * Запрос на получение всех тренировок пользователя
+     *
+     * @return
      */
-    void getAllSortedTrainings();
+    List<TrainingDto> getAllTrainingForUser();
+
+    List<Training> getAllTrainingForUserWithId();
 
     /**
      * Запрос на получение сженных калорий в срезе времени.
      * Границы диапазона НЕ ВКЛЮЧИТЕЛЬНЫ!!!
-     * GET
+     *
+     * @return
      */
-    void getCaloriesBetweenDates();
+    Integer getCaloriesBetweenDates(RangeDto dto);
 
     /**
      * Обновление существующей записи
-     * PUT
      */
-    void edit();
+    void edit(UpdateTrainingDto dto);
 
     /**
      * Удаление существующей записи
-     * DELETE
      */
-    void delete();
+    void delete(Long id);
 
 }
