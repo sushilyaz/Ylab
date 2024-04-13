@@ -11,6 +11,9 @@ import java.util.Scanner;
 public class StartHandler {
     private static final UserController userController = UserControllerImpl.getInstance();
 
+    /**
+     * Взаимодействие с пользователем в окне регистрации
+     */
     public static void registration() {
         System.out.println();
         Scanner scanner = new Scanner(System.in);
@@ -37,6 +40,9 @@ public class StartHandler {
         TrainingDailyRunner.start();
     }
 
+    /**
+     * Взаимодействие с пользователем в окне авторизаци
+     */
     public static void authentication() {
         System.out.println();
         Scanner scanner = new Scanner(System.in);

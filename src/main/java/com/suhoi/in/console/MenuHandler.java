@@ -31,6 +31,9 @@ public class MenuHandler {
     private static TypeOfTrainingController typeOfTrainingController = TypeOfTrainingControllerImpl.getInstance();
     private static AuditController auditController = AuditControllerImpl.getInstance();
 
+    /**
+     * Взаимодействие с пользователем в окне добавления новой тренировки
+     */
     public static void addNewTraining() {
         System.out.println();
         Scanner scanner = new Scanner(System.in);
@@ -63,6 +66,9 @@ public class MenuHandler {
         System.out.println("Data added success!");
     }
 
+    /**
+     * Взаимодействие с пользователем в окне получения тренировок пользователя
+     */
     public static void getAllTrainingsForUser() {
         System.out.println();
         System.out.println("All trainings sorted by date: ");
@@ -72,6 +78,9 @@ public class MenuHandler {
         }
     }
 
+    /**
+     * Взаимодействие с пользователем в окне получения суммы калорий в срезе времени
+     */
     public static void getCaloriesBetweenDates() {
         System.out.println("""
                 You must enter the date in the format yyyy-mm-dd
@@ -100,6 +109,9 @@ public class MenuHandler {
         System.out.println(calories);
     }
 
+    /**
+     * Взаимодействие с пользователем в окне обновления тренировки
+     */
     public static void edit() {
         System.out.println("""
                 Enter the ID of the record you want to update:
@@ -139,6 +151,9 @@ public class MenuHandler {
         trainingController.edit(build);
     }
 
+    /**
+     * Взаимодействие с пользователем в окне удаления тренировки
+     */
     public static void delete() {
         System.out.println("""
                 Enter the ID of the record you want to delete:
@@ -160,6 +175,9 @@ public class MenuHandler {
         trainingController.delete(id);
     }
 
+    /**
+     * Взаимодействие с админом в окне добавления нового ТИПА тренировки
+     */
     public static void addNewTypeOfTraining() {
         System.out.println();
         Scanner scanner = new Scanner(System.in);
@@ -169,6 +187,9 @@ public class MenuHandler {
         typeOfTrainingController.addNewTypeOfTrainings(typeOfTrain);
     }
 
+    /**
+     * Взаимодействие с админом в окне получения аудита
+     */
     public static void getAudit() {
         List<Audit> audits = auditController.getAll();
         for (Audit audit : audits) {

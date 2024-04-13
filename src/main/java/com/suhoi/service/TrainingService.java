@@ -11,7 +11,6 @@ public interface TrainingService {
      * Добавление новой тренировки
      * Если сегодня тренировка с одним типом добавлялась - эксепшен
      */
-
     void addTrainingIfNotExist(Training training);
 
     /**

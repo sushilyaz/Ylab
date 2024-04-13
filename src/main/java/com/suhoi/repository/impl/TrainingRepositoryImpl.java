@@ -110,7 +110,6 @@ public class TrainingRepositoryImpl implements TrainingRepository {
         return RuntimeDB.getTrainings().stream()
                 .filter(train -> train.getDate().isAfter(startDate) && train.getDate().isBefore(endDate) && train.getUserId().equals(id))
                 .toList();
-
     }
 
     @Override

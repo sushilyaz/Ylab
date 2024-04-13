@@ -1,109 +1,149 @@
-//package com.suhoi.service.impl;
-//
-//import com.suhoi.InitDBTest;
-//import com.suhoi.dto.CreateTrainingDto;
-//import com.suhoi.dto.TrainingDto;
-//import com.suhoi.model.Role;
-//import com.suhoi.model.Training;
-//import com.suhoi.model.User;
-//import com.suhoi.repository.TrainingRepository;
-//import com.suhoi.service.TrainingService;
-//import com.suhoi.service.TypeOfTrainingService;
-//import com.suhoi.util.UserUtils;
-//import org.junit.jupiter.api.BeforeAll;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.mockito.Mock;
-//import org.mockito.junit.jupiter.MockitoExtension;
-//
-//import java.time.Duration;
-//import java.time.LocalDate;
-//import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.List;
-//
-//import static org.assertj.core.api.Assertions.assertThat;
-//import static org.mockito.Mockito.*;
-//
-//@ExtendWith(MockitoExtension.class)
-//class TrainingServiceImplTest {
-//
-//    @Mock
-//    private TypeOfTrainingService typeOfTrainingService;
-//
-//    @Mock
-//    private TrainingRepository trainingRepository;
-//
-//    private TrainingService trainingService;
-//
-//    @BeforeAll
-//    static void initTestDB() {
-//        InitDBTest.importData();
-//    }
-//    @BeforeEach
-//    void init() {
-//        trainingService = new TrainingServiceImpl(trainingRepository);
-//        UserUtils.setCurrentUser(new User(1L, "user1", "user1", Role.SIMPLE));
-//    }
-//
-//    @Test
-//    @DisplayName("addTrain without exception")
-//    void test1() {
-//        CreateTrainingDto dto = CreateTrainingDto.builder()
-//                .duration(Duration.ofHours(1))
-//                .calories(5000)
-//                .advanced(new HashMap<>())
-//                .typeOfTrain("GYM")
-//                .build();
-//        trainingService.addTrain(dto);
-//        verify(trainingRepository, times(1)).save(any(Training.class));
-//    }
-//
-//    @Test
-//    @DisplayName("getTrains for simple user success")
-//    void test2() {
-//        trainingService.getTrains();
-//        verify(trainingRepository, times(1)).getTrainOrderByDate(any(Long.class));
-//    }
-//
-//    @Test
-//    @DisplayName("getTrains for simple user failed")
-//    void test3() {
-//        trainingService.getTrains();
-//        verify(trainingRepository, never()).getAll();
-//    }
-//
-//    @Test
-//    @DisplayName("getTrainsBetweenDate success")
-//    void test4() {
-//        TrainingDto gym = TrainingDto.builder()
-//                .duration(Duration.ofHours(1))
-//                .calories(5000)
-//                .advanced(new HashMap<>())
-//                .typeOfTrain("GYM")
-//                .date(LocalDate.parse("2024-04-07"))
-//                .build();
-//        List<TrainingDto> testList = new ArrayList<>();
-//        testList.add(gym);
-//
-//        when(trainingRepository.getTrainBetweenDate(LocalDate.parse("2024-04-06"), LocalDate.parse("2024-04-08"), UserUtils.getCurrentUser().getId())).thenReturn(testList);
-//        Integer trainsBetweenDate = trainingService.getTrainsBetweenDate(LocalDate.parse("2024-04-06"), LocalDate.parse("2024-04-08"));
-//        assertThat(trainsBetweenDate).isEqualTo(5000);
-//    }
-//
-//    @Test
-//    @DisplayName("getAllTrainsByUserId success")
-//    void test5() {
-//        Training build = Training.builder()
-//                .id(1L)
-//                .build();
-//
-//        List<Training> testList = new ArrayList<>();
-//        testList.add(build);
-//        when(trainingRepository.findAll(UserUtils.getCurrentUser().getId())).thenReturn(testList);
-//        List<Training> res = trainingService.getAllTrainsByUserId();
-//        assertThat(res).isNotEmpty();
-//    }
-//}
+package com.suhoi.service.impl;
+
+import com.suhoi.dto.RangeDto;
+import com.suhoi.dto.UpdateTrainingDto;
+import com.suhoi.model.Role;
+import com.suhoi.model.Training;
+import com.suhoi.model.User;
+import com.suhoi.repository.TrainingRepository;
+import com.suhoi.service.TrainingService;
+import com.suhoi.util.UserUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class TrainingServiceImplTest {
+
+    @Mock
+    private TrainingRepository trainingRepository;
+
+    private TrainingService trainingService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        trainingService = TrainingServiceImpl.getInstance();
+        ((TrainingServiceImpl) trainingService).setTrainingRepository(trainingRepository);
+        UserUtils.setCurrentUser(new User(1L, "user1", "user1", Role.SIMPLE));
+    }
+
+    @Test
+    @DisplayName("getTrainingForDateById without exception")
+    void testGetTrainingForDateByIdTestSuccess() {
+
+        Training training = Training.builder()
+                .typeOfTrainingId(1L)
+                .userId(1L)
+                .duration(Duration.ofHours(1))
+                .calories(5000)
+                .advanced(new HashMap<>())
+                .date(LocalDate.now())
+                .build();
+
+        when(trainingRepository.getTrainingForDateById(anyLong(), anyLong(), any(LocalDate.class)))
+                .thenReturn(java.util.Optional.empty());
+
+        trainingService.addTrainingIfNotExist(training);
+
+        verify(trainingRepository, times(1)).getTrainingForDateById(anyLong(), anyLong(), any(LocalDate.class));
+        verify(trainingRepository, times(1)).save(training);
+    }
+
+    @Test
+    @DisplayName("getAllForUser without exception")
+    void testGetAllForUserWithoutException() {
+        // Arrange
+        List<Training> mockTrainings = new ArrayList<>();
+        mockTrainings.add(Training.builder()
+                .typeOfTrainingId(1L)
+                .userId(1L)
+                .duration(Duration.ofHours(1))
+                .calories(5000)
+                .advanced(new HashMap<>())
+                .date(LocalDate.now())
+                .build());
+
+        when(trainingRepository.getAllByUserIdOrderByDate(anyLong())).thenReturn(mockTrainings);
+
+        List<Training> result = trainingService.getAllForUser();
+
+        assertNotNull(result);
+        assertEquals(mockTrainings, result);
+        verify(trainingRepository, times(1)).getAllByUserIdOrderByDate(anyLong());
+    }
+
+    @Test
+    @DisplayName("getTrainsBetweenDate without exception")
+    void testGetTrainsBetweenDateSuccess() {
+        Training gym = Training.builder()
+                .duration(Duration.ofHours(1))
+                .calories(5000)
+                .advanced(new HashMap<>())
+                .typeOfTrainingId(2L)
+                .date(LocalDate.parse("2024-04-07"))
+                .build();
+        List<Training> testList = new ArrayList<>();
+        testList.add(gym);
+
+        when(trainingRepository.getTrainBetweenDate(LocalDate.parse("2024-04-06"), LocalDate.parse("2024-04-08"), UserUtils.getCurrentUser().getId())).thenReturn(testList);
+        RangeDto dto = RangeDto.builder()
+                .startDate(LocalDate.parse("2024-04-06"))
+                .endDate(LocalDate.parse("2024-04-08"))
+                .build();
+        Integer trainsBetweenDate = trainingService.getTrainsBetweenDate(dto);
+        assertThat(trainsBetweenDate).isEqualTo(5000);
+    }
+
+    @Test
+    @DisplayName("getAllTrainsByUserId without exception")
+    void testGetAllTrainsByUserIdSuccess() {
+        Training build = Training.builder()
+                .id(1L)
+                .build();
+
+        List<Training> testList = new ArrayList<>();
+        testList.add(build);
+        when(trainingRepository.findAll(UserUtils.getCurrentUser().getId())).thenReturn(testList);
+        List<Training> res = trainingService.getAllTrainsByUserId();
+        assertThat(res).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("deleteById without exception")
+    void testDeleteByIdWithoutException() {
+        Long trainingId = 1L;
+
+        trainingService.deleteById(trainingId);
+
+        verify(trainingRepository, times(1)).delete(trainingId, UserUtils.getCurrentUser().getId());
+    }
+    @Test
+    @DisplayName("update without exception")
+    void testUpdate() {
+        UpdateTrainingDto dto = UpdateTrainingDto.builder()
+                .userId(1L)
+                .calories(1000)
+                .advanced(new HashMap<>())
+                .build();
+
+        trainingService.update(dto);
+
+        verify(trainingRepository, times(1)).update(dto);
+    }
+}

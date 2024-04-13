@@ -1,6 +1,5 @@
 package com.suhoi.service.impl;
 
-import com.suhoi.dto.CreateTrainingDto;
 import com.suhoi.dto.RangeDto;
 import com.suhoi.dto.UpdateTrainingDto;
 import com.suhoi.exception.DataNotFoundException;
@@ -12,18 +11,19 @@ import com.suhoi.repository.impl.TrainingRepositoryImpl;
 import com.suhoi.service.AuditService;
 import com.suhoi.service.TrainingService;
 import com.suhoi.util.UserUtils;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Javadoc методов в интерфейсе
- */
+
 public class TrainingServiceImpl implements TrainingService {
 
     private static volatile TrainingServiceImpl INSTANCE;
 
-    private final TrainingRepository trainingRepository;
+    // для тестов, т.к. иначе замокать не получится, т.к. классы синглтон с приватным конструктором
+    @Setter
+    private TrainingRepository trainingRepository;
     private final AuditService auditService;
 
     private TrainingServiceImpl() {
@@ -44,7 +44,7 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     public void addTrainingIfNotExist(Training training) {
-        Long userId = training.getId();
+        Long userId = training.getUserId();
         Long typeOfTrainingId = training.getTypeOfTrainingId();
         LocalDate date = training.getDate();
         try {

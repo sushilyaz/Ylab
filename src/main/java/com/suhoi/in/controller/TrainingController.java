@@ -18,6 +18,12 @@ public interface TrainingController {
      */
     List<TrainingDto> getAllTrainingForUser();
 
+
+    /**
+     * Получения сущности тренировок (с id для удаления)
+     *
+     * @return
+     */
     List<Training> getAllTrainingForUserWithId();
 
     /**

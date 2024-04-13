@@ -8,17 +8,16 @@ import com.suhoi.repository.impl.UserRepositoryImpl;
 import com.suhoi.service.AuditService;
 import com.suhoi.service.UserService;
 import com.suhoi.util.UserUtils;
+import lombok.Setter;
 
 import java.util.Optional;
 
-/**
- * Javadoc в интерфейсе
- */
 public class UserServiceImpl implements UserService {
 
     private static volatile UserServiceImpl INSTANCE;
 
-    private final UserRepository userRepository;
+    @Setter
+    private UserRepository userRepository;
 
     private final AuditService auditService;
 
@@ -51,7 +50,6 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.save(createUser);
         System.out.println("User with username '" + createUser.getUsername() + "' registered success");
-
     }
 
     @Override

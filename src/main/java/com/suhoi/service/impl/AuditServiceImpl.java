@@ -12,9 +12,6 @@ import com.suhoi.util.UserUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Javadoc в интерфейсе
- */
 public class AuditServiceImpl implements AuditService {
 
     private static volatile AuditServiceImpl INSTANCE;

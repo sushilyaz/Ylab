@@ -8,6 +8,7 @@ public interface UserController {
      * Регистрация
      */
     void signUp(CreateUserDto createUserDto);
+
     /**
      * Авторизация
      */
