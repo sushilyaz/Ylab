@@ -15,21 +15,21 @@ import java.util.*;
 
 public class TrainingRepositoryImpl implements TrainingRepository {
 
-    private static volatile TrainingRepositoryImpl INSTANCE;
-
-    private TrainingRepositoryImpl() {
-    }
-
-    public static TrainingRepositoryImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (TrainingRepositoryImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new TrainingRepositoryImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
+//    private static volatile TrainingRepositoryImpl INSTANCE;
+//
+//    private TrainingRepositoryImpl() {
+//    }
+//
+//    public static TrainingRepositoryImpl getInstance() {
+//        if (INSTANCE == null) {
+//            synchronized (TrainingRepositoryImpl.class) {
+//                if (INSTANCE == null) {
+//                    INSTANCE = new TrainingRepositoryImpl();
+//                }
+//            }
+//        }
+//        return INSTANCE;
+//    }
 
     @Override
     public Optional<Training> getTrainingForDateById(Long userId, Long typeOfTrainingId, LocalDate date) {
@@ -58,28 +58,23 @@ public class TrainingRepositoryImpl implements TrainingRepository {
         Optional<Training> trainOptional = trainings.stream()
                 .filter(train -> train.getId().equals(dto.getId()) && train.getUserId().equals(dto.getUserId()))
                 .findFirst();
-        try {
-            if (trainOptional.isPresent()) {
-                Training trainingToUpdate = trainOptional.get();
+        if (trainOptional.isPresent()) {
+            Training trainingToUpdate = trainOptional.get();
 
-                trainingToUpdate.setCalories(dto.getCalories());
-                trainingToUpdate.setAdvanced(dto.getAdvanced());
+            trainingToUpdate.setCalories(dto.getCalories());
+            trainingToUpdate.setAdvanced(dto.getAdvanced());
 
-                for (int i = 0; i < trainings.size(); i++) {
-                    if (trainings.get(i).getId().equals(dto.getId())) {
-                        trainings.set(i, trainingToUpdate);
-                        break;
-                    }
+            for (int i = 0; i < trainings.size(); i++) {
+                if (trainings.get(i).getId().equals(dto.getId())) {
+                    trainings.set(i, trainingToUpdate);
+                    break;
                 }
-                System.out.println("Data updated success");
-            } else {
-                throw new DataNotFoundException("Train with id " + dto.getId() + " not found");
             }
-        } catch (DataNotFoundException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Data updated success");
+        } else {
+            System.out.println("Data not found");
             TrainingDailyRunner.menu();
         }
-
     }
 
     @Override
@@ -90,16 +85,12 @@ public class TrainingRepositoryImpl implements TrainingRepository {
                 .filter(train -> train.getId().equals(id) && train.getUserId().equals(userId))
                 .findFirst();
 
-        try {
-            if (trainOptional.isPresent()) {
-                Training trainingToDelete = trainOptional.get();
-                trainings.remove(trainingToDelete);
-                System.out.println("Data removed success");
-            } else {
-                throw new DataNotFoundException("Train with id " + id + " not found");
-            }
-        } catch (DataNotFoundException e) {
-            System.out.println(e.getMessage());
+        if (trainOptional.isPresent()) {
+            Training trainingToDelete = trainOptional.get();
+            trainings.remove(trainingToDelete);
+            System.out.println("Data removed success");
+        } else {
+            System.out.println("Train with id " + id + " not found");
             TrainingDailyRunner.menu();
         }
 

@@ -23,26 +23,33 @@ import java.util.stream.Collectors;
 
 public class TrainingFacadeImpl implements TrainingFacade {
 
-    private static volatile TrainingFacadeImpl INSTANCE;
-
     private final TrainingService trainingService;
     private final TypeOfTrainingService typeOfTrainingService;
 
-    private TrainingFacadeImpl() {
-        this.trainingService = TrainingServiceImpl.getInstance();
-        this.typeOfTrainingService = TypeOfTrainingServiceImpl.getInstance();
+    public TrainingFacadeImpl(TrainingService trainingService, TypeOfTrainingService typeOfTrainingService) {
+        this.trainingService = trainingService;
+        this.typeOfTrainingService = typeOfTrainingService;
     }
-
-    public static TrainingFacadeImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (TrainingFacadeImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new TrainingFacadeImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
+    //    private static volatile TrainingFacadeImpl INSTANCE;
+//
+//    private final TrainingService trainingService;
+//    private final TypeOfTrainingService typeOfTrainingService;
+//
+//    private TrainingFacadeImpl() {
+//        this.trainingService = TrainingServiceImpl.getInstance();
+//        this.typeOfTrainingService = TypeOfTrainingServiceImpl.getInstance();
+//    }
+//
+//    public static TrainingFacadeImpl getInstance() {
+//        if (INSTANCE == null) {
+//            synchronized (TrainingFacadeImpl.class) {
+//                if (INSTANCE == null) {
+//                    INSTANCE = new TrainingFacadeImpl();
+//                }
+//            }
+//        }
+//        return INSTANCE;
+//    }
 
 
     @Override

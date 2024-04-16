@@ -4,6 +4,7 @@ import com.suhoi.dto.AuthDto;
 import com.suhoi.model.Role;
 import com.suhoi.model.User;
 import com.suhoi.repository.UserRepository;
+import com.suhoi.service.AuditService;
 import com.suhoi.service.UserService;
 import com.suhoi.util.UserUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -25,13 +27,15 @@ class UserServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
-    private UserService userService;
+    @Mock
+    private AuditService auditService;
 
+    private UserService userService;
 
     @BeforeEach
     void setUp() {
-        userService = UserServiceImpl.getInstance();
-        ((UserServiceImpl) userService).setUserRepository(userRepository);
+        MockitoAnnotations.openMocks(this);
+        userService = new UserServiceImpl(userRepository, auditService);
     }
 
     @Test

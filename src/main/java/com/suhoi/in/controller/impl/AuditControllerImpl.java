@@ -14,23 +14,28 @@ import java.util.List;
 
 public class AuditControllerImpl implements AuditController {
 
-    private static volatile AuditControllerImpl INSTANCE;
-    private final AuditService auditService;
+    private AuditService auditService;
 
-    private AuditControllerImpl() {
-        this.auditService = AuditServiceImpl.getInstance();
+    public AuditControllerImpl(AuditService auditService) {
+        this.auditService = auditService;
     }
-
-    public static AuditControllerImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (AuditControllerImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new AuditControllerImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
+    //    private static volatile AuditControllerImpl INSTANCE;
+//    private final AuditService auditService;
+//
+//    private AuditControllerImpl() {
+//        this.auditService = AuditServiceImpl.getInstance();
+//    }
+//
+//    public static AuditControllerImpl getInstance() {
+//        if (INSTANCE == null) {
+//            synchronized (AuditControllerImpl.class) {
+//                if (INSTANCE == null) {
+//                    INSTANCE = new AuditControllerImpl();
+//                }
+//            }
+//        }
+//        return INSTANCE;
+//    }
 
     @Override
     public List<Audit> getAll() {

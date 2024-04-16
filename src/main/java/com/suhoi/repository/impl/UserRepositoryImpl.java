@@ -8,21 +8,22 @@ import java.util.Optional;
 
 public class UserRepositoryImpl implements UserRepository {
 
-    private static volatile UserRepositoryImpl INSTANCE;
 
-    private UserRepositoryImpl() {
-    }
-
-    public static UserRepositoryImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (UserRepositoryImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new UserRepositoryImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
+//    private static volatile UserRepositoryImpl INSTANCE;
+//
+//    private UserRepositoryImpl() {
+//    }
+//
+//    public static UserRepositoryImpl getInstance() {
+//        if (INSTANCE == null) {
+//            synchronized (UserRepositoryImpl.class) {
+//                if (INSTANCE == null) {
+//                    INSTANCE = new UserRepositoryImpl();
+//                }
+//            }
+//        }
+//        return INSTANCE;
+//    }
 
     @Override
     public void save(User user) {

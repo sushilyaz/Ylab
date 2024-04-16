@@ -13,23 +13,28 @@ import com.suhoi.util.UserUtils;
 
 public class TypeOfTrainingControllerImpl implements TypeOfTrainingController {
 
-    private static volatile TypeOfTrainingControllerImpl INSTANCE;
-    private TypeOfTrainingFacade typeOfTrainingFacade;
+    private final TypeOfTrainingFacade typeOfTrainingFacade;
 
-    private TypeOfTrainingControllerImpl() {
-        this.typeOfTrainingFacade = TypeOfTrainingFacadeImpl.getInstance();
+    public TypeOfTrainingControllerImpl(TypeOfTrainingFacade typeOfTrainingFacade) {
+        this.typeOfTrainingFacade = typeOfTrainingFacade;
     }
-
-    public static TypeOfTrainingControllerImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (TypeOfTrainingControllerImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new TypeOfTrainingControllerImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
+    //    private static volatile TypeOfTrainingControllerImpl INSTANCE;
+//    private TypeOfTrainingFacade typeOfTrainingFacade;
+//
+//    private TypeOfTrainingControllerImpl() {
+//        this.typeOfTrainingFacade = TypeOfTrainingFacadeImpl.getInstance();
+//    }
+//
+//    public static TypeOfTrainingControllerImpl getInstance() {
+//        if (INSTANCE == null) {
+//            synchronized (TypeOfTrainingControllerImpl.class) {
+//                if (INSTANCE == null) {
+//                    INSTANCE = new TypeOfTrainingControllerImpl();
+//                }
+//            }
+//        }
+//        return INSTANCE;
+//    }
 
     @Override
     public void addNewTypeOfTrainings(String name) {

@@ -15,23 +15,29 @@ import java.util.Scanner;
 
 public class UserControllerImpl implements UserController {
 
-    private static volatile UserControllerImpl INSTANCE;
-    private UserFacade userFacade;
+    private final UserFacade userFacade;
 
-    private UserControllerImpl() {
-        this.userFacade = UserFacadeImpl.getInstance();
+    public UserControllerImpl(UserFacade userFacade) {
+        this.userFacade = userFacade;
     }
 
-    public static UserControllerImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (UserControllerImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new UserControllerImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
+    //    private static volatile UserControllerImpl INSTANCE;
+//    private UserFacade userFacade;
+//
+//    private UserControllerImpl() {
+//        this.userFacade = UserFacadeImpl.getInstance();
+//    }
+//
+//    public static UserControllerImpl getInstance() {
+//        if (INSTANCE == null) {
+//            synchronized (UserControllerImpl.class) {
+//                if (INSTANCE == null) {
+//                    INSTANCE = new UserControllerImpl();
+//                }
+//            }
+//        }
+//        return INSTANCE;
+//    }
 
     @Override
     public void signUp(CreateUserDto createUserDto) {

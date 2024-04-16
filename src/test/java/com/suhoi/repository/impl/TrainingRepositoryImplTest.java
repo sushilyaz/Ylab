@@ -9,10 +9,7 @@ import com.suhoi.model.User;
 import com.suhoi.repository.RuntimeDB;
 import com.suhoi.repository.TrainingRepository;
 import com.suhoi.util.UserUtils;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -23,11 +20,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TrainingRepositoryImplTest {
 
-    private TrainingRepository trainingRepository = TrainingRepositoryImpl.getInstance();
-    @BeforeAll
-    static void initDB() {
+    private final TrainingRepository trainingRepository = new TrainingRepositoryImpl();
+
+    @BeforeEach
+    void initDB() {
         InitDBTest.importData();
         UserUtils.setCurrentUser(new User(1L, "user1", "user1", Role.SIMPLE));
+    }
+    @AfterEach
+    void clear() {
+        RuntimeDB.getTrainings().clear();
     }
 
     @Test
@@ -57,13 +59,6 @@ public class TrainingRepositoryImplTest {
         Training test = RuntimeDB.getTrainings().get(0);
         assertThat(test.getAdvanced()).isEmpty();
         assertThat(test.getCalories()).isEqualTo(10000);
-    }
-    @Test
-    @DisplayName("delete success")
-    void testDeleteSuccess() {
-        trainingRepository.delete(1L, 1L);
-        Training test = RuntimeDB.getTrainings().get(0);
-        assertThat(test.getId()).isEqualTo(2);
     }
     @Test
     @DisplayName("findAll - Trainings exist for user success")

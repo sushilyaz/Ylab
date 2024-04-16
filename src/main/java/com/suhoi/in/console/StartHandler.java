@@ -5,11 +5,13 @@ import com.suhoi.dto.CreateUserDto;
 import com.suhoi.exception.NoValidDataException;
 import com.suhoi.in.controller.UserController;
 import com.suhoi.in.controller.impl.UserControllerImpl;
+import com.suhoi.util.DI;
 
 import java.util.Scanner;
 
 public class StartHandler {
-    private static final UserController userController = UserControllerImpl.getInstance();
+
+    private static final UserController userController = DI.userControllerDI();
 
     /**
      * Взаимодействие с пользователем в окне регистрации

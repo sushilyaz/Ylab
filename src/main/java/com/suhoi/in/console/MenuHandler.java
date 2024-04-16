@@ -15,6 +15,7 @@ import com.suhoi.model.Audit;
 import com.suhoi.model.Role;
 import com.suhoi.model.Training;
 import com.suhoi.model.TypeOfTraining;
+import com.suhoi.util.DI;
 import com.suhoi.util.Parser;
 import com.suhoi.util.UserUtils;
 
@@ -27,9 +28,9 @@ import java.util.Scanner;
 
 public class MenuHandler {
 
-    private static TrainingController trainingController = TrainingControllerImpl.getInstance();
-    private static TypeOfTrainingController typeOfTrainingController = TypeOfTrainingControllerImpl.getInstance();
-    private static AuditController auditController = AuditControllerImpl.getInstance();
+    private static final TrainingController trainingController = DI.trainingControllerDI();
+    private static final TypeOfTrainingController typeOfTrainingController = DI.typeOfTrainingControllerDI();
+    private static final AuditController auditController = DI.auditControllerDI();
 
     /**
      * Взаимодействие с пользователем в окне добавления новой тренировки

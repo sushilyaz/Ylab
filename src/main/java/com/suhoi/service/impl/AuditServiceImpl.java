@@ -13,25 +13,29 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class AuditServiceImpl implements AuditService {
-
-    private static volatile AuditServiceImpl INSTANCE;
-
     private final AuditRepository auditRepository;
 
-    private AuditServiceImpl() {
-        this.auditRepository = AuditRepositoryImpl.getInstance();
+    public AuditServiceImpl(AuditRepository auditRepository) {
+        this.auditRepository = auditRepository;
     }
-
-    public static AuditServiceImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (AuditServiceImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new AuditServiceImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
+    //    private static volatile AuditServiceImpl INSTANCE;
+//
+//    private final AuditRepository auditRepository;
+//
+//    private AuditServiceImpl() {
+//        this.auditRepository = AuditRepositoryImpl.getInstance();
+//    }
+//
+//    public static AuditServiceImpl getInstance() {
+//        if (INSTANCE == null) {
+//            synchronized (AuditServiceImpl.class) {
+//                if (INSTANCE == null) {
+//                    INSTANCE = new AuditServiceImpl();
+//                }
+//            }
+//        }
+//        return INSTANCE;
+//    }
 
     @Override
     public void save(String action) {

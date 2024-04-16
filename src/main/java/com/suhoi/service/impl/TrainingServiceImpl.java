@@ -16,45 +16,46 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.List;
 
-
 public class TrainingServiceImpl implements TrainingService {
 
-    private static volatile TrainingServiceImpl INSTANCE;
-
-    // для тестов, т.к. иначе замокать не получится, т.к. классы синглтон с приватным конструктором
-    @Setter
-    private TrainingRepository trainingRepository;
+    private final TrainingRepository trainingRepository;
     private final AuditService auditService;
 
-    private TrainingServiceImpl() {
-        this.trainingRepository = TrainingRepositoryImpl.getInstance();
-        this.auditService = AuditServiceImpl.getInstance();
+    public TrainingServiceImpl(TrainingRepository trainingRepository, AuditService auditService) {
+        this.trainingRepository = trainingRepository;
+        this.auditService = auditService;
     }
-
-    public static TrainingServiceImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (TrainingServiceImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new TrainingServiceImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
+    //    private static volatile TrainingServiceImpl INSTANCE;
+//
+//    // для тестов, т.к. иначе замокать не получится, т.к. классы синглтон с приватным конструктором
+//    @Setter
+//    private TrainingRepository trainingRepository;
+//    private final AuditService auditService;
+//
+//    private TrainingServiceImpl() {
+//        this.trainingRepository = TrainingRepositoryImpl.getInstance();
+//        this.auditService = AuditServiceImpl.getInstance();
+//    }
+//
+//    public static TrainingServiceImpl getInstance() {
+//        if (INSTANCE == null) {
+//            synchronized (TrainingServiceImpl.class) {
+//                if (INSTANCE == null) {
+//                    INSTANCE = new TrainingServiceImpl();
+//                }
+//            }
+//        }
+//        return INSTANCE;
+//    }
 
     @Override
     public void addTrainingIfNotExist(Training training) {
         Long userId = training.getUserId();
         Long typeOfTrainingId = training.getTypeOfTrainingId();
         LocalDate date = training.getDate();
-        try {
-            trainingRepository.getTrainingForDateById(userId, typeOfTrainingId, date)
-                    .ifPresent(t -> {
-                        throw new DataNotFoundException("Training with id " + training.getId() + " already exists");
-                    });
-        } catch (DataNotFoundException e) {
+        if (trainingRepository.getTrainingForDateById(userId, typeOfTrainingId, date).isPresent()) {
             auditService.save("TrainingService.addTrainingIfNotExist failed");
-            System.out.println(e.getMessage());
+            System.out.println("User " + userId + " has already training with id " + typeOfTrainingId);
             TrainingDailyRunner.menu();
         }
         trainingRepository.save(training);
@@ -64,11 +65,9 @@ public class TrainingServiceImpl implements TrainingService {
     @Override
     public List<Training> getAllForUser() {
         List<Training> rs = trainingRepository.getAllByUserIdOrderByDate(UserUtils.getCurrentUser().getId());
-        try {
-            if (rs.isEmpty()) throw new EmptyListException("There are no trainings");
-        } catch (EmptyListException e) {
+        if (rs.isEmpty()) {
             auditService.save("TrainingService.getAllForUser failed");
-            System.out.println(e.getMessage());
+            System.out.println("Training not found");
             TrainingDailyRunner.menu();
         }
         auditService.save("TrainingService.getAllForUser success");
@@ -78,11 +77,9 @@ public class TrainingServiceImpl implements TrainingService {
     @Override
     public Integer getTrainsBetweenDate(RangeDto dto) {
         List<Training> trainBetweenDate = trainingRepository.getTrainBetweenDate(dto.getStartDate(), dto.getEndDate(), UserUtils.getCurrentUser().getId());
-        try {
-            if (trainBetweenDate.isEmpty()) throw new EmptyListException("Data not exist for this dates");
-        } catch (EmptyListException e) {
+        if (trainBetweenDate.isEmpty()) {
             auditService.save("TrainingService.getTrainsBetweenDate failed");
-            System.out.println(e.getMessage());
+            System.out.println("Training not found");
             TrainingDailyRunner.menu();
         }
         Integer burnedCalories = 0;
@@ -96,11 +93,9 @@ public class TrainingServiceImpl implements TrainingService {
     @Override
     public List<Training> getAllTrainsByUserId() {
         List<Training> all = trainingRepository.findAll(UserUtils.getCurrentUser().getId());
-        try {
-            if (all.isEmpty()) throw new EmptyListException("You have no trainings");
-        } catch (EmptyListException e) {
+        if (all.isEmpty()) {
             auditService.save("TrainingService.getAllTrainsByUserId failed");
-            System.out.println(e.getMessage());
+            System.out.println("Training not found");
             TrainingDailyRunner.menu();
             return null;
         }

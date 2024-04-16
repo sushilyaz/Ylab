@@ -12,26 +12,32 @@ import java.util.List;
 
 public class TypeOfTrainingServiceImpl implements TypeOfTrainingService {
 
-
-    private static volatile TypeOfTrainingServiceImpl INSTANCE;
     private final TypeOfTrainingRepository typeOfTrainingRepository;
     private final AuditService auditService;
 
-    private TypeOfTrainingServiceImpl() {
-        this.typeOfTrainingRepository = TypeOfTrainingRepositoryImpl.getInstance();
-        this.auditService = AuditServiceImpl.getInstance();
+    public TypeOfTrainingServiceImpl(TypeOfTrainingRepository typeOfTrainingRepository, AuditService auditService) {
+        this.typeOfTrainingRepository = typeOfTrainingRepository;
+        this.auditService = auditService;
     }
-
-    public static TypeOfTrainingServiceImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (TypeOfTrainingServiceImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new TypeOfTrainingServiceImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
+    //    private static volatile TypeOfTrainingServiceImpl INSTANCE;
+//    private final TypeOfTrainingRepository typeOfTrainingRepository;
+//    private final AuditService auditService;
+//
+//    private TypeOfTrainingServiceImpl() {
+//        this.typeOfTrainingRepository = TypeOfTrainingRepositoryImpl.getInstance();
+//        this.auditService = AuditServiceImpl.getInstance();
+//    }
+//
+//    public static TypeOfTrainingServiceImpl getInstance() {
+//        if (INSTANCE == null) {
+//            synchronized (TypeOfTrainingServiceImpl.class) {
+//                if (INSTANCE == null) {
+//                    INSTANCE = new TypeOfTrainingServiceImpl();
+//                }
+//            }
+//        }
+//        return INSTANCE;
+//    }
 
     @Override
     public TypeOfTraining getTypeByName(String type) {
@@ -55,12 +61,8 @@ public class TypeOfTrainingServiceImpl implements TypeOfTrainingService {
     @Override
     public void save(String name) {
         auditService.save("called TypeOfTrainingsService save");
-        try {
-            typeOfTrainingRepository.getTypeByName(name).ifPresent(typeOfTraining -> {
-                throw new DataNotFoundException("This type already exist");
-            });
-        } catch (DataNotFoundException e) {
-            System.out.println(e.getMessage());
+        if (typeOfTrainingRepository.getTypeByName(name).isPresent()) {
+            System.out.println("Данный тип уже существует");
             TrainingDailyRunner.menu();
         }
 

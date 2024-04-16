@@ -14,38 +14,41 @@ import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
 
-    private static volatile UserServiceImpl INSTANCE;
-
-    @Setter
-    private UserRepository userRepository;
-
+    private final UserRepository userRepository;
     private final AuditService auditService;
 
-    private UserServiceImpl() {
-        this.userRepository = UserRepositoryImpl.getInstance();
-        this.auditService = AuditServiceImpl.getInstance();
+    public UserServiceImpl(UserRepository userRepository, AuditService auditService) {
+        this.userRepository = userRepository;
+        this.auditService = auditService;
     }
-
-    public static UserServiceImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (UserServiceImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new UserServiceImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
+    //    private static volatile UserServiceImpl INSTANCE;
+//
+//    @Setter
+//    private UserRepository userRepository;
+//
+//    private final AuditService auditService;
+//
+//    private UserServiceImpl() {
+//        this.userRepository = UserRepositoryImpl.getInstance();
+//        this.auditService = AuditServiceImpl.getInstance();
+//    }
+//
+//    public static UserServiceImpl getInstance() {
+//        if (INSTANCE == null) {
+//            synchronized (UserServiceImpl.class) {
+//                if (INSTANCE == null) {
+//                    INSTANCE = new UserServiceImpl();
+//                }
+//            }
+//        }
+//        return INSTANCE;
+//    }
 
     @Override
     public void createUserIfNotExist(User createUser) {
         Optional<User> existUser = userRepository.getUserByUsername(createUser.getUsername());
-        try {
-            if (existUser.isPresent()) {
-                throw new UserActionException("User with username '" + createUser.getUsername() + "' already exist");
-            }
-        } catch (UserActionException e) {
-            System.out.println(e.getMessage());
+        if (existUser.isPresent()) {
+            System.out.println("User already exists!");
             TrainingDailyRunner.start();
         }
         userRepository.save(createUser);
@@ -55,12 +58,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void auth(User authUser) {
         Optional<User> user = userRepository.getUserByUsername(authUser.getUsername());
-        try {
-            if (user.isEmpty() || !user.get().getPassword().equals(authUser.getPassword())) {
-                throw new UserActionException("Incorrect login or password");
-            }
-        } catch (UserActionException e) {
-            System.out.println(e.getMessage());
+        if (user.isEmpty() || !user.get().getPassword().equals(authUser.getPassword())) {
+            System.out.println("user does not exist");
             TrainingDailyRunner.start();
         }
         UserUtils.setCurrentUser(user.get());

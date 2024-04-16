@@ -7,13 +7,14 @@ import com.suhoi.repository.RuntimeDB;
 import com.suhoi.repository.UserRepository;
 import org.junit.jupiter.api.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserRepositoryImplTest {
 
-    private UserRepository userRepository = UserRepositoryImpl.getInstance();
+    private final UserRepository userRepository = new UserRepositoryImpl();
 
 
     @BeforeEach
@@ -33,8 +34,8 @@ public class UserRepositoryImplTest {
                 .role(Role.SIMPLE)
                 .build();
         userRepository.save(build);
-        User user = RuntimeDB.getUsers().get(3);
-        assertThat(user.getUsername()).isEqualTo("user3");
+        List<User> users = RuntimeDB.getUsers();
+        assertThat(users).contains(build);
     }
 
     @Test

@@ -7,14 +7,14 @@ import java.util.Optional;
 public interface UserRepository {
 
     /**
-     * INSERT
+     * Сохранение нового пользователя
      *
      * @param user
      */
     void save(User user);
 
     /**
-     * SELECT * FROM users WHERE username = ?
+     * Поиск пользователя по имени
      *
      * @param username
      * @return

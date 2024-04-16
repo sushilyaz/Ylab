@@ -11,24 +11,30 @@ import com.suhoi.service.impl.UserServiceImpl;
 
 public class UserFacadeImpl implements UserFacade {
 
-    private static volatile UserFacadeImpl INSTANCE;
-
     private UserService userService;
 
-    private UserFacadeImpl() {
-        this.userService = UserServiceImpl.getInstance();
+    public UserFacadeImpl(UserService userService) {
+        this.userService = userService;
     }
 
-    public static UserFacadeImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (UserFacadeImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new UserFacadeImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
+    //    private static volatile UserFacadeImpl INSTANCE;
+//
+//    private UserService userService;
+//
+//    private UserFacadeImpl() {
+//        this.userService = UserServiceImpl.getInstance();
+//    }
+//
+//    public static UserFacadeImpl getInstance() {
+//        if (INSTANCE == null) {
+//            synchronized (UserFacadeImpl.class) {
+//                if (INSTANCE == null) {
+//                    INSTANCE = new UserFacadeImpl();
+//                }
+//            }
+//        }
+//        return INSTANCE;
+//    }
 
     @Override
     public void signUp(CreateUserDto createUserDto) {

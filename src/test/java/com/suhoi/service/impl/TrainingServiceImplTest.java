@@ -6,12 +6,14 @@ import com.suhoi.model.Role;
 import com.suhoi.model.Training;
 import com.suhoi.model.User;
 import com.suhoi.repository.TrainingRepository;
+import com.suhoi.service.AuditService;
 import com.suhoi.service.TrainingService;
 import com.suhoi.util.UserUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -30,23 +32,24 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class TrainingServiceImplTest {
 
+    private TrainingServiceImpl trainingService;
+
     @Mock
     private TrainingRepository trainingRepository;
 
-    private TrainingService trainingService;
+    @Mock
+    private AuditService auditService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        trainingService = TrainingServiceImpl.getInstance();
-        ((TrainingServiceImpl) trainingService).setTrainingRepository(trainingRepository);
+        trainingService = new TrainingServiceImpl(trainingRepository, auditService);
         UserUtils.setCurrentUser(new User(1L, "user1", "user1", Role.SIMPLE));
     }
 
     @Test
     @DisplayName("getTrainingForDateById without exception")
     void testGetTrainingForDateByIdTestSuccess() {
-
         Training training = Training.builder()
                 .typeOfTrainingId(1L)
                 .userId(1L)
@@ -56,12 +59,12 @@ class TrainingServiceImplTest {
                 .date(LocalDate.now())
                 .build();
 
-        when(trainingRepository.getTrainingForDateById(anyLong(), anyLong(), any(LocalDate.class)))
+        when(trainingRepository.getTrainingForDateById(1L, 1L, LocalDate.now()))
                 .thenReturn(java.util.Optional.empty());
 
         trainingService.addTrainingIfNotExist(training);
 
-        verify(trainingRepository, times(1)).getTrainingForDateById(anyLong(), anyLong(), any(LocalDate.class));
+        verify(trainingRepository, times(1)).getTrainingForDateById(1L, 1L, LocalDate.now());
         verify(trainingRepository, times(1)).save(training);
     }
 

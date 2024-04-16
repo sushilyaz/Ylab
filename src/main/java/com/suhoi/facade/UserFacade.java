@@ -4,9 +4,7 @@ import com.suhoi.dto.AuthDto;
 import com.suhoi.dto.CreateUserDto;
 
 /**
- * Ментор Алексей намекнул, что вместо того, чтобы возвращать DTO из DAO можно использовать паттерн "Фасад"
- * Находится между контроллером и сервисом.
- * Тут я собираю DTOшки из сущностей и наоборот
+ * Паттерн фасад
  */
 public interface UserFacade {
 
