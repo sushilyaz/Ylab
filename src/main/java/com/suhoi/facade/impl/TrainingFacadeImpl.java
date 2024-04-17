@@ -30,27 +30,6 @@ public class TrainingFacadeImpl implements TrainingFacade {
         this.trainingService = trainingService;
         this.typeOfTrainingService = typeOfTrainingService;
     }
-    //    private static volatile TrainingFacadeImpl INSTANCE;
-//
-//    private final TrainingService trainingService;
-//    private final TypeOfTrainingService typeOfTrainingService;
-//
-//    private TrainingFacadeImpl() {
-//        this.trainingService = TrainingServiceImpl.getInstance();
-//        this.typeOfTrainingService = TypeOfTrainingServiceImpl.getInstance();
-//    }
-//
-//    public static TrainingFacadeImpl getInstance() {
-//        if (INSTANCE == null) {
-//            synchronized (TrainingFacadeImpl.class) {
-//                if (INSTANCE == null) {
-//                    INSTANCE = new TrainingFacadeImpl();
-//                }
-//            }
-//        }
-//        return INSTANCE;
-//    }
-
 
     @Override
     public void addNewTraining(CreateTrainingDto createTrainingDto) {

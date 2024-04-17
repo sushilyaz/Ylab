@@ -5,6 +5,7 @@ import com.suhoi.dto.UpdateTrainingDto;
 import com.suhoi.exception.DataNotFoundException;
 import com.suhoi.exception.EmptyListException;
 import com.suhoi.in.console.TrainingDailyRunner;
+import com.suhoi.model.Role;
 import com.suhoi.model.Training;
 import com.suhoi.repository.TrainingRepository;
 import com.suhoi.repository.impl.TrainingRepositoryImpl;
@@ -14,6 +15,7 @@ import com.suhoi.util.UserUtils;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrainingServiceImpl implements TrainingService {
@@ -55,7 +57,7 @@ public class TrainingServiceImpl implements TrainingService {
         LocalDate date = training.getDate();
         if (trainingRepository.getTrainingForDateById(userId, typeOfTrainingId, date).isPresent()) {
             auditService.save("TrainingService.addTrainingIfNotExist failed");
-            System.out.println("User " + userId + " has already training with id " + typeOfTrainingId);
+            System.out.println("Training with id " + typeOfTrainingId + " already exist");
             TrainingDailyRunner.menu();
         }
         trainingRepository.save(training);
@@ -64,7 +66,12 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     public List<Training> getAllForUser() {
-        List<Training> rs = trainingRepository.getAllByUserIdOrderByDate(UserUtils.getCurrentUser().getId());
+        List<Training> rs = new ArrayList<>();
+        if (UserUtils.getCurrentUser().getRole().equals(Role.SIMPLE)) {
+            rs = trainingRepository.getAllByUserIdOrderByDate(UserUtils.getCurrentUser().getId());
+        } else {
+            rs = trainingRepository.findAll();
+        }
         if (rs.isEmpty()) {
             auditService.save("TrainingService.getAllForUser failed");
             System.out.println("Training not found");
@@ -90,23 +97,30 @@ public class TrainingServiceImpl implements TrainingService {
         return burnedCalories;
     }
 
-    @Override
-    public List<Training> getAllTrainsByUserId() {
-        List<Training> all = trainingRepository.findAll(UserUtils.getCurrentUser().getId());
-        if (all.isEmpty()) {
-            auditService.save("TrainingService.getAllTrainsByUserId failed");
-            System.out.println("Training not found");
-            TrainingDailyRunner.menu();
-            return null;
-        }
-        auditService.save("TrainingService.getAllTrainsByUserId success");
-        return all;
-    }
+//    @Override
+//    public List<Training> getAllTrainsByUserId() {
+//        List<Training> all = trainingRepository.findAll(UserUtils.getCurrentUser().getId());
+//        if (all.isEmpty()) {
+//            auditService.save("TrainingService.getAllTrainsByUserId failed");
+//            System.out.println("Training not found");
+//            TrainingDailyRunner.menu();
+//            return null;
+//        }
+//        auditService.save("TrainingService.getAllTrainsByUserId success");
+//        return all;
+//    }
 
     @Override
     public void deleteById(Long id) {
-        auditService.save("called TrainingService.deleteById");
-        trainingRepository.delete(id, UserUtils.getCurrentUser().getId());
+        List<Training> list = trainingRepository.getAllByUserIdOrderByDate(UserUtils.getCurrentUser().getId());
+        boolean checkId = list.stream().anyMatch(training -> training.getId().equals(id));
+        if (!checkId) {
+            auditService.save("TrainingService.deleteById failed");
+            System.out.println("Training not found");
+            TrainingDailyRunner.menu();
+        }
+        auditService.save("TrainingService.deleteById success");
+        trainingRepository.delete(id);
     }
 
     @Override

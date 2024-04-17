@@ -1,5 +1,7 @@
 package com.suhoi.util;
 
+import lombok.Getter;
+
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,6 +17,7 @@ public class ConnectionPool {
     private static final String URL_KEY = "db.url";
     private static final String POOL_SIZE_KEY = "db.pool.size";
     private static final Integer DEFAULT_POOL_SIZE = 10;
+    @Getter
     private static BlockingQueue<Connection> pool;
     private static List<Connection> sourceConnections;
 

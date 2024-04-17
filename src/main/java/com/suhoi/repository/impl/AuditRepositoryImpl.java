@@ -41,7 +41,7 @@ public class AuditRepositoryImpl implements AuditRepository {
     @Override
     public void save(Audit audit) {
         try (Connection connection = ConnectionPool.get();
-             PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, audit.getUsername());
             preparedStatement.setString(2, audit.getAction());
             preparedStatement.setTimestamp(3, Timestamp.valueOf(audit.getDateTime()));
@@ -49,7 +49,7 @@ public class AuditRepositoryImpl implements AuditRepository {
 
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                audit.setId(generatedKeys.getLong("id"));
+                audit.setId(generatedKeys.getLong(1));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

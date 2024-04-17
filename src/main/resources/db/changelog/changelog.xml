@@ -8,4 +8,5 @@
     <include file="001-create-schema.xml" relativeToChangelogFile="true"/>
     <include file="002-create-seq.xml" relativeToChangelogFile="true"/>
     <include file="003-create-tables.xml" relativeToChangelogFile="true"/>
+    <include file="004-init-db.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

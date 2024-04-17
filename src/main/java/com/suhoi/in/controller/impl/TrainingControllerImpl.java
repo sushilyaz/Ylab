@@ -18,23 +18,6 @@ public class TrainingControllerImpl implements TrainingController {
     public TrainingControllerImpl(TrainingFacade trainingFacade) {
         this.trainingFacade = trainingFacade;
     }
-    //    private static volatile TrainingControllerImpl INSTANCE;
-//    private final TrainingFacade trainingFacade;
-//
-//    private TrainingControllerImpl() {
-//        this.trainingFacade = TrainingFacadeImpl.getInstance();
-//    }
-//
-//    public static TrainingControllerImpl getInstance() {
-//        if (INSTANCE == null) {
-//            synchronized (TrainingControllerImpl.class) {
-//                if (INSTANCE == null) {
-//                    INSTANCE = new TrainingControllerImpl();
-//                }
-//            }
-//        }
-//        return INSTANCE;
-//    }
 
     @Override
     public void addNewTraining(CreateTrainingDto dto) {

@@ -44,7 +44,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void save(User user) {
         try (Connection connection = ConnectionPool.get();
-             PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, String.valueOf(user.getRole()));
@@ -52,7 +52,7 @@ public class UserRepositoryImpl implements UserRepository {
 
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                user.setId(generatedKeys.getLong("id"));
+                user.setId(generatedKeys.getLong(1));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -63,6 +63,7 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<User> getUserByUsername(String username) {
         try (Connection connection = ConnectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_USERNAME_SQL)) {
+            preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             User user = null;
             if (resultSet.next()) {

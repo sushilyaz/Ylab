@@ -1,21 +1,59 @@
 package com.suhoi.repository.impl;
 
-import com.suhoi.dto.TrainingDto;
 import com.suhoi.dto.UpdateTrainingDto;
-import com.suhoi.exception.DataNotFoundException;
 import com.suhoi.in.console.TrainingDailyRunner;
 import com.suhoi.model.Training;
-import com.suhoi.model.TypeOfTraining;
 import com.suhoi.repository.RuntimeDB;
 import com.suhoi.repository.TrainingRepository;
-import com.suhoi.util.UserUtils;
+import com.suhoi.util.ConnectionPool;
+import com.suhoi.util.Parser;
 
+import java.sql.*;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
 
 public class TrainingRepositoryImpl implements TrainingRepository {
 
     private static volatile TrainingRepositoryImpl INSTANCE;
+
+    private static final String GET_TRAINING_FOR_DATE_SQL = """
+            SELECT id, user_id, type_of_training_id, duration, calories, date, advanced
+            FROM ylab.trainings
+            WHERE user_id = ? AND type_of_training_id = ? AND date = ?;
+            """;
+    private static final String SAVE_SQL = """
+            INSERT INTO ylab.trainings (user_id, type_of_training_id, duration, calories, date, advanced)
+            VALUES (?, ?, ?, ?, ?, ?::jsonb);
+            """;
+
+    private static final String GET_ALL_BY_USER_ID_SQL = """
+            SELECT id, user_id, type_of_training_id, duration, calories, date, advanced
+            FROM ylab.trainings
+            WHERE user_id = ?
+            ORDER BY date DESC;
+            """;
+    private static final String UPDATE_SQL = """
+            UPDATE ylab.trainings
+            SET calories = ?,
+                advanced = ?::jsonb,
+            WHERE id = ? AND user_id = ?;
+            """;
+    private static final String DELETE_SQL = """
+            DELETE FROM ylab.trainings
+            WHERE id = ?
+            """;
+
+    private static final String FIND_ALL_SQL = """
+            SELECT id, user_id, type_of_training_id, duration, calories, date, advanced
+            FROM ylab.trainings;
+            """;
+
+    private static final String GET_TRAININGS_BETWEEN_DATE_SQL = """
+            SELECT id, user_id, type_of_training_id, duration, calories, date, advanced
+            FROM ylab.trainings;
+            WHERE user_id ? AND date BETWEEN ? AND ?;
+            """;
 
     private TrainingRepositoryImpl() {
     }
@@ -33,81 +71,129 @@ public class TrainingRepositoryImpl implements TrainingRepository {
 
     @Override
     public Optional<Training> getTrainingForDateById(Long userId, Long typeOfTrainingId, LocalDate date) {
-        return RuntimeDB.getTrainings().stream()
-                .filter(training -> training.getDate().equals(date) && training.getUserId().equals(userId) && training.getTypeOfTrainingId().equals(typeOfTrainingId))
-                .findFirst();
+        try (Connection connection = ConnectionPool.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_TRAINING_FOR_DATE_SQL)) {
+            preparedStatement.setLong(1, userId);
+            preparedStatement.setLong(2, typeOfTrainingId);
+            preparedStatement.setObject(3, date);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            Training training = null;
+            if (resultSet.next()) {
+                training = buildTraining(resultSet);
+            }
+            return Optional.ofNullable(training);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void save(Training training) {
-        RuntimeDB.addTrain(training);
+        try (Connection connection = ConnectionPool.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setLong(1, training.getUserId());
+            preparedStatement.setLong(2, training.getTypeOfTrainingId());
+            preparedStatement.setString(3, String.valueOf(training.getDuration()));
+            preparedStatement.setInt(4, training.getCalories());
+            preparedStatement.setObject(5, training.getDate());
+            preparedStatement.setObject(6, Parser.toJSONB(training.getAdvanced()));
+            preparedStatement.executeUpdate();
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+//            connection.commit();
+            if (generatedKeys.next()) {
+                training.setId(generatedKeys.getLong(1));
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
     }
-
 
     @Override
     public List<Training> getAllByUserIdOrderByDate(Long id) {
-        return RuntimeDB.getTrainings().stream()
-                .filter(o -> o.getUserId().equals(id))
-                .sorted(Comparator.comparing(Training::getDate).reversed())
-                .toList();
+        try (Connection connection = ConnectionPool.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_BY_USER_ID_SQL)) {
+            preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<Training> trainings = new ArrayList<>();
+            while (resultSet.next()) {
+                Training training = buildTraining(resultSet);
+                trainings.add(training);
+            }
+            return trainings;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void update(UpdateTrainingDto dto) {
-        List<Training> trainings = RuntimeDB.getTrainings();
-        Optional<Training> trainOptional = trainings.stream()
-                .filter(train -> train.getId().equals(dto.getId()) && train.getUserId().equals(dto.getUserId()))
-                .findFirst();
-        if (trainOptional.isPresent()) {
-            Training trainingToUpdate = trainOptional.get();
-
-            trainingToUpdate.setCalories(dto.getCalories());
-            trainingToUpdate.setAdvanced(dto.getAdvanced());
-
-            for (int i = 0; i < trainings.size(); i++) {
-                if (trainings.get(i).getId().equals(dto.getId())) {
-                    trainings.set(i, trainingToUpdate);
-                    break;
-                }
-            }
-            System.out.println("Data updated success");
-        } else {
-            System.out.println("Data not found");
-            TrainingDailyRunner.menu();
+        try (Connection connection = ConnectionPool.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
+            preparedStatement.setLong(1, dto.getCalories());
+            preparedStatement.setObject(2, dto.getAdvanced());
+            preparedStatement.setLong(3, dto.getId());
+            preparedStatement.setLong(4, dto.getUserId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void delete(Long id, Long userId) {
-        List<Training> trainings = RuntimeDB.getTrainings();
-
-        Optional<Training> trainOptional = trainings.stream()
-                .filter(train -> train.getId().equals(id) && train.getUserId().equals(userId))
-                .findFirst();
-
-        if (trainOptional.isPresent()) {
-            Training trainingToDelete = trainOptional.get();
-            trainings.remove(trainingToDelete);
-            System.out.println("Data removed success");
-        } else {
-            System.out.println("Train with id " + id + " not found");
-            TrainingDailyRunner.menu();
+    public void delete(Long id) {
+        try (Connection connection = ConnectionPool.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-
     }
 
     @Override
     public List<Training> getTrainBetweenDate(LocalDate startDate, LocalDate endDate, Long id) {
-        return RuntimeDB.getTrainings().stream()
-                .filter(train -> train.getDate().isAfter(startDate) && train.getDate().isBefore(endDate) && train.getUserId().equals(id))
-                .toList();
+        try (Connection connection = ConnectionPool.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_TRAININGS_BETWEEN_DATE_SQL)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.setObject(2, startDate);
+            preparedStatement.setObject(3, endDate);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<Training> trainings = new ArrayList<>();
+            while (resultSet.next()) {
+                Training training = buildTraining(resultSet);
+                trainings.add(training);
+            }
+            return trainings;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public List<Training> findAll(Long id) {
+    public List<Training> findAll() {
+        try (Connection connection = ConnectionPool.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<Training> trainings = new ArrayList<>();
+            while (resultSet.next()) {
+                Training training = buildTraining(resultSet);
+                trainings.add(training);
+            }
+            return trainings;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-        return RuntimeDB.getTrainings().stream()
-                .filter(o -> Objects.equals(o.getUserId(), id))
-                .toList();
+    private Training buildTraining(ResultSet resultSet) throws SQLException {
+        return Training.builder()
+                .id(resultSet.getLong("id"))
+                .userId(resultSet.getLong("user_id"))
+                .typeOfTrainingId(resultSet.getLong("type_of_training_id"))
+                .duration(Duration.parse(resultSet.getString("duration")))
+                .calories(resultSet.getInt("calories"))
+                .advanced(Parser.toMap(resultSet.getString("advanced")))
+                .date(resultSet.getDate("date").toLocalDate())
+                .build();
     }
 }
