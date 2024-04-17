@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <!-- Console appender configuration -->
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss} %p [%c:%L] %m%n" />
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="WARN">
+            <AppenderRef ref="console" />
+        </Root>
+        <Logger name="liquibase"                level="ERROR" />
+        <Logger name="liquibase.changelog"      level="ERROR"  />
+        <Logger name="liquibase.command"        level="ERROR" />
+        <Logger name="liquibase.configuration"  level="ERROR" />
+        <Logger name="liquibase.database"       level="ERROR" />
+        <Logger name="liquibase.executor"       level="ERROR" />
+        <Logger name="liquibase.ext"            level="ERROR" />
+        <Logger name="liquibase.integration"    level="ERROR" />
+        <Logger name="liquibase.lockservice"    level="ERROR" />
+        <Logger name="liquibase.parser"         level="ERROR" />
+        <Logger name="liquibase.servicelocator" level="ERROR" />
+        <Logger name="liquibase.snapshot"       level="ERROR" />
+        <Logger name="liquibase.ui"             level="ERROR" />
+        <Logger name="liquibase.util"           level="ERROR" />
+    </Loggers>
+</Configuration>

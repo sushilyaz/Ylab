@@ -15,21 +15,21 @@ import java.util.*;
 
 public class TrainingRepositoryImpl implements TrainingRepository {
 
-//    private static volatile TrainingRepositoryImpl INSTANCE;
-//
-//    private TrainingRepositoryImpl() {
-//    }
-//
-//    public static TrainingRepositoryImpl getInstance() {
-//        if (INSTANCE == null) {
-//            synchronized (TrainingRepositoryImpl.class) {
-//                if (INSTANCE == null) {
-//                    INSTANCE = new TrainingRepositoryImpl();
-//                }
-//            }
-//        }
-//        return INSTANCE;
-//    }
+    private static volatile TrainingRepositoryImpl INSTANCE;
+
+    private TrainingRepositoryImpl() {
+    }
+
+    public static TrainingRepositoryImpl getInstance() {
+        if (INSTANCE == null) {
+            synchronized (TrainingRepositoryImpl.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new TrainingRepositoryImpl();
+                }
+            }
+        }
+        return INSTANCE;
+    }
 
     @Override
     public Optional<Training> getTrainingForDateById(Long userId, Long typeOfTrainingId, LocalDate date) {

@@ -34,9 +34,20 @@ ext {
     mockitoVersion = "5.11.0"
     lombokVersion = "1.18.30"
     assertjVersion = "3.25.3"
+    liquibaseVersion = "4.27.0"
+    postgresqlVersion = "42.7.3"
+    slf4jVersion = "2.0.12"
+    log4jVersion = "2.23.1"
 }
 
 dependencies {
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
+    implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
+    implementation "org.apache.logging.log4j:log4j-slf4j2-impl:${log4jVersion}"
+
+    implementation "org.liquibase:liquibase-core:${liquibaseVersion}"
+    implementation "org.postgresql:postgresql:${postgresqlVersion}"
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation platform("org.junit:junit-bom:${junitVersion}")

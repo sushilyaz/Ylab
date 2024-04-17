@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="suhoi">
+        <createTable schemaName="ylab" tableName="users">
+            <column name="id" type="BIGINT" defaultValueComputed="nextval('ylab.user_id_seq')" remarks="users id seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)" remarks="user's name"/>
+            <column name="password" type="VARCHAR(255)" remarks="user's password"/>
+            <column name="role" type="VARCHAR(255)" remarks="user's role: ADMIN or SIMPLE"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="suhoi">
+        <createTable schemaName="ylab" tableName="type_of_trainings">
+            <column name="id" type="BIGINT" defaultValueComputed="nextval('ylab.type_of_training_id_seq')"
+                    remarks="type of training id seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)" remarks="type of training name"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="suhoi">
+        <createTable schemaName="ylab" tableName="trainings">
+            <column name="id" type="bigint" defaultValueComputed="nextval('ylab.training_id_seq')"
+                    remarks="training id seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT" remarks="user with this training">
+                <constraints foreignKeyName="fk_userId" references="ylab.users(id)" nullable="false"/>
+            </column>
+            <column name="type_of_training_id" type="BIGINT" remarks="type of this training">
+                <constraints foreignKeyName="fk_typeOfTrainingId" references="ylab.type_of_trainings(id)"
+                             nullable="false"/>
+            </column>
+            <column name="duration" type="INTERVAL" remarks="duration of training"/>
+            <column name="calories" type="INT" remarks="burned calories for this training"/>
+            <column name="date" type="DATE" remarks="date of training"/>
+            <column name="advanced" type="JSONB" remarks="optional data of training"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="suhoi">
+        <createTable schemaName="ylab" tableName="audits">
+            <column name="id" type="BIGINT" defaultValueComputed="nextval('ylab.audit_id_seq')" remarks="audit id seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)" remarks="whos do action"/>
+            <column name="action" type="VARCHAR(255)" remarks="action"/>
+            <column name="datetime" type="TIMESTAMP" remarks="time of do action"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

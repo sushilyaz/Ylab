@@ -9,21 +9,21 @@ import java.util.Optional;
 
 public class TypeOfTrainingRepositoryImpl implements TypeOfTrainingRepository {
 
-//    private static volatile TypeOfTrainingRepositoryImpl INSTANCE;
-//
-//    private TypeOfTrainingRepositoryImpl() {
-//    }
-//
-//    public static TypeOfTrainingRepositoryImpl getInstance() {
-//        if (INSTANCE == null) {
-//            synchronized (TypeOfTrainingRepositoryImpl.class) {
-//                if (INSTANCE == null) {
-//                    INSTANCE = new TypeOfTrainingRepositoryImpl();
-//                }
-//            }
-//        }
-//        return INSTANCE;
-//    }
+    private static volatile TypeOfTrainingRepositoryImpl INSTANCE;
+
+    private TypeOfTrainingRepositoryImpl() {
+    }
+
+    public static TypeOfTrainingRepositoryImpl getInstance() {
+        if (INSTANCE == null) {
+            synchronized (TypeOfTrainingRepositoryImpl.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new TypeOfTrainingRepositoryImpl();
+                }
+            }
+        }
+        return INSTANCE;
+    }
 
     @Override
     public void save(TypeOfTraining build) {
