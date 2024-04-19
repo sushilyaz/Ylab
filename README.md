@@ -5,7 +5,7 @@
 * gradle 8.4
 ### Install
 * git clone git@github.com:sushilyaz/Ylab.git
-* git checkout task1
+* git checkout task2
 * do task gradle -> build
 * docker compose up -d (or: docker-compose up -d)
 * java -jar .\build\libs\Ylab-1.0-SNAPSHOT.jar
