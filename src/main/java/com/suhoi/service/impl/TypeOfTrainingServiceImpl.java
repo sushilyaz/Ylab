@@ -19,25 +19,6 @@ public class TypeOfTrainingServiceImpl implements TypeOfTrainingService {
         this.typeOfTrainingRepository = typeOfTrainingRepository;
         this.auditService = auditService;
     }
-    //    private static volatile TypeOfTrainingServiceImpl INSTANCE;
-//    private final TypeOfTrainingRepository typeOfTrainingRepository;
-//    private final AuditService auditService;
-//
-//    private TypeOfTrainingServiceImpl() {
-//        this.typeOfTrainingRepository = TypeOfTrainingRepositoryImpl.getInstance();
-//        this.auditService = AuditServiceImpl.getInstance();
-//    }
-//
-//    public static TypeOfTrainingServiceImpl getInstance() {
-//        if (INSTANCE == null) {
-//            synchronized (TypeOfTrainingServiceImpl.class) {
-//                if (INSTANCE == null) {
-//                    INSTANCE = new TypeOfTrainingServiceImpl();
-//                }
-//            }
-//        }
-//        return INSTANCE;
-//    }
 
     @Override
     public TypeOfTraining getTypeByName(String type) {

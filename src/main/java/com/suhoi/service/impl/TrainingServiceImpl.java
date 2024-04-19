@@ -27,28 +27,6 @@ public class TrainingServiceImpl implements TrainingService {
         this.trainingRepository = trainingRepository;
         this.auditService = auditService;
     }
-    //    private static volatile TrainingServiceImpl INSTANCE;
-//
-//    // для тестов, т.к. иначе замокать не получится, т.к. классы синглтон с приватным конструктором
-//    @Setter
-//    private TrainingRepository trainingRepository;
-//    private final AuditService auditService;
-//
-//    private TrainingServiceImpl() {
-//        this.trainingRepository = TrainingRepositoryImpl.getInstance();
-//        this.auditService = AuditServiceImpl.getInstance();
-//    }
-//
-//    public static TrainingServiceImpl getInstance() {
-//        if (INSTANCE == null) {
-//            synchronized (TrainingServiceImpl.class) {
-//                if (INSTANCE == null) {
-//                    INSTANCE = new TrainingServiceImpl();
-//                }
-//            }
-//        }
-//        return INSTANCE;
-//    }
 
     @Override
     public void addTrainingIfNotExist(Training training) {

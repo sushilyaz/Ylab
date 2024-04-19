@@ -18,24 +18,6 @@ public class AuditServiceImpl implements AuditService {
     public AuditServiceImpl(AuditRepository auditRepository) {
         this.auditRepository = auditRepository;
     }
-    //    private static volatile AuditServiceImpl INSTANCE;
-//
-//    private final AuditRepository auditRepository;
-//
-//    private AuditServiceImpl() {
-//        this.auditRepository = AuditRepositoryImpl.getInstance();
-//    }
-//
-//    public static AuditServiceImpl getInstance() {
-//        if (INSTANCE == null) {
-//            synchronized (AuditServiceImpl.class) {
-//                if (INSTANCE == null) {
-//                    INSTANCE = new AuditServiceImpl();
-//                }
-//            }
-//        }
-//        return INSTANCE;
-//    }
 
     @Override
     public void save(String action) {
