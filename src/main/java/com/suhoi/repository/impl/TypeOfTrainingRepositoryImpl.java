@@ -1,7 +1,6 @@
 package com.suhoi.repository.impl;
 
 import com.suhoi.model.TypeOfTraining;
-import com.suhoi.repository.RuntimeDB;
 import com.suhoi.repository.TypeOfTrainingRepository;
 import com.suhoi.util.ConnectionPool;
 

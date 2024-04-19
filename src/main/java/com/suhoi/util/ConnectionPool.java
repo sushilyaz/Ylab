@@ -17,7 +17,6 @@ public class ConnectionPool {
     private static final String URL_KEY = "db.url";
     private static final String POOL_SIZE_KEY = "db.pool.size";
     private static final Integer DEFAULT_POOL_SIZE = 10;
-    @Getter
     private static BlockingQueue<Connection> pool;
     private static List<Connection> sourceConnections;
 
@@ -29,14 +28,18 @@ public class ConnectionPool {
     private ConnectionPool() {
     }
 
-    private static void initConnectionPool() {
-        var poolSize = PropertiesUtil.get(POOL_SIZE_KEY);
-        var size = poolSize == null ? DEFAULT_POOL_SIZE : Integer.parseInt(poolSize);
+    /**
+     * Init ConnectionPool.
+     * В приложение раздается прокси-соединения, которые закрываются автоматически при вызове метода close (try with resources)
+     */
+    public static void initConnectionPool() {
+        String poolSize = PropertiesUtil.get(POOL_SIZE_KEY);
+        int size = poolSize == null ? DEFAULT_POOL_SIZE : Integer.parseInt(poolSize);
         pool = new ArrayBlockingQueue<>(size);
         sourceConnections = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            var connection = open();
-            var proxyConnection = (Connection)
+            Connection connection = open();
+            Connection proxyConnection = (Connection)
                     Proxy.newProxyInstance(ConnectionPool.class.getClassLoader(), new Class[]{Connection.class},
                             (proxy, method, args) -> method.getName().equals("close")
                                     ? pool.add((Connection) proxy)
@@ -46,6 +49,11 @@ public class ConnectionPool {
         }
     }
 
+    /**
+     * Получить соединение
+     *
+     * @return
+     */
     public static Connection get() {
         try {
             return pool.take();
@@ -74,6 +82,9 @@ public class ConnectionPool {
         }
     }
 
+    /**
+     * Закрыть все соединения в пуле
+     */
     public static void closePool() {
         try {
             for (Connection sourceConnection : sourceConnections) {

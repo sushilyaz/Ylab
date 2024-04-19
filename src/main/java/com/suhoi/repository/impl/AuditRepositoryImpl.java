@@ -2,7 +2,6 @@ package com.suhoi.repository.impl;
 
 import com.suhoi.model.Audit;
 import com.suhoi.repository.AuditRepository;
-import com.suhoi.repository.RuntimeDB;
 import com.suhoi.util.ConnectionPool;
 
 import java.sql.*;

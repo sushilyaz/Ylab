@@ -1,9 +1,7 @@
 package com.suhoi.repository.impl;
 
 import com.suhoi.dto.UpdateTrainingDto;
-import com.suhoi.in.console.TrainingDailyRunner;
 import com.suhoi.model.Training;
-import com.suhoi.repository.RuntimeDB;
 import com.suhoi.repository.TrainingRepository;
 import com.suhoi.util.ConnectionPool;
 import com.suhoi.util.Parser;
@@ -36,7 +34,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
     private static final String UPDATE_SQL = """
             UPDATE ylab.trainings
             SET calories = ?,
-                advanced = ?::jsonb,
+                advanced = ?::jsonb
             WHERE id = ? AND user_id = ?;
             """;
     private static final String DELETE_SQL = """
@@ -51,8 +49,8 @@ public class TrainingRepositoryImpl implements TrainingRepository {
 
     private static final String GET_TRAININGS_BETWEEN_DATE_SQL = """
             SELECT id, user_id, type_of_training_id, duration, calories, date, advanced
-            FROM ylab.trainings;
-            WHERE user_id ? AND date BETWEEN ? AND ?;
+            FROM ylab.trainings
+            WHERE user_id = ? AND date BETWEEN ? AND ?;
             """;
 
     private TrainingRepositoryImpl() {
@@ -129,8 +127,8 @@ public class TrainingRepositoryImpl implements TrainingRepository {
     public void update(UpdateTrainingDto dto) {
         try (Connection connection = ConnectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
-            preparedStatement.setLong(1, dto.getCalories());
-            preparedStatement.setObject(2, dto.getAdvanced());
+            preparedStatement.setInt(1, dto.getCalories());
+            preparedStatement.setObject(2, Parser.toJSONB(dto.getAdvanced()));
             preparedStatement.setLong(3, dto.getId());
             preparedStatement.setLong(4, dto.getUserId());
             preparedStatement.executeUpdate();

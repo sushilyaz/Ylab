@@ -1,15 +1,11 @@
 package com.suhoi.repository.impl;
 
-import com.suhoi.model.Audit;
 import com.suhoi.model.Role;
 import com.suhoi.model.User;
-import com.suhoi.repository.RuntimeDB;
 import com.suhoi.repository.UserRepository;
 import com.suhoi.util.ConnectionPool;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class UserRepositoryImpl implements UserRepository {

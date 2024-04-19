@@ -13,6 +13,12 @@ public class PropertiesUtil {
     private PropertiesUtil() {
     }
 
+    /**
+     * Получить пропертю по ключу
+     *
+     * @param key
+     * @return
+     */
     public static String get(String key) {
         return PROPERTIES.getProperty(key);
     }
