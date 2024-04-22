@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserRepositoryImplTest extends PostgresContainer {
 
-    private final UserRepository userRepository = UserRepositoryImpl.getInstance();
+    private final UserRepository userRepository = new UserRepositoryImpl();
 
     @Test
     @DisplayName("success save user")

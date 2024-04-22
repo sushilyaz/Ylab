@@ -10,8 +10,6 @@ import java.util.List;
 
 public class AuditRepositoryImpl implements AuditRepository {
 
-    private static volatile AuditRepositoryImpl INSTANCE;
-
     private static final String SAVE_SQL = """
             INSERT INTO ylab.audits (username, action, datetime)
             VALUES (?, ?, ?);
@@ -21,20 +19,6 @@ public class AuditRepositoryImpl implements AuditRepository {
             SELECT id, username, action, datetime
             FROM ylab.audits
             """;
-
-    private AuditRepositoryImpl() {
-    }
-
-    public static AuditRepositoryImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (AuditRepositoryImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new AuditRepositoryImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
 
 
     @Override

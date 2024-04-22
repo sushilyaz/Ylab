@@ -18,23 +18,6 @@ public class TypeOfTrainingControllerImpl implements TypeOfTrainingController {
     public TypeOfTrainingControllerImpl(TypeOfTrainingFacade typeOfTrainingFacade) {
         this.typeOfTrainingFacade = typeOfTrainingFacade;
     }
-    //    private static volatile TypeOfTrainingControllerImpl INSTANCE;
-//    private TypeOfTrainingFacade typeOfTrainingFacade;
-//
-//    private TypeOfTrainingControllerImpl() {
-//        this.typeOfTrainingFacade = TypeOfTrainingFacadeImpl.getInstance();
-//    }
-//
-//    public static TypeOfTrainingControllerImpl getInstance() {
-//        if (INSTANCE == null) {
-//            synchronized (TypeOfTrainingControllerImpl.class) {
-//                if (INSTANCE == null) {
-//                    INSTANCE = new TypeOfTrainingControllerImpl();
-//                }
-//            }
-//        }
-//        return INSTANCE;
-//    }
 
     @Override
     public void addNewTypeOfTrainings(String name) {

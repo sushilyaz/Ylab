@@ -24,8 +24,6 @@ public class TrainingControllerImpl implements TrainingController {
         trainingFacade.addNewTraining(dto);
     }
 
-
-
     @Override
     public List<TrainingDto> getAllTrainingForUser() {
         return trainingFacade.getTrainingsForUser();

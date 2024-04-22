@@ -13,8 +13,6 @@ import java.util.*;
 
 public class TrainingRepositoryImpl implements TrainingRepository {
 
-    private static volatile TrainingRepositoryImpl INSTANCE;
-
     private static final String GET_TRAINING_FOR_DATE_SQL = """
             SELECT id, user_id, type_of_training_id, duration, calories, date, advanced
             FROM ylab.trainings
@@ -52,20 +50,6 @@ public class TrainingRepositoryImpl implements TrainingRepository {
             FROM ylab.trainings
             WHERE user_id = ? AND date BETWEEN ? AND ?;
             """;
-
-    private TrainingRepositoryImpl() {
-    }
-
-    public static TrainingRepositoryImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (TrainingRepositoryImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new TrainingRepositoryImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
 
     @Override
     public Optional<Training> getTrainingForDateById(Long userId, Long typeOfTrainingId, LocalDate date) {

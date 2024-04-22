@@ -11,8 +11,6 @@ import java.util.Optional;
 
 public class TypeOfTrainingRepositoryImpl implements TypeOfTrainingRepository {
 
-    private static volatile TypeOfTrainingRepositoryImpl INSTANCE;
-
     private static final String SAVE_SQL = """
             INSERT INTO ylab.type_of_trainings (name)
             VALUES (?);
@@ -28,20 +26,6 @@ public class TypeOfTrainingRepositoryImpl implements TypeOfTrainingRepository {
             SELECT id, name
             FROM ylab.type_of_trainings
             """;
-
-    private TypeOfTrainingRepositoryImpl() {
-    }
-
-    public static TypeOfTrainingRepositoryImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (TypeOfTrainingRepositoryImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new TypeOfTrainingRepositoryImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
 
     @Override
     public void save(TypeOfTraining typeOfTraining) {

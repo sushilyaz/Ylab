@@ -4,9 +4,8 @@ import com.suhoi.in.console.TrainingDailyRunner;
 import com.suhoi.util.LiquibaseRunner;
 
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         LiquibaseRunner.runLiquibaseMigration();
-        Thread.sleep(1500);
         TrainingDailyRunner.start();
     }
 }

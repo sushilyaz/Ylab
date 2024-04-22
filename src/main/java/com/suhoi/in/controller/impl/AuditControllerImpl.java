@@ -19,23 +19,6 @@ public class AuditControllerImpl implements AuditController {
     public AuditControllerImpl(AuditService auditService) {
         this.auditService = auditService;
     }
-    //    private static volatile AuditControllerImpl INSTANCE;
-//    private final AuditService auditService;
-//
-//    private AuditControllerImpl() {
-//        this.auditService = AuditServiceImpl.getInstance();
-//    }
-//
-//    public static AuditControllerImpl getInstance() {
-//        if (INSTANCE == null) {
-//            synchronized (AuditControllerImpl.class) {
-//                if (INSTANCE == null) {
-//                    INSTANCE = new AuditControllerImpl();
-//                }
-//            }
-//        }
-//        return INSTANCE;
-//    }
 
     @Override
     public List<Audit> getAll() {

@@ -11,7 +11,6 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
 
-    private static volatile UserRepositoryImpl INSTANCE;
 
     private static final String SAVE_SQL = """
             INSERT INTO ylab.users (username, password, role)
@@ -23,19 +22,6 @@ public class UserRepositoryImpl implements UserRepository {
             FROM ylab.users
             WHERE username = ?;
             """;
-    private UserRepositoryImpl() {
-    }
-
-    public static UserRepositoryImpl getInstance() {
-        if (INSTANCE == null) {
-            synchronized (UserRepositoryImpl.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new UserRepositoryImpl();
-                }
-            }
-        }
-        return INSTANCE;
-    }
 
     @Override
     public void save(User user) {

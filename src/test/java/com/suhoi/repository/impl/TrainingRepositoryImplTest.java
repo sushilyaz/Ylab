@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TrainingRepositoryImplTest extends PostgresContainer {
 
-    private final TrainingRepository trainingRepository = TrainingRepositoryImpl.getInstance();
+    private final TrainingRepository trainingRepository = new TrainingRepositoryImpl();
 
     @BeforeEach
     void initDB() {
