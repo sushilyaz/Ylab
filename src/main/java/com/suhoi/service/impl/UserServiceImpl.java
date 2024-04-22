@@ -21,28 +21,6 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.auditService = auditService;
     }
-    //    private static volatile UserServiceImpl INSTANCE;
-//
-//    @Setter
-//    private UserRepository userRepository;
-//
-//    private final AuditService auditService;
-//
-//    private UserServiceImpl() {
-//        this.userRepository = UserRepositoryImpl.getInstance();
-//        this.auditService = AuditServiceImpl.getInstance();
-//    }
-//
-//    public static UserServiceImpl getInstance() {
-//        if (INSTANCE == null) {
-//            synchronized (UserServiceImpl.class) {
-//                if (INSTANCE == null) {
-//                    INSTANCE = new UserServiceImpl();
-//                }
-//            }
-//        }
-//        return INSTANCE;
-//    }
 
     @Override
     public void createUserIfNotExist(User createUser) {

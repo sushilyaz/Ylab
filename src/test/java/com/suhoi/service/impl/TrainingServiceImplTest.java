@@ -122,19 +122,24 @@ class TrainingServiceImplTest {
 
         List<Training> testList = new ArrayList<>();
         testList.add(build);
-        when(trainingRepository.findAll(UserUtils.getCurrentUser().getId())).thenReturn(testList);
-        List<Training> res = trainingService.getAllTrainsByUserId();
+        when(trainingRepository.getAllByUserIdOrderByDate(UserUtils.getCurrentUser().getId())).thenReturn(testList);
+        List<Training> res = trainingService.getAllForUser();
         assertThat(res).isNotEmpty();
     }
 
     @Test
     @DisplayName("deleteById without exception")
     void testDeleteByIdWithoutException() {
+        Training build = Training.builder()
+                .id(1L)
+                .build();
+        List<Training> testList = new ArrayList<>();
+        testList.add(build);
         Long trainingId = 1L;
-
+        when(trainingRepository.getAllByUserIdOrderByDate(UserUtils.getCurrentUser().getId())).thenReturn(testList);
         trainingService.deleteById(trainingId);
 
-        verify(trainingRepository, times(1)).delete(trainingId, UserUtils.getCurrentUser().getId());
+        verify(trainingRepository, times(1)).delete(trainingId);
     }
     @Test
     @DisplayName("update without exception")

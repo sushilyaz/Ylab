@@ -33,35 +33,35 @@ import com.suhoi.service.impl.UserServiceImpl;
 
 public class DI {
     public static UserController userControllerDI() {
-        AuditRepository auditRepository = new AuditRepositoryImpl();
+        AuditRepository auditRepository = AuditRepositoryImpl.getInstance();
         AuditService auditService = new AuditServiceImpl(auditRepository);
-        UserRepository userRepository = new UserRepositoryImpl();
+        UserRepository userRepository = UserRepositoryImpl.getInstance();
         UserService userService = new UserServiceImpl(userRepository, auditService);
         UserFacade userFacade = new UserFacadeImpl(userService);
         return new UserControllerImpl(userFacade);
     }
     public static TrainingController trainingControllerDI() {
-        AuditRepository auditRepository = new AuditRepositoryImpl();
+        AuditRepository auditRepository = AuditRepositoryImpl.getInstance();
         AuditService auditService = new AuditServiceImpl(auditRepository);
-        TrainingRepository trainingRepository = new TrainingRepositoryImpl();
+        TrainingRepository trainingRepository = TrainingRepositoryImpl.getInstance();
         TrainingService trainingService = new TrainingServiceImpl(trainingRepository, auditService);
-        TypeOfTrainingRepository typeOfTrainingRepository = new TypeOfTrainingRepositoryImpl();
+        TypeOfTrainingRepository typeOfTrainingRepository = TypeOfTrainingRepositoryImpl.getInstance();
         TypeOfTrainingService typeOfTrainingService = new TypeOfTrainingServiceImpl(typeOfTrainingRepository, auditService);
         TrainingFacade trainingFacade = new TrainingFacadeImpl(trainingService, typeOfTrainingService);
         return new TrainingControllerImpl(trainingFacade);
     }
 
     public static TypeOfTrainingController typeOfTrainingControllerDI() {
-        AuditRepository auditRepository = new AuditRepositoryImpl();
+        AuditRepository auditRepository = AuditRepositoryImpl.getInstance();
         AuditService auditService = new AuditServiceImpl(auditRepository);
-        TypeOfTrainingRepository typeOfTrainingRepository = new TypeOfTrainingRepositoryImpl();
+        TypeOfTrainingRepository typeOfTrainingRepository = TypeOfTrainingRepositoryImpl.getInstance();
         TypeOfTrainingService typeOfTrainingService = new TypeOfTrainingServiceImpl(typeOfTrainingRepository, auditService);
         TypeOfTrainingFacade typeOfTrainingFacade = new TypeOfTrainingFacadeImpl(typeOfTrainingService);
         return new TypeOfTrainingControllerImpl(typeOfTrainingFacade);
     }
 
     public static AuditController auditControllerDI() {
-        AuditRepository auditRepository = new AuditRepositoryImpl();
+        AuditRepository auditRepository = AuditRepositoryImpl.getInstance();
         AuditService auditService = new AuditServiceImpl(auditRepository);
         return new AuditControllerImpl(auditService);
     }

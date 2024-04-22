@@ -1,5 +1,6 @@
 package com.suhoi.in.console;
 
+import com.suhoi.util.ConnectionPool;
 import com.suhoi.util.UserUtils;
 import java.util.Scanner;
 
@@ -33,6 +34,7 @@ public class TrainingDailyRunner {
                 break;
             case 3:
                 System.out.println("Exit");
+                ConnectionPool.closePool();
                 System.exit(0);
                 break;
             default:

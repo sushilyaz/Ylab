@@ -10,9 +10,8 @@ public interface TypeOfTrainingRepository {
     /**
      * INSERT
      *
-     * @param build
      */
-    void save(TypeOfTraining build);
+    void save(TypeOfTraining typeOfTraining);
 
     /**
      * SELECT * FROM type_of_trainings WHERE name = ?

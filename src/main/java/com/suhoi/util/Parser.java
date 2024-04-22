@@ -1,8 +1,11 @@
 package com.suhoi.util;
 
+import com.google.gson.Gson;
 import com.suhoi.in.console.TrainingDailyRunner;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Parser {
     /**
@@ -29,4 +32,26 @@ public class Parser {
         }
         return null;
     }
+
+    /**
+     * Парсер из JSONB to Map<String, String>
+     *
+     * @param jsonb
+     * @return
+     */
+    public static Map<String, String> toMap(String jsonb) {
+        Gson gson = new Gson();
+        return gson.fromJson(jsonb, Map.class);
+    }
+
+    /**
+     * Парсер из Map<String, String> to JSONB
+     * @param map
+     * @return
+     */
+    public static String toJSONB(Map<String, String> map) {
+        Gson gson = new Gson();
+        return gson.toJson(map, Map.class);
+    }
+
 }

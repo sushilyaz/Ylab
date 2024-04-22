@@ -34,9 +34,18 @@ ext {
     mockitoVersion = "5.11.0"
     lombokVersion = "1.18.30"
     assertjVersion = "3.25.3"
+    liquibaseVersion = "4.27.0"
+    postgresqlVersion = "42.7.3"
+    slf4jVersion = "2.0.12"
+    log4jVersion = "2.23.1"
+    gsonVersion = "2.10.1"
+    testcontainerVersion = "1.19.7"
 }
 
 dependencies {
+    implementation "com.google.code.gson:gson:${gsonVersion}"
+    implementation "org.liquibase:liquibase-core:${liquibaseVersion}"
+    implementation "org.postgresql:postgresql:${postgresqlVersion}"
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation platform("org.junit:junit-bom:${junitVersion}")
@@ -44,6 +53,9 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter"
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"
     testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
+    testImplementation "org.testcontainers:testcontainers:${testcontainerVersion}"
+    testImplementation "org.testcontainers:junit-jupiter:${testcontainerVersion}"
+    testImplementation "org.testcontainers:postgresql:${testcontainerVersion}"
 }
 
 test {

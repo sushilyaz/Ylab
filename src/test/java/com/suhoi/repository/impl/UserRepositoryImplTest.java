@@ -1,30 +1,21 @@
 package com.suhoi.repository.impl;
 
-import com.suhoi.InitDBTest;
 import com.suhoi.model.Role;
 import com.suhoi.model.User;
-import com.suhoi.repository.RuntimeDB;
 import com.suhoi.repository.UserRepository;
+import com.suhoi.util.ConnectionPool;
+import com.suhoi.util.LiquibaseRunner;
+import liquibase.Liquibase;
 import org.junit.jupiter.api.*;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserRepositoryImplTest {
+public class UserRepositoryImplTest extends PostgresContainer {
 
-    private final UserRepository userRepository = new UserRepositoryImpl();
+    private final UserRepository userRepository = UserRepositoryImpl.getInstance();
 
-
-    @BeforeEach
-    void initDB() {
-        InitDBTest.importData();
-    }
-    @AfterEach
-    void clear() {
-        RuntimeDB.getUsers().clear();
-    }
     @Test
     @DisplayName("success save user")
     void testSaveSuccess() {
@@ -34,8 +25,8 @@ public class UserRepositoryImplTest {
                 .role(Role.SIMPLE)
                 .build();
         userRepository.save(build);
-        List<User> users = RuntimeDB.getUsers();
-        assertThat(users).contains(build);
+        Optional<User> user = userRepository.getUserByUsername(build.getUsername());
+        assertThat(user.get()).isEqualTo(build);
     }
 
     @Test

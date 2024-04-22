@@ -203,8 +203,7 @@ public class MenuHandler {
         Map<String, String> advanced = new HashMap<>();
         while (true) {
             System.out.print("Do you want add optional? (yes/no): ");
-            scanner.nextLine();
-            String addField = scanner.nextLine().trim();
+            String addField = scanner.next().trim();
             if (addField.equalsIgnoreCase("no")) {
                 break;
             } else if (!addField.equalsIgnoreCase("yes")) {
@@ -213,10 +212,10 @@ public class MenuHandler {
             }
 
             System.out.print("Enter key: ");
-            String key = scanner.nextLine().trim();
+            String key = scanner.next().trim();
 
             System.out.print("Enter values: ");
-            String value = scanner.nextLine().trim();
+            String value = scanner.next().trim();
 
             advanced.put(key, value);
         }

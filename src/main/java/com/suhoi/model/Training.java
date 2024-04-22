@@ -22,10 +22,6 @@ public class Training {
     private Long typeOfTrainingId; // FK type_of_train.id
     private Duration duration; // продолжительность
     private Integer calories; // сженные калории
-    /*
-     Доп. инфа, например: количество упражнений, количество ввыпитого протеина, количество уколов тренболона итд
-     P.S. В БД планирую хранить в JSONB, если подход плохой - дайте знать пж
-     */
     private Map<String, String> advanced;
     private LocalDate date;
 }
