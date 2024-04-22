@@ -13,24 +13,6 @@ public class TypeOfTrainingFacadeImpl implements TypeOfTrainingFacade {
     public TypeOfTrainingFacadeImpl(TypeOfTrainingService typeOfTrainingService) {
         this.typeOfTrainingService = typeOfTrainingService;
     }
-//    private static volatile TypeOfTrainingFacadeImpl INSTANCE;
-//
-//    private final TypeOfTrainingService typeOfTrainingService;
-//
-//    private TypeOfTrainingFacadeImpl() {
-//        this.typeOfTrainingService = TypeOfTrainingServiceImpl.getInstance();
-//    }
-//
-//    public static TypeOfTrainingFacadeImpl getInstance() {
-//        if (INSTANCE == null) {
-//            synchronized (TypeOfTrainingFacadeImpl.class) {
-//                if (INSTANCE == null) {
-//                    INSTANCE = new TypeOfTrainingFacadeImpl();
-//                }
-//            }
-//        }
-//        return INSTANCE;
-//    }
 
     @Override
     public void addNewTypeOfTraining(String name) {

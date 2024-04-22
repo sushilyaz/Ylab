@@ -75,19 +75,6 @@ public class TrainingServiceImpl implements TrainingService {
         return burnedCalories;
     }
 
-//    @Override
-//    public List<Training> getAllTrainsByUserId() {
-//        List<Training> all = trainingRepository.findAll(UserUtils.getCurrentUser().getId());
-//        if (all.isEmpty()) {
-//            auditService.save("TrainingService.getAllTrainsByUserId failed");
-//            System.out.println("Training not found");
-//            TrainingDailyRunner.menu();
-//            return null;
-//        }
-//        auditService.save("TrainingService.getAllTrainsByUserId success");
-//        return all;
-//    }
-
     @Override
     public void deleteById(Long id) {
         List<Training> list = trainingRepository.getAllByUserIdOrderByDate(UserUtils.getCurrentUser().getId());

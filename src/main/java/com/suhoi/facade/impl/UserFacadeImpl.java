@@ -17,25 +17,6 @@ public class UserFacadeImpl implements UserFacade {
         this.userService = userService;
     }
 
-    //    private static volatile UserFacadeImpl INSTANCE;
-//
-//    private UserService userService;
-//
-//    private UserFacadeImpl() {
-//        this.userService = UserServiceImpl.getInstance();
-//    }
-//
-//    public static UserFacadeImpl getInstance() {
-//        if (INSTANCE == null) {
-//            synchronized (UserFacadeImpl.class) {
-//                if (INSTANCE == null) {
-//                    INSTANCE = new UserFacadeImpl();
-//                }
-//            }
-//        }
-//        return INSTANCE;
-//    }
-
     @Override
     public void signUp(CreateUserDto createUserDto) {
         User createUser = User.builder()
