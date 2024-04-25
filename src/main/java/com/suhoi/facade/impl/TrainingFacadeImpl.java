@@ -10,16 +10,12 @@ import com.suhoi.model.Training;
 import com.suhoi.model.TypeOfTraining;
 import com.suhoi.service.TrainingService;
 import com.suhoi.service.TypeOfTrainingService;
-import com.suhoi.service.impl.TrainingServiceImpl;
-import com.suhoi.service.impl.TypeOfTrainingServiceImpl;
 import com.suhoi.util.UserUtils;
 import org.mapstruct.factory.Mappers;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TrainingFacadeImpl implements TrainingFacade {

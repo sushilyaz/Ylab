@@ -14,12 +14,6 @@ repositories {
 java {
     sourceCompatibility = JavaVersion.VERSION_17;
     targetCompatibility = JavaVersion.VERSION_17;
-
-    tasks.withType(JavaCompile).tap {
-        configureEach {
-            options.encoding = "UTF-8"
-        }
-    }
 }
 
 ext {
@@ -39,13 +33,12 @@ ext {
     aspectjrtVersion = "1.9.21"
     mapstructVersion = "1.5.5.Final"
     mapstructLombokVersion = "0.2.0"
+    log4jApiVersion = '2.22.1'
+    log4jCoreVersion = '2.22.1'
+    log4jSlf4j2ImplVersion = '2.22.1'
 }
 
-apply {
-    if (!isTest) {
-        apply plugin: 'io.freefair.aspectj.post-compile-weaving'
-    }
-}
+
 
 dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
@@ -56,6 +49,10 @@ dependencies {
     implementation "com.google.code.gson:gson:${gsonVersion}"
     implementation "org.liquibase:liquibase-core:${liquibaseVersion}"
     implementation "org.postgresql:postgresql:${postgresqlVersion}"
+
+    implementation "org.apache.logging.log4j:log4j-api:${log4jApiVersion}"
+    implementation "org.apache.logging.log4j:log4j-core:${log4jCoreVersion}"
+    implementation "org.apache.logging.log4j:log4j-slf4j2-impl:${log4jSlf4j2ImplVersion}"
 
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
@@ -71,8 +68,13 @@ dependencies {
     testImplementation "org.testcontainers:testcontainers:${testcontainerVersion}"
     testImplementation "org.testcontainers:junit-jupiter:${testcontainerVersion}"
     testImplementation "org.testcontainers:postgresql:${testcontainerVersion}"
+    testImplementation "jakarta.servlet:jakarta.servlet-api:${jakartaVersion}"
 }
-
+apply {
+    if (!isTest) {
+        apply plugin: 'io.freefair.aspectj.post-compile-weaving'
+    }
+}
 test {
     useJUnitPlatform()
 }

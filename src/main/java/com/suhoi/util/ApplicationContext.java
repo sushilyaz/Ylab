@@ -45,9 +45,9 @@ public class ApplicationContext {
         TypeOfTrainingRepository typeOfTrainingRepository = new TypeOfTrainingRepositoryImpl();
 
         AuditService auditService = new AuditServiceImpl(auditRepository);
-        TrainingService trainingService = new TrainingServiceImpl(trainingRepository, auditService);
-        UserService userService = new UserServiceImpl(userRepository, auditService);
-        TypeOfTrainingService typeOfTrainingService = new TypeOfTrainingServiceImpl(typeOfTrainingRepository, auditService);
+        TrainingService trainingService = new TrainingServiceImpl(trainingRepository);
+        UserService userService = new UserServiceImpl(userRepository);
+        TypeOfTrainingService typeOfTrainingService = new TypeOfTrainingServiceImpl(typeOfTrainingRepository);
 
         TypeOfTrainingFacade typeOfTrainingFacade = new TypeOfTrainingFacadeImpl(typeOfTrainingService);
         UserFacade userFacade = new UserFacadeImpl(userService);

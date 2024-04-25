@@ -1,19 +1,13 @@
 package com.suhoi.aspects;
 
-import com.suhoi.annotation.Auditable;
 import com.suhoi.model.Audit;
-import com.suhoi.model.User;
 import com.suhoi.service.AuditService;
 import com.suhoi.util.ApplicationContext;
 import com.suhoi.util.UserUtils;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 
 import java.time.LocalDateTime;
 

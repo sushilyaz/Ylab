@@ -5,21 +5,15 @@ import com.suhoi.exception.DataAlreadyExistException;
 import com.suhoi.exception.DataNotFoundException;
 import com.suhoi.model.TypeOfTraining;
 import com.suhoi.repository.TypeOfTrainingRepository;
-import com.suhoi.repository.impl.TypeOfTrainingRepositoryImpl;
-import com.suhoi.service.AuditService;
 import com.suhoi.service.TypeOfTrainingService;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class TypeOfTrainingServiceImpl implements TypeOfTrainingService {
 
     private final TypeOfTrainingRepository typeOfTrainingRepository;
-    private final AuditService auditService;
-
-    public TypeOfTrainingServiceImpl(TypeOfTrainingRepository typeOfTrainingRepository, AuditService auditService) {
-        this.typeOfTrainingRepository = typeOfTrainingRepository;
-        this.auditService = auditService;
-    }
 
     @Override
     public TypeOfTraining getTypeByName(String type) {

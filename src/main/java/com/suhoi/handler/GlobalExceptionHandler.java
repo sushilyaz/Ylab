@@ -2,6 +2,7 @@ package com.suhoi.handler;
 
 import com.suhoi.exception.DataAlreadyExistException;
 import com.suhoi.exception.DataNotFoundException;
+import com.suhoi.exception.NoValidDataException;
 import com.suhoi.exception.UserActionException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,11 @@ public class GlobalExceptionHandler {
 
     public static void handleDataAlreadyExistException(HttpServletResponse response, DataAlreadyExistException ex) throws ServletException, IOException {
         response.setStatus(HttpServletResponse.SC_CONFLICT);
+        response.getWriter().write(ex.getMessage());
+    }
+
+    public static void handleNoValidDataException(HttpServletResponse response, NoValidDataException ex) throws ServletException, IOException {
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         response.getWriter().write(ex.getMessage());
     }
 }

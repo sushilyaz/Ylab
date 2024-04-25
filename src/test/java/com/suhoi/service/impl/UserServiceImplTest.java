@@ -27,15 +27,12 @@ class UserServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private AuditService auditService;
-
     private UserService userService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        userService = new UserServiceImpl(userRepository, auditService);
+        userService = new UserServiceImpl(userRepository);
     }
 
     @Test

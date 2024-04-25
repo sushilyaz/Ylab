@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,13 +38,10 @@ class TrainingServiceImplTest {
     @Mock
     private TrainingRepository trainingRepository;
 
-    @Mock
-    private AuditService auditService;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        trainingService = new TrainingServiceImpl(trainingRepository, auditService);
+        trainingService = new TrainingServiceImpl(trainingRepository);
         UserUtils.setCurrentUser(new User(1L, "user1", "user1", Role.SIMPLE));
     }
 
@@ -136,7 +134,7 @@ class TrainingServiceImplTest {
         List<Training> testList = new ArrayList<>();
         testList.add(build);
         Long trainingId = 1L;
-        when(trainingRepository.getAllByUserIdOrderByDate(UserUtils.getCurrentUser().getId())).thenReturn(testList);
+        when(trainingRepository.findById(trainingId, UserUtils.getCurrentUser().getId())).thenReturn(Optional.of(build));
         trainingService.deleteById(trainingId);
 
         verify(trainingRepository, times(1)).delete(trainingId);
@@ -150,6 +148,7 @@ class TrainingServiceImplTest {
                 .advanced(new HashMap<>())
                 .build();
 
+        when(trainingRepository.findById(dto.getId(), dto.getUserId())).thenReturn(Optional.of(new Training()));
         trainingService.update(dto);
 
         verify(trainingRepository, times(1)).update(dto);

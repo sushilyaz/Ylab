@@ -4,30 +4,28 @@ import com.suhoi.annotation.Auditable;
 import com.suhoi.dto.RangeDto;
 import com.suhoi.dto.UpdateTrainingDto;
 import com.suhoi.exception.DataNotFoundException;
+import com.suhoi.exception.NoValidDataException;
 import com.suhoi.model.Role;
 import com.suhoi.model.Training;
 import com.suhoi.repository.TrainingRepository;
 import com.suhoi.service.AuditService;
 import com.suhoi.service.TrainingService;
 import com.suhoi.util.UserUtils;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class TrainingServiceImpl implements TrainingService {
 
     private final TrainingRepository trainingRepository;
-    private final AuditService auditService;
-
-    public TrainingServiceImpl(TrainingRepository trainingRepository, AuditService auditService) {
-        this.trainingRepository = trainingRepository;
-        this.auditService = auditService;
-    }
 
     @Auditable
     @Override
     public void addTrainingIfNotExist(Training training) {
+
         Long userId = training.getUserId();
         Long typeOfTrainingId = training.getTypeOfTrainingId();
         LocalDate date = training.getDate();
@@ -80,6 +78,9 @@ public class TrainingServiceImpl implements TrainingService {
     @Auditable
     @Override
     public void update(UpdateTrainingDto dto) {
+        if (dto.getId() == null || dto.getUserId() == null || dto.getCalories() == null || dto.getAdvanced() == null) {
+            throw new NoValidDataException("Fill out all fields");
+        }
         if (trainingRepository.findById(dto.getId(), dto.getUserId()).isEmpty()) {
             throw new DataNotFoundException("Training with id " + dto.getId() + " not found");
         }

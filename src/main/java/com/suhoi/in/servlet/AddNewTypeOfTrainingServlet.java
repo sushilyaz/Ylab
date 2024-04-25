@@ -1,11 +1,8 @@
 package com.suhoi.in.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.suhoi.dto.CreateTrainingDto;
 import com.suhoi.dto.CreateTypeDto;
 import com.suhoi.exception.DataAlreadyExistException;
-import com.suhoi.exception.DataNotFoundException;
-import com.suhoi.facade.TrainingFacade;
 import com.suhoi.facade.TypeOfTrainingFacade;
 import com.suhoi.handler.GlobalExceptionHandler;
 import jakarta.servlet.ServletConfig;
