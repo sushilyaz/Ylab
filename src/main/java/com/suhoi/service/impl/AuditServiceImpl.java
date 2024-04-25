@@ -1,5 +1,6 @@
 package com.suhoi.service.impl;
 
+import com.suhoi.annotation.Auditable;
 import com.suhoi.model.Audit;
 import com.suhoi.repository.AuditRepository;
 import com.suhoi.repository.TrainingRepository;
@@ -20,15 +21,9 @@ public class AuditServiceImpl implements AuditService {
     }
 
     @Override
-    public void save(String action) {
-        Audit build = Audit.builder()
-                .username(UserUtils.getCurrentUser().getUsername())
-                .action(action)
-                .dateTime(LocalDateTime.now())
-                .build();
-        auditRepository.save(build);
+    public void save(Audit audit) {
+        auditRepository.save(audit);
     }
-
     @Override
     public List<Audit> getAll() {
         return auditRepository.getAll();

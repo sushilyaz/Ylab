@@ -1,6 +1,7 @@
 plugins {
     id 'java'
-    id 'application'
+    id 'war'
+    id "io.freefair.aspectj.post-compile-weaving" version "8.4" apply false
 }
 
 group = 'com.suhoi'
@@ -10,14 +11,6 @@ repositories {
     mavenCentral()
 }
 
-application {
-    mainClass = "com.suhoi.Main"
-}
-tasks.withType(Jar) {
-    manifest {
-        attributes 'Main-Class': 'com.suhoi.Main'
-    }
-}
 java {
     sourceCompatibility = JavaVersion.VERSION_17;
     targetCompatibility = JavaVersion.VERSION_17;
@@ -30,6 +23,7 @@ java {
 }
 
 ext {
+    isTest = System.properties['env'] == 'test'
     junitVersion = "5.9.1"
     mockitoVersion = "5.11.0"
     lombokVersion = "1.18.30"
@@ -40,14 +34,35 @@ ext {
     log4jVersion = "2.23.1"
     gsonVersion = "2.10.1"
     testcontainerVersion = "1.19.7"
+    jakartaVersion = "6.0.0"
+    jacksonVersion = "2.16.1"
+    aspectjrtVersion = "1.9.21"
+    mapstructVersion = "1.5.5.Final"
+    mapstructLombokVersion = "0.2.0"
+}
+
+apply {
+    if (!isTest) {
+        apply plugin: 'io.freefair.aspectj.post-compile-weaving'
+    }
 }
 
 dependencies {
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
+    compileOnly "jakarta.servlet:jakarta.servlet-api:${jakartaVersion}"
+    implementation "org.aspectj:aspectjrt:${aspectjrtVersion}"
     implementation "com.google.code.gson:gson:${gsonVersion}"
     implementation "org.liquibase:liquibase-core:${liquibaseVersion}"
     implementation "org.postgresql:postgresql:${postgresqlVersion}"
+
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${mapstructLombokVersion}"
+
     testImplementation platform("org.junit:junit-bom:${junitVersion}")
     testImplementation "org.assertj:assertj-core:${assertjVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter"

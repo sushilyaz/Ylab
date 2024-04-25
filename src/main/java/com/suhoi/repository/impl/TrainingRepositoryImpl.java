@@ -37,12 +37,18 @@ public class TrainingRepositoryImpl implements TrainingRepository {
             """;
     private static final String DELETE_SQL = """
             DELETE FROM ylab.trainings
-            WHERE id = ?
+            WHERE id = ?;
             """;
 
     private static final String FIND_ALL_SQL = """
             SELECT id, user_id, type_of_training_id, duration, calories, date, advanced
             FROM ylab.trainings;
+            """;
+
+    private static final String FIND_BY_ID_SQL = """
+            SELECT id, user_id, type_of_training_id, duration, calories, date, advanced
+            FROM ylab.trainings
+            WHERE id = ? AND user_id = ?;
             """;
 
     private static final String GET_TRAININGS_BETWEEN_DATE_SQL = """
@@ -81,7 +87,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
             preparedStatement.setObject(6, Parser.toJSONB(training.getAdvanced()));
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-//            connection.commit();
+            connection.commit();
             if (generatedKeys.next()) {
                 training.setId(generatedKeys.getLong(1));
             }
@@ -116,6 +122,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
             preparedStatement.setLong(3, dto.getId());
             preparedStatement.setLong(4, dto.getUserId());
             preparedStatement.executeUpdate();
+//            connection.commit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -127,6 +134,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -162,6 +170,23 @@ public class TrainingRepositoryImpl implements TrainingRepository {
                 trainings.add(training);
             }
             return trainings;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<Training> findById(Long id, Long userId) {
+        try (Connection connection = ConnectionPool.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.setLong(2, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            Training training = null;
+            if (resultSet.next()) {
+                training = buildTraining(resultSet);
+            }
+            return Optional.ofNullable(training);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

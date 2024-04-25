@@ -1,6 +1,5 @@
 package com.suhoi.repository;
 
-import com.suhoi.dto.TrainingDto;
 import com.suhoi.dto.UpdateTrainingDto;
 import com.suhoi.model.Training;
 
@@ -65,4 +64,13 @@ public interface TrainingRepository {
      * @return
      */
     List<Training> findAll();
+
+    /**
+     * Поиск по id
+     *
+     * @param id
+     * @param userId
+     * @return
+     */
+    Optional<Training> findById(Long id, Long userId);
 }

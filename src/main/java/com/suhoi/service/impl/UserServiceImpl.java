@@ -1,7 +1,7 @@
 package com.suhoi.service.impl;
 
+import com.suhoi.annotation.Auditable;
 import com.suhoi.exception.UserActionException;
-import com.suhoi.in.console.TrainingDailyRunner;
 import com.suhoi.model.User;
 import com.suhoi.repository.UserRepository;
 import com.suhoi.repository.impl.UserRepositoryImpl;
@@ -22,26 +22,24 @@ public class UserServiceImpl implements UserService {
         this.auditService = auditService;
     }
 
+    @Auditable
     @Override
     public void createUserIfNotExist(User createUser) {
         Optional<User> existUser = userRepository.getUserByUsername(createUser.getUsername());
-        if (existUser.isPresent()) {
-            System.out.println("User already exists!");
-            TrainingDailyRunner.start();
-        }
+        if (existUser.isPresent()) throw new UserActionException("User already exists");
         userRepository.save(createUser);
         System.out.println("User with username '" + createUser.getUsername() + "' registered success");
     }
 
+
     @Override
+    @Auditable
     public void auth(User authUser) {
         Optional<User> user = userRepository.getUserByUsername(authUser.getUsername());
         if (user.isEmpty() || !user.get().getPassword().equals(authUser.getPassword())) {
-            System.out.println("user does not exist");
-            TrainingDailyRunner.start();
+            throw new UserActionException("Invalid username or password");
         }
         UserUtils.setCurrentUser(user.get());
         System.out.println("User with username '" + authUser.getUsername() + "' log in success");
-        auditService.save("called UserService.auth");
     }
 }

@@ -5,7 +5,7 @@ import com.suhoi.dto.RangeDto;
 import com.suhoi.dto.TrainingDto;
 import com.suhoi.dto.UpdateTrainingDto;
 import com.suhoi.facade.TrainingFacade;
-import com.suhoi.in.controller.impl.TrainingControllerImpl;
+import com.suhoi.mapper.TrainingMapper;
 import com.suhoi.model.Training;
 import com.suhoi.model.TypeOfTraining;
 import com.suhoi.service.TrainingService;
@@ -13,6 +13,7 @@ import com.suhoi.service.TypeOfTrainingService;
 import com.suhoi.service.impl.TrainingServiceImpl;
 import com.suhoi.service.impl.TypeOfTrainingServiceImpl;
 import com.suhoi.util.UserUtils;
+import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ public class TrainingFacadeImpl implements TrainingFacade {
 
     private final TrainingService trainingService;
     private final TypeOfTrainingService typeOfTrainingService;
+    private final TrainingMapper mapper = Mappers.getMapper(TrainingMapper.class);
+
 
     public TrainingFacadeImpl(TrainingService trainingService, TypeOfTrainingService typeOfTrainingService) {
         this.trainingService = trainingService;
@@ -34,15 +37,10 @@ public class TrainingFacadeImpl implements TrainingFacade {
     @Override
     public void addNewTraining(CreateTrainingDto createTrainingDto) {
         TypeOfTraining typeByName = typeOfTrainingService.getTypeByName(createTrainingDto.getTypeOfTrain());
-        Training build = Training.builder()
-                .typeOfTrainingId(typeByName.getId())
-                .userId(UserUtils.getCurrentUser().getId())
-                .calories(createTrainingDto.getCalories())
-                .duration(createTrainingDto.getDuration())
-                .advanced(createTrainingDto.getAdvanced())
-                .date(LocalDate.now())
-                .build();
-        trainingService.addTrainingIfNotExist(build);
+        Training training = mapper.toEntity(createTrainingDto);
+        training.setUserId(UserUtils.getCurrentUser().getId());
+        training.setTypeOfTrainingId(typeByName.getId());
+        trainingService.addTrainingIfNotExist(training);
     }
 
     @Override
@@ -80,14 +78,9 @@ public class TrainingFacadeImpl implements TrainingFacade {
         for (Training training : trainings) {
             String typeName = typeMap.get(training.getTypeOfTrainingId());
             if (typeName != null) {
-                TrainingDto trainingDto = TrainingDto.builder()
-                        .typeOfTrain(typeName)
-                        .duration(training.getDuration())
-                        .calories(training.getCalories())
-                        .advanced(training.getAdvanced())
-                        .date(training.getDate())
-                        .build();
-                trainingDtos.add(trainingDto);
+                TrainingDto dto = mapper.toDto(training);
+                dto.setTypeOfTrain(typeName);
+                trainingDtos.add(dto);
             }
         }
         return trainingDtos;

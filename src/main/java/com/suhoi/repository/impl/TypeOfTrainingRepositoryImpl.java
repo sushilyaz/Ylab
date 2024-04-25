@@ -33,7 +33,7 @@ public class TypeOfTrainingRepositoryImpl implements TypeOfTrainingRepository {
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, typeOfTraining.getName());
             preparedStatement.executeUpdate();
-
+            connection.commit();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 typeOfTraining.setId(generatedKeys.getLong(1));

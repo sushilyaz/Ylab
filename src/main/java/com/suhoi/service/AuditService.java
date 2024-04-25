@@ -8,9 +8,8 @@ public interface AuditService {
     /**
      * Сервис для сохранения аудита
      *
-     * @param action
      */
-    void save(String action);
+    void save(Audit audit);
 
     /**
      * Сервис для предоставления администратору всех действий пользователей
