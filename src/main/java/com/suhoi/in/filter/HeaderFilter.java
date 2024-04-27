@@ -5,6 +5,11 @@ import jakarta.servlet.annotation.WebFilter;
 
 import java.io.IOException;
 
+/**
+ * Фильтер, выставляющий заголовки
+ * Он срабатывает первый (если рассматривать со стороны request-response)
+ * filterName = "A" - т.к. единственный способ задать порядок срабатывания сервлетов без использования xml конфига
+ */
 @WebFilter(filterName = "A")
 public class HeaderFilter implements Filter {
     @Override

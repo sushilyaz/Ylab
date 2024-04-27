@@ -11,6 +11,9 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+/**
+ * Фильтр, срабатывающий в последнюю очередь. По url, предоставленному ниже может обращаться только админ
+ */
 @WebFilter(filterName = "C", urlPatterns = "/type-of-training/create")
 public class RoleFilter implements Filter {
     @Override

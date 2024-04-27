@@ -8,7 +8,6 @@ import com.suhoi.exception.NoValidDataException;
 import com.suhoi.model.Role;
 import com.suhoi.model.Training;
 import com.suhoi.repository.TrainingRepository;
-import com.suhoi.service.AuditService;
 import com.suhoi.service.TrainingService;
 import com.suhoi.util.UserUtils;
 import lombok.RequiredArgsConstructor;

@@ -7,6 +7,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+/**
+ * Маппер для сущности тренировок
+ */
 @Mapper
 public interface TrainingMapper {
     TrainingMapper MAPPER = Mappers.getMapper(TrainingMapper.class);

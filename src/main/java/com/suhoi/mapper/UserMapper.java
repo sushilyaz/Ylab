@@ -5,6 +5,9 @@ import com.suhoi.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+/**
+ * Маппер для сущности пользователь
+ */
 @Mapper
 public interface UserMapper {
     @Mapping(target = "id", ignore = true)

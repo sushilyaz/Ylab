@@ -6,7 +6,6 @@ import com.suhoi.exception.NoValidDataException;
 import com.suhoi.exception.UserActionException;
 import com.suhoi.model.User;
 import com.suhoi.repository.UserRepository;
-import com.suhoi.service.AuditService;
 import com.suhoi.service.UserService;
 import com.suhoi.util.UserUtils;
 import lombok.RequiredArgsConstructor;

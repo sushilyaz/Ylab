@@ -1,29 +1,22 @@
 package com.suhoi.service.impl;
 
-import com.suhoi.annotation.Auditable;
 import com.suhoi.model.Audit;
 import com.suhoi.repository.AuditRepository;
-import com.suhoi.repository.TrainingRepository;
-import com.suhoi.repository.impl.AuditRepositoryImpl;
-import com.suhoi.repository.impl.TrainingRepositoryImpl;
 import com.suhoi.service.AuditService;
-import com.suhoi.service.TypeOfTrainingService;
-import com.suhoi.util.UserUtils;
+import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class AuditServiceImpl implements AuditService {
-    private final AuditRepository auditRepository;
 
-    public AuditServiceImpl(AuditRepository auditRepository) {
-        this.auditRepository = auditRepository;
-    }
+    private final AuditRepository auditRepository;
 
     @Override
     public void save(Audit audit) {
         auditRepository.save(audit);
     }
+
     @Override
     public List<Audit> getAll() {
         return auditRepository.getAll();

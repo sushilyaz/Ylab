@@ -8,6 +8,9 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+/**
+ * Фильтр на проверку аутентификации пользователя. Если фильтр не срабатывает - исключение
+ */
 @WebFilter(filterName = "B", urlPatterns = {"/training/*", "/type-of-training/*"})
 public class SessionFilter implements Filter {
     @Override

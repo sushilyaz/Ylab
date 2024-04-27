@@ -3,6 +3,7 @@ package com.suhoi.in.servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.suhoi.dto.AuthDto;
 import com.suhoi.dto.CreateUserDto;
+import com.suhoi.exception.NoValidDataException;
 import com.suhoi.exception.UserActionException;
 import com.suhoi.facade.UserFacade;
 import com.suhoi.handler.GlobalExceptionHandler;
@@ -36,6 +37,8 @@ public class RegistrationUserServlet extends HttpServlet {
             userFacade.signUp(createUserDto);
             resp.setStatus(HttpServletResponse.SC_CREATED);
             resp.getWriter().write("User register success! ");
+        } catch (NoValidDataException e) {
+            GlobalExceptionHandler.handleNoValidDataException(resp, e);
         } catch (UserActionException e) {
             GlobalExceptionHandler.handleUserActionException(resp, e);
         } catch (Exception e) {
