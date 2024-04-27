@@ -143,6 +143,7 @@ class TrainingServiceImplTest {
     @DisplayName("update without exception")
     void testUpdate() {
         UpdateTrainingDto dto = UpdateTrainingDto.builder()
+                .id(1L)
                 .userId(1L)
                 .calories(1000)
                 .advanced(new HashMap<>())

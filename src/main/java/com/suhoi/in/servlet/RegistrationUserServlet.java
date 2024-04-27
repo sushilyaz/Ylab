@@ -1,13 +1,11 @@
 package com.suhoi.in.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.suhoi.dto.AuthDto;
 import com.suhoi.dto.CreateUserDto;
 import com.suhoi.exception.NoValidDataException;
 import com.suhoi.exception.UserActionException;
 import com.suhoi.facade.UserFacade;
 import com.suhoi.handler.GlobalExceptionHandler;
-import com.suhoi.model.User;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

@@ -11,6 +11,9 @@ import org.aspectj.lang.annotation.Pointcut;
 
 import java.time.LocalDateTime;
 
+/**
+ * Аспект аудита. Предусмотрена ситуация аудита действий неавторизованного пользователя
+ */
 @Aspect
 public class AuditAspect {
 

@@ -2,7 +2,6 @@ package com.suhoi.in.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.suhoi.dto.AuthDto;
-import com.suhoi.dto.CreateUserDto;
 import com.suhoi.exception.UserActionException;
 import com.suhoi.facade.UserFacade;
 import com.suhoi.handler.GlobalExceptionHandler;

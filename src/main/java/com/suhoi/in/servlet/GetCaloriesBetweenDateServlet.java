@@ -2,7 +2,6 @@ package com.suhoi.in.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.suhoi.dto.RangeDto;
-import com.suhoi.dto.TrainingDto;
 import com.suhoi.exception.DataNotFoundException;
 import com.suhoi.facade.TrainingFacade;
 import com.suhoi.handler.GlobalExceptionHandler;
@@ -14,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/training/get-calories-between-date")
 public class GetCaloriesBetweenDateServlet extends HttpServlet {

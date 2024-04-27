@@ -4,20 +4,16 @@ import com.suhoi.dto.AuthDto;
 import com.suhoi.dto.CreateUserDto;
 import com.suhoi.facade.UserFacade;
 import com.suhoi.mapper.UserMapper;
-import com.suhoi.model.Role;
 import com.suhoi.model.User;
 import com.suhoi.service.UserService;
-import com.suhoi.service.impl.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 
+@RequiredArgsConstructor
 public class UserFacadeImpl implements UserFacade {
 
     private final UserService userService;
     private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-
-    public UserFacadeImpl(UserService userService) {
-        this.userService = userService;
-    }
 
     @Override
     public void signUp(CreateUserDto createUserDto) {

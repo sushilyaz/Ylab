@@ -11,6 +11,7 @@ import com.suhoi.model.TypeOfTraining;
 import com.suhoi.service.TrainingService;
 import com.suhoi.service.TypeOfTrainingService;
 import com.suhoi.util.UserUtils;
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
@@ -18,17 +19,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class TrainingFacadeImpl implements TrainingFacade {
 
     private final TrainingService trainingService;
     private final TypeOfTrainingService typeOfTrainingService;
     private final TrainingMapper mapper = Mappers.getMapper(TrainingMapper.class);
-
-
-    public TrainingFacadeImpl(TrainingService trainingService, TypeOfTrainingService typeOfTrainingService) {
-        this.trainingService = trainingService;
-        this.typeOfTrainingService = typeOfTrainingService;
-    }
 
     @Override
     public void addNewTraining(CreateTrainingDto createTrainingDto) {

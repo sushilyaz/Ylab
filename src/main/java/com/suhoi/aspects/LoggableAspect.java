@@ -8,6 +8,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 
+/**
+ * Аспект логирования по аннотации. На прошлом интенсиве ментор сказал, что лучше делать так (в смысле по аннотации, а не по классам в пакете)
+ */
 @Aspect
 @Slf4j
 public class LoggableAspect {

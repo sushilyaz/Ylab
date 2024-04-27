@@ -70,6 +70,7 @@ dependencies {
     testImplementation "org.testcontainers:postgresql:${testcontainerVersion}"
     testImplementation "jakarta.servlet:jakarta.servlet-api:${jakartaVersion}"
 }
+// Для тестов необходимо запустить таску test с -Denv=test
 apply {
     if (!isTest) {
         apply plugin: 'io.freefair.aspectj.post-compile-weaving'

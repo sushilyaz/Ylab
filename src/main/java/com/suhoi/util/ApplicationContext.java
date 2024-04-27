@@ -2,7 +2,6 @@ package com.suhoi.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.suhoi.aspects.AuditAspect;
 import com.suhoi.facade.TrainingFacade;
 import com.suhoi.facade.TypeOfTrainingFacade;
 import com.suhoi.facade.UserFacade;
@@ -32,6 +31,11 @@ import lombok.Getter;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * DI вынес в класс
+ * Что касается мапы - она по факту нужна для аспектов, чтобы инициализировать постоянно одну и ту же зависимость auditService,
+ * поэтому только его добавил. По-хорошему надо было все объекты в нее добавить, но на данном этапе в приложении этого не нужно
+ */
 public class ApplicationContext {
 
     @Getter

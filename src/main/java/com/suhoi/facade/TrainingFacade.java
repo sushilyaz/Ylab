@@ -6,7 +6,6 @@ import com.suhoi.dto.TrainingDto;
 import com.suhoi.dto.UpdateTrainingDto;
 import com.suhoi.model.Training;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**

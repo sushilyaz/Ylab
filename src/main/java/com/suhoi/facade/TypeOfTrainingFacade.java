@@ -1,7 +1,5 @@
 package com.suhoi.facade;
 
-import com.suhoi.model.TypeOfTraining;
-
 /**
  * Паттерн фасад
  */
