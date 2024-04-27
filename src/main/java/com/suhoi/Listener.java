@@ -1,6 +1,7 @@
 package com.suhoi;
 
 import com.suhoi.util.ApplicationContext;
+import com.suhoi.util.ConnectionPool;
 import com.suhoi.util.LiquibaseRunner;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
@@ -17,6 +18,7 @@ public class Listener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        ConnectionPool.closePool();
         ServletContextListener.super.contextDestroyed(sce);
     }
 }
