@@ -63,7 +63,6 @@ public class TrainingServiceImpl implements TrainingService {
         return burnedCalories;
     }
 
-    // поправил метод для оптимизации (если у пользователя будет много тренировок, то в старой версии могли возникнуть проблемы с перфомансом)
     @Auditable
     @Override
     public void deleteById(Long id) {
@@ -73,7 +72,6 @@ public class TrainingServiceImpl implements TrainingService {
         trainingRepository.delete(id);
     }
 
-    // поправил метод для оптимизации (если у пользователя будет много тренировок, то в старой версии могли возникнуть проблемы с перфомансом)
     @Auditable
     @Override
     public void update(UpdateTrainingDto dto) {
