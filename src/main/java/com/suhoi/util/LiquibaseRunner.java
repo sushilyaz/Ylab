@@ -13,7 +13,7 @@ public class LiquibaseRunner {
     private static final String CREATE_DEFAULT_SCHEMA = "CREATE SCHEMA IF NOT EXISTS services";
 
     /**
-     * Запускаем миграции из changelog, указанный в application.properties
+     * Запускаем миграции из changelog, указанный в application.yml
      * Перед стартом миграций, необходимо создать дефолтную схему, чтобы туда сохранились служебные таблицы
      */
     public static void runLiquibaseMigration() {
