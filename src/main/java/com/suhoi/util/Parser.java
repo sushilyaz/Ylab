@@ -1,7 +1,7 @@
 package com.suhoi.util;
 
 import com.google.gson.Gson;
-import com.suhoi.in.console.TrainingDailyRunner;
+import com.suhoi.annotation.Loggable;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -13,6 +13,7 @@ public class Parser {
      * @param toParse
      * @return
      */
+
     public static Duration durationParse(String toParse) {
         try {
             Duration duration;
@@ -28,7 +29,6 @@ public class Parser {
             return duration;
         } catch (Exception e) {
             System.out.println("Data no valid: " + e.getMessage());
-            TrainingDailyRunner.menu();
         }
         return null;
     }

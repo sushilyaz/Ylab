@@ -3,6 +3,7 @@ package com.suhoi.repository.impl;
 import com.suhoi.model.Audit;
 import com.suhoi.repository.AuditRepository;
 import com.suhoi.util.ConnectionPool;
+import com.suhoi.util.QuerySQL;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,15 +11,9 @@ import java.util.List;
 
 public class AuditRepositoryImpl implements AuditRepository {
 
-    private static final String SAVE_SQL = """
-            INSERT INTO ylab.audits (username, action, datetime)
-            VALUES (?, ?, ?);
-            """;
+    private static final String SAVE_SQL = QuerySQL.SAVE_SQL_AUDIT;
 
-    private static final String GET_ALL_SQL = """
-            SELECT id, username, action, datetime
-            FROM ylab.audits
-            """;
+    private static final String GET_ALL_SQL = QuerySQL.GET_ALL_SQL;
 
 
     @Override

@@ -4,24 +4,16 @@ import com.suhoi.model.Role;
 import com.suhoi.model.User;
 import com.suhoi.repository.UserRepository;
 import com.suhoi.util.ConnectionPool;
+import com.suhoi.util.QuerySQL;
 
 import java.sql.*;
 import java.util.Optional;
 
 public class UserRepositoryImpl implements UserRepository {
 
+    private static final String SAVE_SQL = QuerySQL.SAVE_SQL_USER;
 
-
-    private static final String SAVE_SQL = """
-            INSERT INTO ylab.users (username, password, role)
-            VALUES (?, ?, ?);
-            """;
-
-    private static final String GET_BY_USERNAME_SQL = """
-            SELECT id, username, password, role
-            FROM ylab.users
-            WHERE username = ?;
-            """;
+    private static final String GET_BY_USERNAME_SQL = QuerySQL.GET_BY_USERNAME_SQL;
 
     @Override
     public void save(User user) {

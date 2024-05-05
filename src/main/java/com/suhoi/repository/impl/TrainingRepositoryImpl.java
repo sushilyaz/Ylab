@@ -5,6 +5,7 @@ import com.suhoi.model.Training;
 import com.suhoi.repository.TrainingRepository;
 import com.suhoi.util.ConnectionPool;
 import com.suhoi.util.Parser;
+import com.suhoi.util.QuerySQL;
 
 import java.sql.*;
 import java.time.Duration;
@@ -13,43 +14,21 @@ import java.util.*;
 
 public class TrainingRepositoryImpl implements TrainingRepository {
 
-    private static final String GET_TRAINING_FOR_DATE_SQL = """
-            SELECT id, user_id, type_of_training_id, duration, calories, date, advanced
-            FROM ylab.trainings
-            WHERE user_id = ? AND type_of_training_id = ? AND date = ?;
-            """;
-    private static final String SAVE_SQL = """
-            INSERT INTO ylab.trainings (user_id, type_of_training_id, duration, calories, date, advanced)
-            VALUES (?, ?, ?, ?, ?, ?::jsonb);
-            """;
+    private static final String GET_TRAINING_FOR_DATE_SQL = QuerySQL.GET_TRAINING_FOR_DATE_SQL;
 
-    private static final String GET_ALL_BY_USER_ID_SQL = """
-            SELECT id, user_id, type_of_training_id, duration, calories, date, advanced
-            FROM ylab.trainings
-            WHERE user_id = ?
-            ORDER BY date DESC;
-            """;
-    private static final String UPDATE_SQL = """
-            UPDATE ylab.trainings
-            SET calories = ?,
-                advanced = ?::jsonb
-            WHERE id = ? AND user_id = ?;
-            """;
-    private static final String DELETE_SQL = """
-            DELETE FROM ylab.trainings
-            WHERE id = ?
-            """;
+    private static final String SAVE_SQL = QuerySQL.SAVE_SQL_TRAINING;
 
-    private static final String FIND_ALL_SQL = """
-            SELECT id, user_id, type_of_training_id, duration, calories, date, advanced
-            FROM ylab.trainings;
-            """;
+    private static final String GET_ALL_BY_USER_ID_SQL = QuerySQL.GET_ALL_BY_USER_ID_SQL;
 
-    private static final String GET_TRAININGS_BETWEEN_DATE_SQL = """
-            SELECT id, user_id, type_of_training_id, duration, calories, date, advanced
-            FROM ylab.trainings
-            WHERE user_id = ? AND date BETWEEN ? AND ?;
-            """;
+    private static final String UPDATE_SQL = QuerySQL.UPDATE_SQL;
+
+    private static final String DELETE_SQL = QuerySQL.DELETE_SQL;
+
+    private static final String FIND_ALL_SQL = QuerySQL.FIND_ALL_SQL;
+
+    private static final String FIND_BY_ID_SQL = QuerySQL.FIND_BY_ID_SQL;
+
+    private static final String GET_TRAININGS_BETWEEN_DATE_SQL = QuerySQL.GET_TRAININGS_BETWEEN_DATE_SQL;
 
     @Override
     public Optional<Training> getTrainingForDateById(Long userId, Long typeOfTrainingId, LocalDate date) {
@@ -81,7 +60,8 @@ public class TrainingRepositoryImpl implements TrainingRepository {
             preparedStatement.setObject(6, Parser.toJSONB(training.getAdvanced()));
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-//            connection.commit();
+
+            connection.commit();
             if (generatedKeys.next()) {
                 training.setId(generatedKeys.getLong(1));
             }
@@ -101,6 +81,8 @@ public class TrainingRepositoryImpl implements TrainingRepository {
                 Training training = buildTraining(resultSet);
                 trainings.add(training);
             }
+            preparedStatement.close();
+            resultSet.close();
             return trainings;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -116,6 +98,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
             preparedStatement.setLong(3, dto.getId());
             preparedStatement.setLong(4, dto.getUserId());
             preparedStatement.executeUpdate();
+//            connection.commit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -127,6 +110,8 @@ public class TrainingRepositoryImpl implements TrainingRepository {
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+            preparedStatement.close();
+            connection.commit();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -145,6 +130,8 @@ public class TrainingRepositoryImpl implements TrainingRepository {
                 Training training = buildTraining(resultSet);
                 trainings.add(training);
             }
+            resultSet.close();
+            preparedStatement.close();
             return trainings;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -161,7 +148,28 @@ public class TrainingRepositoryImpl implements TrainingRepository {
                 Training training = buildTraining(resultSet);
                 trainings.add(training);
             }
+            resultSet.close();
+            preparedStatement.close();
             return trainings;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<Training> findById(Long id, Long userId) {
+        try (Connection connection = ConnectionPool.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.setLong(2, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            Training training = null;
+            if (resultSet.next()) {
+                training = buildTraining(resultSet);
+            }
+            resultSet.close();
+            preparedStatement.close();
+            return Optional.ofNullable(training);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

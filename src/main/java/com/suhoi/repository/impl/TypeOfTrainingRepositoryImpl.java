@@ -3,6 +3,7 @@ package com.suhoi.repository.impl;
 import com.suhoi.model.TypeOfTraining;
 import com.suhoi.repository.TypeOfTrainingRepository;
 import com.suhoi.util.ConnectionPool;
+import com.suhoi.util.QuerySQL;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,21 +12,11 @@ import java.util.Optional;
 
 public class TypeOfTrainingRepositoryImpl implements TypeOfTrainingRepository {
 
-    private static final String SAVE_SQL = """
-            INSERT INTO ylab.type_of_trainings (name)
-            VALUES (?);
-            """;
+    private static final String SAVE_SQL = QuerySQL.SAVE_SQL_TOT;
 
-    private static final String GET_BY_NAME_SQL = """
-            SELECT id, name
-            FROM ylab.type_of_trainings
-            WHERE name = ?;
-            """;
+    private static final String GET_BY_NAME_SQL = QuerySQL.GET_BY_NAME_SQL;
 
-    private static final String GET_ALL_SQL = """
-            SELECT id, name
-            FROM ylab.type_of_trainings
-            """;
+    private static final String GET_ALL_SQL = QuerySQL.GET_ALL_SQL_TOT;
 
     @Override
     public void save(TypeOfTraining typeOfTraining) {
@@ -33,7 +24,7 @@ public class TypeOfTrainingRepositoryImpl implements TypeOfTrainingRepository {
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, typeOfTraining.getName());
             preparedStatement.executeUpdate();
-
+            connection.commit();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 typeOfTraining.setId(generatedKeys.getLong(1));

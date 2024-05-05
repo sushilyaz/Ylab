@@ -1,47 +1,40 @@
 package com.suhoi.service.impl;
 
+import com.suhoi.annotation.Auditable;
 import com.suhoi.dto.RangeDto;
 import com.suhoi.dto.UpdateTrainingDto;
 import com.suhoi.exception.DataNotFoundException;
-import com.suhoi.exception.EmptyListException;
-import com.suhoi.in.console.TrainingDailyRunner;
+import com.suhoi.exception.NoValidDataException;
 import com.suhoi.model.Role;
 import com.suhoi.model.Training;
 import com.suhoi.repository.TrainingRepository;
-import com.suhoi.repository.impl.TrainingRepositoryImpl;
-import com.suhoi.service.AuditService;
 import com.suhoi.service.TrainingService;
 import com.suhoi.util.UserUtils;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class TrainingServiceImpl implements TrainingService {
 
     private final TrainingRepository trainingRepository;
-    private final AuditService auditService;
 
-    public TrainingServiceImpl(TrainingRepository trainingRepository, AuditService auditService) {
-        this.trainingRepository = trainingRepository;
-        this.auditService = auditService;
-    }
-
+    @Auditable
     @Override
     public void addTrainingIfNotExist(Training training) {
+
         Long userId = training.getUserId();
         Long typeOfTrainingId = training.getTypeOfTrainingId();
         LocalDate date = training.getDate();
         if (trainingRepository.getTrainingForDateById(userId, typeOfTrainingId, date).isPresent()) {
-            auditService.save("TrainingService.addTrainingIfNotExist failed");
-            System.out.println("Training with id " + typeOfTrainingId + " already exist");
-            TrainingDailyRunner.menu();
+            throw new DataNotFoundException("Training with id " + typeOfTrainingId + " already exist");
         }
         trainingRepository.save(training);
-        auditService.save("TrainingService.addTrainingIfNotExist success");
     }
 
+    @Auditable
     @Override
     public List<Training> getAllForUser() {
         List<Training> rs = new ArrayList<>();
@@ -51,46 +44,43 @@ public class TrainingServiceImpl implements TrainingService {
             rs = trainingRepository.findAll();
         }
         if (rs.isEmpty()) {
-            auditService.save("TrainingService.getAllForUser failed");
-            System.out.println("Training not found");
-            TrainingDailyRunner.menu();
+            throw new DataNotFoundException("You have no training data");
         }
-        auditService.save("TrainingService.getAllForUser success");
         return rs;
     }
 
+    @Auditable
     @Override
     public Integer getTrainsBetweenDate(RangeDto dto) {
         List<Training> trainBetweenDate = trainingRepository.getTrainBetweenDate(dto.getStartDate(), dto.getEndDate(), UserUtils.getCurrentUser().getId());
         if (trainBetweenDate.isEmpty()) {
-            auditService.save("TrainingService.getTrainsBetweenDate failed");
-            System.out.println("Training not found");
-            TrainingDailyRunner.menu();
+            throw new DataNotFoundException("Training between this dates is empty");
         }
         Integer burnedCalories = 0;
         for (Training training : trainBetweenDate) {
             burnedCalories = burnedCalories + training.getCalories();
         }
-        auditService.save("TrainingService.getTrainsBetweenDate success");
         return burnedCalories;
     }
 
+    @Auditable
     @Override
     public void deleteById(Long id) {
-        List<Training> list = trainingRepository.getAllByUserIdOrderByDate(UserUtils.getCurrentUser().getId());
-        boolean checkId = list.stream().anyMatch(training -> training.getId().equals(id));
-        if (!checkId) {
-            auditService.save("TrainingService.deleteById failed");
-            System.out.println("Training not found");
-            TrainingDailyRunner.menu();
+        if (trainingRepository.findById(id, UserUtils.getCurrentUser().getId()).isEmpty()) {
+            throw new DataNotFoundException("Training with id " + id + " not found");
         }
-        auditService.save("TrainingService.deleteById success");
         trainingRepository.delete(id);
     }
 
+    @Auditable
     @Override
     public void update(UpdateTrainingDto dto) {
-        auditService.save("called TrainingService.update");
+        if (dto.getId() == null || dto.getUserId() == null || dto.getCalories() == null || dto.getAdvanced() == null) {
+            throw new NoValidDataException("Fill out all fields");
+        }
+        if (trainingRepository.findById(dto.getId(), dto.getUserId()).isEmpty()) {
+            throw new DataNotFoundException("Training with id " + dto.getId() + " not found");
+        }
         dto.setUserId(UserUtils.getCurrentUser().getId());
         trainingRepository.update(dto);
     }
