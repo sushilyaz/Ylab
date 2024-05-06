@@ -7,9 +7,11 @@ import com.suhoi.model.TypeOfTraining;
 import com.suhoi.repository.TypeOfTrainingRepository;
 import com.suhoi.service.TypeOfTrainingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 public class TypeOfTrainingServiceImpl implements TypeOfTrainingService {
 

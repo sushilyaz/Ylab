@@ -9,8 +9,11 @@ import com.suhoi.repository.UserRepository;
 import com.suhoi.service.UserService;
 import com.suhoi.util.UserUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+@Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 

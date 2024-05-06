@@ -13,12 +13,14 @@ import com.suhoi.service.TypeOfTrainingService;
 import com.suhoi.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Component
 @RequiredArgsConstructor
 public class TrainingFacadeImpl implements TrainingFacade {
 

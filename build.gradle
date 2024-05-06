@@ -14,6 +14,11 @@ repositories {
 java {
     sourceCompatibility = JavaVersion.VERSION_17;
     targetCompatibility = JavaVersion.VERSION_17;
+
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 ext {
@@ -36,11 +41,18 @@ ext {
     log4jApiVersion = '2.22.1'
     log4jCoreVersion = '2.22.1'
     log4jSlf4j2ImplVersion = '2.22.1'
+    springVersion = '6.1.4'
 }
 
 
 
 dependencies {
+    implementation "org.springframework:spring-aspects:${springVersion}"
+    implementation "org.springframework:spring-aop:${springVersion}"
+    implementation "org.springframework:spring-context:${springVersion}"
+    implementation "org.springframework:spring-web:${springVersion}"
+    implementation "org.springframework:spring-webmvc:${springVersion}"
+
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"

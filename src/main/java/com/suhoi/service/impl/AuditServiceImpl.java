@@ -4,9 +4,11 @@ import com.suhoi.model.Audit;
 import com.suhoi.repository.AuditRepository;
 import com.suhoi.service.AuditService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 public class AuditServiceImpl implements AuditService {
 

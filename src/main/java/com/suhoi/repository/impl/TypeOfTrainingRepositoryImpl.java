@@ -4,12 +4,17 @@ import com.suhoi.model.TypeOfTraining;
 import com.suhoi.repository.TypeOfTrainingRepository;
 import com.suhoi.util.ConnectionPool;
 import com.suhoi.util.QuerySQL;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
+@RequiredArgsConstructor
 public class TypeOfTrainingRepositoryImpl implements TypeOfTrainingRepository {
 
     private static final String SAVE_SQL = QuerySQL.SAVE_SQL_TOT;
@@ -18,9 +23,11 @@ public class TypeOfTrainingRepositoryImpl implements TypeOfTrainingRepository {
 
     private static final String GET_ALL_SQL = QuerySQL.GET_ALL_SQL_TOT;
 
+    private final ConnectionPool connectionPool;
+
     @Override
     public void save(TypeOfTraining typeOfTraining) {
-        try (Connection connection = ConnectionPool.get();
+        try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, typeOfTraining.getName());
             preparedStatement.executeUpdate();
@@ -36,7 +43,7 @@ public class TypeOfTrainingRepositoryImpl implements TypeOfTrainingRepository {
 
     @Override
     public Optional<TypeOfTraining> getTypeByName(String name) {
-        try (Connection connection = ConnectionPool.get();
+        try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_NAME_SQL)) {
             preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -52,7 +59,7 @@ public class TypeOfTrainingRepositoryImpl implements TypeOfTrainingRepository {
 
     @Override
     public List<TypeOfTraining> getTypesOfTrain() {
-        try (Connection connection = ConnectionPool.get();
+        try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             List<TypeOfTraining> typeOfTrainings = new ArrayList<>();

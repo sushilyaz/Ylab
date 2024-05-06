@@ -1,24 +1,23 @@
 package com.suhoi;
 
-import com.suhoi.util.ApplicationContext;
 import com.suhoi.util.ConnectionPool;
 import com.suhoi.util.LiquibaseRunner;
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
 
-@WebListener
-public class Listener implements ServletContextListener {
+@Component
+@RequiredArgsConstructor
+public class Listener implements ApplicationListener<ContextRefreshedEvent> {
+    private final LiquibaseRunner liquibaseRunner;
+    private final ConnectionPool connectionPool;
     @Override
-    public void contextInitialized(ServletContextEvent sce) {
-        LiquibaseRunner.runLiquibaseMigration();
-        ApplicationContext.dependencyInjection(sce.getServletContext());
-    }
-
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) {
-        ConnectionPool.closePool();
-        ServletContextListener.super.contextDestroyed(sce);
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        connectionPool.initConnectionPool();
+        liquibaseRunner.runLiquibaseMigration();
     }
 }

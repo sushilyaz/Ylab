@@ -6,12 +6,16 @@ import com.suhoi.repository.TrainingRepository;
 import com.suhoi.util.ConnectionPool;
 import com.suhoi.util.Parser;
 import com.suhoi.util.QuerySQL;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
 
+@Repository
+@RequiredArgsConstructor
 public class TrainingRepositoryImpl implements TrainingRepository {
 
     private static final String GET_TRAINING_FOR_DATE_SQL = QuerySQL.GET_TRAINING_FOR_DATE_SQL;
@@ -30,9 +34,11 @@ public class TrainingRepositoryImpl implements TrainingRepository {
 
     private static final String GET_TRAININGS_BETWEEN_DATE_SQL = QuerySQL.GET_TRAININGS_BETWEEN_DATE_SQL;
 
+    private final ConnectionPool connectionPool;
+
     @Override
     public Optional<Training> getTrainingForDateById(Long userId, Long typeOfTrainingId, LocalDate date) {
-        try (Connection connection = ConnectionPool.get();
+        try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_TRAINING_FOR_DATE_SQL)) {
             preparedStatement.setLong(1, userId);
             preparedStatement.setLong(2, typeOfTrainingId);
@@ -50,7 +56,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
 
     @Override
     public void save(Training training) {
-        try (Connection connection = ConnectionPool.get();
+        try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setLong(1, training.getUserId());
             preparedStatement.setLong(2, training.getTypeOfTrainingId());
@@ -72,7 +78,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
 
     @Override
     public List<Training> getAllByUserIdOrderByDate(Long id) {
-        try (Connection connection = ConnectionPool.get();
+        try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_BY_USER_ID_SQL)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -91,7 +97,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
 
     @Override
     public void update(UpdateTrainingDto dto) {
-        try (Connection connection = ConnectionPool.get();
+        try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
             preparedStatement.setInt(1, dto.getCalories());
             preparedStatement.setObject(2, Parser.toJSONB(dto.getAdvanced()));
@@ -106,7 +112,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
 
     @Override
     public void delete(Long id) {
-        try (Connection connection = ConnectionPool.get();
+        try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SQL)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
@@ -119,7 +125,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
 
     @Override
     public List<Training> getTrainBetweenDate(LocalDate startDate, LocalDate endDate, Long id) {
-        try (Connection connection = ConnectionPool.get();
+        try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_TRAININGS_BETWEEN_DATE_SQL)) {
             preparedStatement.setLong(1, id);
             preparedStatement.setObject(2, startDate);
@@ -140,7 +146,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
 
     @Override
     public List<Training> findAll() {
-        try (Connection connection = ConnectionPool.get();
+        try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             List<Training> trainings = new ArrayList<>();
@@ -158,7 +164,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
 
     @Override
     public Optional<Training> findById(Long id, Long userId) {
-        try (Connection connection = ConnectionPool.get();
+        try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setLong(1, id);
             preparedStatement.setLong(2, userId);

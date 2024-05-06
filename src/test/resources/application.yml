@@ -1,0 +1,8 @@
+datasource:
+  username: suhoiTest
+  password: qwerty
+  url: jdbc:postgresql://localhost:5433/suhoiTest
+  pool-size: 10
+liquibase:
+  change-log: db/changelog/changelogTest.xml
+  liquibase-schema: services

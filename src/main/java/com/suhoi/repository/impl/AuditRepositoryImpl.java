@@ -4,21 +4,27 @@ import com.suhoi.model.Audit;
 import com.suhoi.repository.AuditRepository;
 import com.suhoi.util.ConnectionPool;
 import com.suhoi.util.QuerySQL;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
+@RequiredArgsConstructor
 public class AuditRepositoryImpl implements AuditRepository {
 
     private static final String SAVE_SQL = QuerySQL.SAVE_SQL_AUDIT;
 
     private static final String GET_ALL_SQL = QuerySQL.GET_ALL_SQL;
 
+    private final ConnectionPool connectionPool;
+
 
     @Override
     public void save(Audit audit) {
-        try (Connection connection = ConnectionPool.get();
+        try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, audit.getUsername());
             preparedStatement.setString(2, audit.getAction());
@@ -36,7 +42,7 @@ public class AuditRepositoryImpl implements AuditRepository {
 
     @Override
     public List<Audit> getAll() {
-        try (Connection connection = ConnectionPool.get();
+        try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             List<Audit> audits = new ArrayList<>();

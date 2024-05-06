@@ -11,11 +11,13 @@ import com.suhoi.repository.TrainingRepository;
 import com.suhoi.service.TrainingService;
 import com.suhoi.util.UserUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 public class TrainingServiceImpl implements TrainingService {
 

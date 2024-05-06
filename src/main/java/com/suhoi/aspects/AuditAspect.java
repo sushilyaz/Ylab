@@ -2,23 +2,25 @@ package com.suhoi.aspects;
 
 import com.suhoi.model.Audit;
 import com.suhoi.service.AuditService;
-import com.suhoi.util.ApplicationContext;
 import com.suhoi.util.UserUtils;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 /**
  * Аспект аудита. Предусмотрена ситуация аудита действий неавторизованного пользователя
  */
+@Component
 @Aspect
+@RequiredArgsConstructor
 public class AuditAspect {
-
-    private final AuditService auditService = (AuditService) ApplicationContext.getBeanMap().get("auditService");
-
+    private final AuditService auditService;
     @Pointcut("@annotation(com.suhoi.annotation.Auditable) && execution(* *(..))")
     public void auditMethod() {
     }

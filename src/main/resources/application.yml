@@ -1,8 +1,8 @@
 datasource:
+  url: jdbc:postgresql://localhost:5432/suhoi
   username: suhoi
   password: qwerty
-  url: jdbc:postgresql://localhost:5432/suhoi
   pool-size: 10
 liquibase:
   change-log: db/changelog/changelog.xml
-  liquibase-schema: service
+  liquibase-schema: services

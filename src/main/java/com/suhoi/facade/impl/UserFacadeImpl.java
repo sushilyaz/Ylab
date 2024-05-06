@@ -8,7 +8,9 @@ import com.suhoi.model.User;
 import com.suhoi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class UserFacadeImpl implements UserFacade {
 
