@@ -17,7 +17,7 @@ public interface TrainingFacade {
      * Собираю сущность из DTO
      * @param createTrainingDto
      */
-    void addNewTraining(CreateTrainingDto createTrainingDto);
+    Training addNewTraining(CreateTrainingDto createTrainingDto);
 
     /**
      * Собираю DTO из сущностей

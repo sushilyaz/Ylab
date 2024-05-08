@@ -29,12 +29,12 @@ public class TrainingFacadeImpl implements TrainingFacade {
     private final TrainingMapper mapper = Mappers.getMapper(TrainingMapper.class);
 
     @Override
-    public void addNewTraining(CreateTrainingDto createTrainingDto) {
+    public Training addNewTraining(CreateTrainingDto createTrainingDto) {
         TypeOfTraining typeByName = typeOfTrainingService.getTypeByName(createTrainingDto.getTypeOfTrain());
         Training training = mapper.toEntity(createTrainingDto);
         training.setUserId(UserUtils.getCurrentUser().getId());
         training.setTypeOfTrainingId(typeByName.getId());
-        trainingService.addTrainingIfNotExist(training);
+        return trainingService.addTrainingIfNotExist(training);
     }
 
     @Override

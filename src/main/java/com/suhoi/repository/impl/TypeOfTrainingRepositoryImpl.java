@@ -26,7 +26,7 @@ public class TypeOfTrainingRepositoryImpl implements TypeOfTrainingRepository {
     private final ConnectionPool connectionPool;
 
     @Override
-    public void save(TypeOfTraining typeOfTraining) {
+    public TypeOfTraining save(TypeOfTraining typeOfTraining) {
         try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, typeOfTraining.getName());
@@ -36,6 +36,7 @@ public class TypeOfTrainingRepositoryImpl implements TypeOfTrainingRepository {
             if (generatedKeys.next()) {
                 typeOfTraining.setId(generatedKeys.getLong(1));
             }
+            return typeOfTraining;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -24,5 +24,5 @@ public interface TypeOfTrainingService {
      *
      * @param name
      */
-    void save(String name);
+    TypeOfTraining save(String name);
 }

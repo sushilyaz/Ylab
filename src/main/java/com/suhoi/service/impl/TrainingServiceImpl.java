@@ -25,7 +25,7 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Auditable
     @Override
-    public void addTrainingIfNotExist(Training training) {
+    public Training addTrainingIfNotExist(Training training) {
 
         Long userId = training.getUserId();
         Long typeOfTrainingId = training.getTypeOfTrainingId();
@@ -33,7 +33,7 @@ public class TrainingServiceImpl implements TrainingService {
         if (trainingRepository.getTrainingForDateById(userId, typeOfTrainingId, date).isPresent()) {
             throw new DataNotFoundException("Training with id " + typeOfTrainingId + " already exist");
         }
-        trainingRepository.save(training);
+        return trainingRepository.save(training);
     }
 
     @Auditable

@@ -22,13 +22,10 @@ public abstract class PostgresContainer {
     @BeforeAll
     public static void init() {
         POSTGRES_CONTAINER.start();
-//        ConnectionPool.initConnectionPool();
-//        LiquibaseRunner.runLiquibaseMigration();
     }
 
     @AfterAll
     public static void destroy() {
         POSTGRES_CONTAINER.stop();
-//        ConnectionPool.closePool();
     }
 }

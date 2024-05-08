@@ -1,5 +1,5 @@
 # Training Daily Service
-## Task3 - Servlets and aspects
+## Task4 - Spring
 ### Requirements
 * JDK 17
 * gradle 8.4
@@ -10,8 +10,6 @@
 * add Tomcat 10
 * run
 
-В корне проекта
-Для тестов необходимо запустить таску test с -Denv=test
 ### Features
 * При запуске приложения уже будет существовать администратор и один обычный пользователь:
   Admin:

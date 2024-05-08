@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 public class Listener implements ApplicationListener<ContextRefreshedEvent> {
     private final LiquibaseRunner liquibaseRunner;
     private final ConnectionPool connectionPool;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         connectionPool.initConnectionPool();

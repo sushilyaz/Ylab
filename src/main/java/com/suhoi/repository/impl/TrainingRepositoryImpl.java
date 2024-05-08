@@ -55,7 +55,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
     }
 
     @Override
-    public void save(Training training) {
+    public Training save(Training training) {
         try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setLong(1, training.getUserId());
@@ -71,6 +71,7 @@ public class TrainingRepositoryImpl implements TrainingRepository {
             if (generatedKeys.next()) {
                 training.setId(generatedKeys.getLong(1));
             }
+            return training;
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }

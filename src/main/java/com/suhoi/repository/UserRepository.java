@@ -11,7 +11,7 @@ public interface UserRepository {
      *
      * @param user
      */
-    void save(User user);
+    User save(User user);
 
     /**
      * Поиск пользователя по имени

@@ -7,11 +7,13 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.stereotype.Component;
 
 /**
  * Аспект логирования по аннотации. На прошлом интенсиве ментор сказал, что лучше делать так (в смысле по аннотации, а не по классам в пакете)
  */
 @Aspect
+@Component
 @Slf4j
 public class LoggableAspect {
 

@@ -8,7 +8,7 @@ public interface UserService {
      * Если пользователь уже существует - исключение
      * Если нет - сохраняем
      */
-    void createUserIfNotExist(User createUser);
+    User createUserIfNotExist(User createUser);
 
     /**
      * Авторизация пользователя

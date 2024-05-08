@@ -4,32 +4,31 @@ import com.suhoi.exception.DataAlreadyExistException;
 import com.suhoi.exception.DataNotFoundException;
 import com.suhoi.exception.NoValidDataException;
 import com.suhoi.exception.UserActionException;
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.io.IOException;
-
+@RestControllerAdvice
 public class GlobalExceptionHandler {
-    public static void handleUserActionException(HttpServletResponse response, UserActionException ex) throws IOException {
-        response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_CONFLICT);
-        response.getWriter().write(ex.getMessage());
+
+    @ExceptionHandler(UserActionException.class)
+    public ResponseEntity<String> handleUserActionException(UserActionException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
     }
 
-    public static void handleDataNotFoundException(HttpServletResponse response, DataNotFoundException ex) throws IOException {
-        response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        response.getWriter().write(ex.getMessage());
+    @ExceptionHandler(DataNotFoundException.class)
+    public ResponseEntity<String> handleDataNotFoundException(DataNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
-    public static void handleDataAlreadyExistException(HttpServletResponse response, DataAlreadyExistException ex) throws IOException {
-        response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_CONFLICT);
-        response.getWriter().write(ex.getMessage());
+    @ExceptionHandler(DataAlreadyExistException.class)
+    public ResponseEntity<String> handleDataAlreadyExistException(DataAlreadyExistException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
-    public static void handleNoValidDataException(HttpServletResponse response, NoValidDataException ex) throws IOException {
-        response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        response.getWriter().write(ex.getMessage());
+    @ExceptionHandler(NoValidDataException.class)
+    public ResponseEntity<String> handleNoValidDataException(NoValidDataException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 }

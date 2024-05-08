@@ -22,7 +22,7 @@ public class UserRepositoryImpl implements UserRepository {
     private final ConnectionPool connectionPool;
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
         try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, user.getUsername());
@@ -34,6 +34,7 @@ public class UserRepositoryImpl implements UserRepository {
             if (generatedKeys.next()) {
                 user.setId(generatedKeys.getLong(1));
             }
+            return user;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

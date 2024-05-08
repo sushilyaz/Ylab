@@ -30,7 +30,7 @@ public class TypeOfTrainingServiceImpl implements TypeOfTrainingService {
 
     @Auditable
     @Override
-    public void save(String name) {
+    public TypeOfTraining save(String name) {
         if (typeOfTrainingRepository.getTypeByName(name).isPresent()) {
             throw new DataAlreadyExistException("Type of training with name '" + name + "' already exists");
         }
@@ -39,6 +39,6 @@ public class TypeOfTrainingServiceImpl implements TypeOfTrainingService {
                 .name(name)
                 .build();
 
-        typeOfTrainingRepository.save(build);
+        return typeOfTrainingRepository.save(build);
     }
 }

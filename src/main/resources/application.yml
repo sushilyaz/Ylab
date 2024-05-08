@@ -1,7 +1,7 @@
 datasource:
-  url: jdbc:postgresql://localhost:5432/suhoi
+  url: jdbc:postgresql://localhost:5432/training_service_db
   username: suhoi
-  password: qwerty
+  password: suhoi
   pool-size: 10
 liquibase:
   change-log: db/changelog/changelog.xml
