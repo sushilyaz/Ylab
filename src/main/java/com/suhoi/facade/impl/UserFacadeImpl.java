@@ -8,7 +8,9 @@ import com.suhoi.model.User;
 import com.suhoi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class UserFacadeImpl implements UserFacade {
 
@@ -16,9 +18,9 @@ public class UserFacadeImpl implements UserFacade {
     private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     @Override
-    public void signUp(CreateUserDto createUserDto) {
+    public User signUp(CreateUserDto createUserDto) {
         User user = userMapper.toEntity(createUserDto);
-        userService.createUserIfNotExist(user);
+        return userService.createUserIfNotExist(user);
     }
 
     @Override

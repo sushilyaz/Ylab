@@ -1,5 +1,6 @@
 package com.suhoi.repository.impl;
 
+import com.suhoi.config.YamlReader;
 import com.suhoi.model.Role;
 import com.suhoi.model.User;
 import com.suhoi.repository.UserRepository;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserRepositoryImplTest extends PostgresContainer {
 
-    private final UserRepository userRepository = new UserRepositoryImpl();
+    private final UserRepository userRepository = new UserRepositoryImpl(new ConnectionPool(new YamlReader()));
 
     @Test
     @DisplayName("success save user")

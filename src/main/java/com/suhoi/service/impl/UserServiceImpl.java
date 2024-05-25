@@ -9,8 +9,11 @@ import com.suhoi.repository.UserRepository;
 import com.suhoi.service.UserService;
 import com.suhoi.util.UserUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+@Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -21,7 +24,7 @@ public class UserServiceImpl implements UserService {
     @Loggable
     @Auditable
     @Override
-    public void createUserIfNotExist(User createUser) {
+    public User createUserIfNotExist(User createUser) {
         if (createUser.getUsername() == null || createUser.getPassword() == null || createUser.getUsername().isEmpty() || createUser.getPassword().isEmpty()) {
             throw new NoValidDataException("Incorrect data");
         }
@@ -30,7 +33,7 @@ public class UserServiceImpl implements UserService {
         }
         Optional<User> existUser = userRepository.getUserByUsername(createUser.getUsername());
         if (existUser.isPresent()) throw new UserActionException("User already exists");
-        userRepository.save(createUser);
+        return userRepository.save(createUser);
     }
 
     @Loggable

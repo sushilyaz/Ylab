@@ -23,7 +23,7 @@ public interface TrainingRepository {
      *
      * @param training
      */
-    void save(Training training);
+    Training save(Training training);
 
     /**
      * Получить тренировки для конкретного пользователя

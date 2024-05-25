@@ -11,11 +11,13 @@ import com.suhoi.repository.TrainingRepository;
 import com.suhoi.service.TrainingService;
 import com.suhoi.util.UserUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 public class TrainingServiceImpl implements TrainingService {
 
@@ -23,7 +25,7 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Auditable
     @Override
-    public void addTrainingIfNotExist(Training training) {
+    public Training addTrainingIfNotExist(Training training) {
 
         Long userId = training.getUserId();
         Long typeOfTrainingId = training.getTypeOfTrainingId();
@@ -31,7 +33,7 @@ public class TrainingServiceImpl implements TrainingService {
         if (trainingRepository.getTrainingForDateById(userId, typeOfTrainingId, date).isPresent()) {
             throw new DataNotFoundException("Training with id " + typeOfTrainingId + " already exist");
         }
-        trainingRepository.save(training);
+        return trainingRepository.save(training);
     }
 
     @Auditable

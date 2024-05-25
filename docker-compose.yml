@@ -1,11 +1,11 @@
 version: '3'
-
 services:
-  postgres:
+  base-project-pg:
+    container_name: ylab-postgres
     image: postgres:16
     environment:
-      POSTGRES_DB: suhoi
       POSTGRES_USER: suhoi
-      POSTGRES_PASSWORD: qwerty
+      POSTGRES_PASSWORD: suhoi
+      POSTGRES_DB: training_service_db
     ports:
       - "5432:5432"

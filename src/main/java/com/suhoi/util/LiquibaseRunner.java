@@ -1,30 +1,37 @@
 package com.suhoi.util;
 
+import com.suhoi.config.YamlReader;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+@Component
+@RequiredArgsConstructor
 public class LiquibaseRunner {
-    // Как будет spring boot, добавлю preliquibase
-    private static final String CREATE_DEFAULT_SCHEMA = "CREATE SCHEMA IF NOT EXISTS services";
+    private final YamlReader yamlReader;
+    private final ConnectionPool connectionPool;
 
     /**
-     * Запускаем миграции из changelog, указанный в application.properties
+     * Запускаем миграции из changelog, указанный в application.yml
      * Перед стартом миграций, необходимо создать дефолтную схему, чтобы туда сохранились служебные таблицы
      */
-    public static void runLiquibaseMigration() {
-        try (Connection connection = ConnectionPool.get();
+    public void runLiquibaseMigration() {
+        String CREATE_DEFAULT_SCHEMA = "CREATE SCHEMA IF NOT EXISTS " + yamlReader.getLiquibaseSchema();
+        try (Connection connection = connectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(CREATE_DEFAULT_SCHEMA)) {
             preparedStatement.executeUpdate();
             Database database =
                     DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
-            database.setDefaultSchemaName("services");
+            database.setDefaultSchemaName(yamlReader.getLiquibaseSchema());
 
-            Liquibase liquibase = new Liquibase(PropertiesUtil.get("liquibase.changelog"), new ClassLoaderResourceAccessor(), database);
+            Liquibase liquibase = new Liquibase(yamlReader.getLiquibaseChangeLog(), new ClassLoaderResourceAccessor(), database);
             liquibase.update();
 
             System.out.println("Migration is completed successfully");

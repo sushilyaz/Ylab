@@ -1,6 +1,8 @@
 package com.suhoi.util;
 
-import lombok.Getter;
+import com.suhoi.config.YamlReader;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
@@ -11,29 +13,25 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+@Component
+@RequiredArgsConstructor
 public class ConnectionPool {
-    private static final String PASSWORD_KEY = "db.password";
-    private static final String USERNAME_KEY = "db.username";
-    private static final String URL_KEY = "db.url";
-    private static final String POOL_SIZE_KEY = "db.pool.size";
-    private static final Integer DEFAULT_POOL_SIZE = 10;
-    private static BlockingQueue<Connection> pool;
-    private static List<Connection> sourceConnections;
+
+    private final YamlReader yamlReader;
+    private final Integer DEFAULT_POOL_SIZE = 10;
+    private BlockingQueue<Connection> pool;
+    private List<Connection> sourceConnections;
 
     static {
         loadDriver();
-        initConnectionPool();
-    }
-
-    private ConnectionPool() {
     }
 
     /**
      * Init ConnectionPool.
      * В приложение раздается прокси-соединения, которые закрываются автоматически при вызове метода close (try with resources)
      */
-    public static void initConnectionPool() {
-        String poolSize = PropertiesUtil.get(POOL_SIZE_KEY);
+    public void initConnectionPool() {
+        String poolSize = yamlReader.getPoolSize();
         int size = poolSize == null ? DEFAULT_POOL_SIZE : Integer.parseInt(poolSize);
         pool = new ArrayBlockingQueue<>(size);
         sourceConnections = new ArrayList<>(size);
@@ -54,7 +52,7 @@ public class ConnectionPool {
      *
      * @return
      */
-    public static Connection get() {
+    public Connection get() {
         try {
             return pool.take();
         } catch (InterruptedException e) {
@@ -62,12 +60,12 @@ public class ConnectionPool {
         }
     }
 
-    private static Connection open() {
+    private Connection open() {
         try {
             return DriverManager.getConnection(
-                    PropertiesUtil.get(URL_KEY),
-                    PropertiesUtil.get(USERNAME_KEY),
-                    PropertiesUtil.get(PASSWORD_KEY)
+                    yamlReader.getUrl(),
+                    yamlReader.getUsername(),
+                    yamlReader.getPassword()
             );
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -85,7 +83,7 @@ public class ConnectionPool {
     /**
      * Закрыть все соединения в пуле
      */
-    public static void closePool() {
+    public void closePool() {
         try {
             for (Connection sourceConnection : sourceConnections) {
                 sourceConnection.close();

@@ -11,7 +11,7 @@ public interface TypeOfTrainingRepository {
      * INSERT
      *
      */
-    void save(TypeOfTraining typeOfTraining);
+    TypeOfTraining save(TypeOfTraining typeOfTraining);
 
     /**
      * SELECT * FROM type_of_trainings WHERE name = ?
